@@ -1,0 +1,10 @@
+staff:
+  instructors:
+    name: "Gaston Sanchez"
+    role: Instructor
+    email: gastonsanchez@berkeley.edu
+    website: https://www.gastonsanchez.com
+    photo: "https://statistics.berkeley.edu/sites/default/files/styles/crop_person/public/faculty/GST-headshot2-March-2024.jpeg"
+    pronouns: "He/Him/His"
+    oh: "TBD (Evans 309)"
+    team: foo

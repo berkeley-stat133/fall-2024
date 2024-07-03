@@ -1,0 +1,15 @@
+---
+title: "Data"
+subtitle: "Stat 133, Fall 2024"
+---
+
+We'll use data from several real world situations in class.
+
+## Data 1
+
+TBD
+
+
+## Data 2
+
+TBD

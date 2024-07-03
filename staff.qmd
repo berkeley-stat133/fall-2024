@@ -1,0 +1,68 @@
+---
+title: "Staff"
+subtitle: "Stat 133, Fall 2024"
+---
+
+
+Append `@berkeley.edu` to all email addresses.
+
+Office hours are subject to change.
+
+You can attend OH of any staff member.
+
+-----
+
+::: {.grid}
+
+::: {.g-col-6}
+**Instructor:** <a href='https://www.gastonsanchez.com' target='_blank'>Gaston Sanchez</a><br>
+`gastonsanchez`<br>
+Office hours: <br>
+- Thursday 3:30pm-5pm, Evans 309 <br>
+- Friday 2:30pm-4:30pm, Evans 309<br>
+:::
+
+::: {.g-col-6}
+**GSI**: <a href="https://statistics.berkeley.edu/people/calvin-carter" target="_blank">Calvin Carter</a><br>
+`calv2n`<br>
+Office hours:<br>
+- Day time, room TBA<br>
+- Day time, room TBA
+:::
+
+
+::: {.g-col-6}
+**GSI**: <a href="https://statistics.berkeley.edu/people/huong-bui-thien-vu" target="_blank">Huong Bui Thien Vu</a><br>
+`huong_vu`<br>
+Office hours: <br>
+- Day time, room TBA<br>
+- Day time, room TBA
+:::
+
+::: {.g-col-6}
+**GSI:** <a href="https://statistics.berkeley.edu/people/dylan-webb" target="_blank">Dylan Webb</a><br>
+`dylancw`<br>
+Office hours: <br>
+- Day time, room TBA<br>
+- Day time, room TBA
+:::
+
+
+::: {.g-col-6}
+**Tutor:** David Sun<br>
+`davidzhongyisun`<br>
+Office hours: <br>
+- Day time, room TBA<br>
+- Day time, room TBA
+:::
+
+::: {.g-col-6}
+**Tutor**: Ari Hadjiyianni<br>
+`hadjiyianni`<br>
+Office hours: <br>
+- Day time, room TBA<br>
+- Day time, room TBA
+:::
+
+:::
+

@@ -1,0 +1,39 @@
+---
+title: "1) Intro"
+---
+
+
+## 📖 Lecture
+
+Welcome to Stat 133. Our first meeting is on Wednesday Aug-28 where we begin with the usual review of the course policies, logistics, overall expectations, topics in a nutshell, etc. As for Friday Jan-19, we review some housekeeping aspects of R and RStudio to get you up and running for the following week.
+
+ 
+
+## 🔬 Lab
+
+Getting started with R and RStudio: first, we want to make sure everybody has installed both programs; and then we will provide an introductory review of RStudio’s workspace, as well as a brief intro to Quarto notebooks. 
+
+BTW: there's nothing to submit this week.
+
+ 
+
+## 🔔 Activities
+
+If you haven't yet, please spend some time outside class to review the following documentation:
+
+- [syllabus](../syllabus.html)
+- [communication via email](../email.html)
+- [some frequently asked questions](../faqs.html)
+- [five things you need to know to pass this class](../five-things.html)
+- <a href="https://forms.gle/DnkZsQeCrXZs2Caf8" target="_blank">introduction survey (google form)</a>
+
+
+
+## 📢 Install R & RStudio
+
+For those of you that don't have either R or RStudio, download and install these programs (both are free, and they are available for Mac, Windows, and Linux computers)
+
+- <a href="https://cran.r-project.org/" target="_blank">Install R</a>
+
+- <a href="https://www.rstudio.com/products/rstudio/download/#download" target="_blank">Install RStudio</a> (Desktop free version)
+

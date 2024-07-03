@@ -1,0 +1,47 @@
+.label {
+    border-radius: 10px;
+    padding: 3px;
+    color: white;
+    display: inline-block; // a bit of reparation from text outside button
+}
+
+.label-Overview { background-color: #facd05}
+.label-Lecture { background-color: #b3b3b3}
+.label-Participation { background-color:  #7A77B9}
+.label-Lab { background-color: #32c99a}
+.label-Homework { background-color: #ff6f36}
+.label-Shiny { background-color: #377eb8}
+.label-Midterm { background-color: #7A2CAB}
+.label-Final { background-color: #7A2CAB}
+
+
+th {
+    width: 10%;
+}
+
+td:first-of-type {
+    width: 60%;
+}
+
+td:last-of-type {
+    width: 30%;
+}
+
+table {
+    border: 2px solid;
+}
+
+button > a {
+    color: white;
+    text-decoration: none;
+}
+
+button {
+    border: none;
+}
+
+.border {
+  color:#069;
+  font-weight: bold;
+}
+
