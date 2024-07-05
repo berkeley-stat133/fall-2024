@@ -24,9 +24,9 @@
                <td><strong class="label label-<%- day.items[i].type %>"><%- day.items[i].type %> <%- day.items[i].id %></strong> <%- day.items[i].name %></td>
              <% } %>
              <% if (day.items[i].auxil) { %>
-                  <td><a href="<%- day.items[i].auxil.href %>"><%- day.items[i].auxil.id %></a></td>
-             <% } else{ %>
-                  <td></td>
+               <td><a href="<%- day.items[i].auxil.href %>"><%- day.items[i].auxil.id %></a></td>
+              <% } else{ %>
+               <td><%- day.items[i].auxil %> </td>
              <% } %>
                   
              </tr>
