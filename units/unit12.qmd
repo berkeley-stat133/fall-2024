@@ -1,5 +1,6 @@
 ---
 title: "12) Maps 2"
+subtitle: "UC Berkeley, STAT 133, Fall 2024"
 ---
 
 

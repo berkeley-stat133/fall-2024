@@ -15,7 +15,7 @@
     - date: "Aug 29"
       items:
         - type: "Labwork"
-          name: "Lab 1: Intro to R, RStudio, and Quarto notebooks"
+          name: "Lab 1: Intro to R and RStudio"
           href: ""
     - date: "Aug 30"
       items:
@@ -24,6 +24,9 @@
           name: "Vectors, part 1 (notes)"
           href: "https://www.gastonsanchez.com/R-coding-basics/1-01-vectors-intro.html"
           auxil:
+            id: "Demo"
+            href: ""
+          auxil2:
             id: "Demo"
             href: ""
         - type: "Lectur2"

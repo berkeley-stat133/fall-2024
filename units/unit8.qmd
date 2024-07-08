@@ -1,5 +1,6 @@
 ---
 title: "8) Regular Expressions"
+subtitle: "UC Berkeley, STAT 133, Fall 2024"
 ---
 
 

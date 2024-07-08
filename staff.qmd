@@ -1,6 +1,6 @@
 ---
 title: "Staff"
-subtitle: "Stat 133, Fall 2024"
+subtitle: "UC Berkeley, STAT 133, Fall 2024"
 ---
 
 

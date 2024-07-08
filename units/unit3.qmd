@@ -1,5 +1,6 @@
 ---
 title: "3) Lists and Matrices"
+subtitle: "UC Berkeley, STAT 133, Fall 2024"
 ---
 
 
@@ -68,6 +69,6 @@ There are two versions of the app: one uses three sliders (one slider per input)
 
 ## 🔔 HW Assignments
 
-- HW1 due this 09/13
-- HW2 released on 09/14, due 09/20
+- HW1 due this 9/13
+- HW2 released on 9/14, due 9/20
  

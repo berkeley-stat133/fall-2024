@@ -1,5 +1,6 @@
 ---
 title: "4) Functions and Conditionals"
+subtitle: "UC Berkeley, STAT 133, Fall 2024"
 ---
 
 
@@ -60,5 +61,5 @@ More specifically, we have three new versions:
 
 ## 🔔 Assignments
 
-- HW2 due this 09/20
-- HW3 released on 09/21, due 09/27
+- HW2 due this 9/20
+- HW3 released on 9/21, due 9/27

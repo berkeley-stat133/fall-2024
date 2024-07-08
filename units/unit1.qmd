@@ -1,11 +1,12 @@
 ---
 title: "1) Intro"
+subtitle: "UC Berkeley, STAT 133, Fall 2024"
 ---
 
 
 ## 📖 Lecture
 
-Welcome to Stat 133. Our first meeting is on Wednesday Aug-28 where we begin with the usual review of the course policies, logistics, overall expectations, topics in a nutshell, etc. As for Friday Jan-19, we review some housekeeping aspects of R and RStudio to get you up and running for the following week.
+Welcome to Stat 133. Our first meeting is on Wednesday Aug-28 where we begin with the usual review of the course policies, logistics, overall expectations, topics in a nutshell, etc. As for Friday Aug-30, we start with an introduction to R vectors which are the most basic kind of data structure in R.
 
  
 
@@ -25,7 +26,7 @@ If you haven't yet, please spend some time outside class to review the following
 - [communication via email](../email.html)
 - [some frequently asked questions](../faqs.html)
 - [five things you need to know to pass this class](../five-things.html)
-- <a href="https://forms.gle/DnkZsQeCrXZs2Caf8" target="_blank">introduction survey (google form)</a>
+- <a href="https://forms.gle/2R6V5FGh2UMj5Uom7" target="_blank">introduction survey (google form)</a>
 
 
 

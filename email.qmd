@@ -1,5 +1,6 @@
 ---
 title: "Communication via Email"
+subtitle: "UC Berkeley, STAT 133, Fall 2024"
 ---
 
 

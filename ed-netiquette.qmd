@@ -1,5 +1,6 @@
 ---
-title: Ed-Discussion Netiquette
+title: "Ed-Discussion Netiquette"
+subtitle: "UC Berkeley, STAT 133, Fall 2024"
 ---
 
 
@@ -11,7 +12,8 @@ In the past, some students have decided to use external discussion forums. When 
 
 In order to make Ed-Discussion a better resource for everyone, we've outlined some guidelines for you to follow when posting on this tool. Questions which follow these guidelines tend to have a higher chance of being answered!
 
-- Please adhere to the same standards of behavior online that you follow in real life
+- Please adhere to the same standards of behavior online that you follow in real life.
+
 - We want to make sure that you are helping each other out, and having instructors give away the answers isn't the most beneficial for your education either.
 
 

@@ -1,10 +1,12 @@
 ---
 title: "About"
-subtitle: "Stat 133, Fall 2024"
+subtitle: "UC Berkeley, STAT 133, Fall 2024"
 ---
 
 ::: {.callout-note title="Announcement"}
 ## Info
+__Instructor__: <a href='https://www.gastonsanchez.com' target='_blank'>Gaston Sanchez</a>
+
 __Lecture__: MWF 1pm-2pm in [Stanley 105](https://www.berkeley.edu/map/?stanley)
 
 __Lab__:

@@ -1,5 +1,6 @@
 ---
 title: "7) Iterations"
+subtitle: "UC Berkeley, STAT 133, Fall 2024"
 ---
 
 

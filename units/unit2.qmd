@@ -1,5 +1,6 @@
 ---
 title: "2) R Vectors"
+subtitle: "UC Berkeley, STAT 133, Fall 2024"
 ---
 
 
@@ -70,6 +71,6 @@ The app is a very basic app that displays a histogram of the "waiting times".
 
 ## 🔔 Activities
 
-HW1 instructions will be released at the end of this week (due 09/13).
+HW1 instructions will be released at the end of this week (due 9/07).
 
 

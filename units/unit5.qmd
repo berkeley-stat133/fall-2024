@@ -1,5 +1,6 @@
 ---
 title: "5) Tables and Tidyverse-1"
+subtitle: "UC Berkeley, STAT 133, Fall 2024"
 ---
 
 
@@ -77,5 +78,5 @@ We have two versions:
 
 ## 🔔 Assignments
 
-- HW3 due this 09/27
-- HW4 released on 09/28, due 10/04
+- HW3 due this 9/27
+- HW4 released on 9/28, due 10/04
