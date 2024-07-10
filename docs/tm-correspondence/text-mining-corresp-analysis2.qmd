@@ -1,0 +1,440 @@
+---
+title: "Correspondence Analysis 2"
+subtitle: "UC Berkeley, STAT 133, Fall 2024"
+format: 
+  html:
+    toc: true
+    number-sections: true
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, error = TRUE)
+```
+
+This is a companion file to the Stat 133 lectures on "Text Mining". You'll need
+the following packages:
+
+```{r message=FALSE}
+# used packages
+library(tidyverse)    # base tidy data tools
+library(tidytext)     # text mining; gets along with tidyverse
+library(janeaustenr)  # Jane Austen's novels
+library(FactoMineR)   # Multivariate Statistics methods
+```
+
+
+-----
+
+
+## Jane Austen's Novels
+
+As you know, the package `"janeaustenr"` contains the six novels by Jane Austen:
+
+- Emma               
+- Mansfield Park     
+- Northanger Abbey   
+- Persuasion  
+- Pride and Prejudice  
+- Sense and Sensibility
+
+The text of each novel is available in vector format: e.g. `prideprejudice`,
+`emma`, `persuasion`. 
+But you can also find the text of all six novels in a single data frame (tibble) 
+by using the function `austen_books()`
+
+```{r eval = FALSE}
+austen_books()
+```
+
+
+-----
+
+
+## Detecting Associations with Correspondence Analysis (CA)
+
+Say we are interested in studying the use of punctuation symbols across all 
+Austen's novels:
+
+- commas: `","`
+- semicolons: `";"`
+- colons: `":"`
+- quotations: `'\\"'`
+- apostrophes: `"'"`
+- question marks: `"?"`
+- exclamation symbols: `"!"`
+- dashes (pairs): `"--"`
+
+We can use `str_count()` to count the frequencies of these types of symbols,
+and then get the their total sum for each book:
+
+```{r}
+crosstable = austen_books() |>
+  mutate(
+    commas = str_count(text, ","),
+    colons = str_count(text, ":"),
+    semicolons = str_count(text, ";"),
+    quotes = str_count(text, '\\"'),
+    apostrophes = str_count(text, "'"),
+    questions = str_count(text, "\\?"),
+    exclamations = str_count(text, "\\!"),
+    dashes = str_count(text, "--")
+  ) |>
+  group_by(book) |>
+  summarise(
+    commas = sum(commas),
+    colons = sum(colons),
+    semis = sum(semicolons),
+    quotes = sum(quotes),
+    aposts = sum(apostrophes),
+    quests = sum(questions),
+    bangs = sum(exclamations),
+    dashes = sum(dashes)
+  )
+
+crosstable
+```
+
+The above table, technically speaking, is an example of a __cross-table__, also
+referred to as a _2-way table_ or a _contingency_ table. The important thing
+about this table is that it contains counts, which in turn are non-negative
+numbers.
+
+From a statistical point of view, this table is the result of __crossing__
+the categories of 2 qualitative (i.e. categorical) variables:
+
+- Variable $V_1$: name of book or novel
+
+- Variable $V_2$: type of punctuation symbol
+
+![Cross-table from 2 categorical variables](ca-fig1.png){fig-align="center" width=70%}
+
+
+With this kind of table, we could ask questions like:
+
+- Is there an association between books and punctuation symbols?
+
+- Do some books tend to have more (or less) of a certain punctuation symbol?
+
+To answer this kind of questions, we can use a statistical multivariate 
+method known as __Correspondence Analysis__ (CA).
+
+Originally, CA was developed to analyze contingency tables in which a sample of 
+observations is described by two nominal variables, but it was rapidly extended 
+to the analysis of any data table with non-negative entries.
+
+On a side note, we should mention that CA was often discovered (and rediscovered), 
+and so variations of CA can be found under several different names such as
+"dual scaling," "optimal scaling," "homogeneity analysis," or "reciprocal 
+averaging." The multiple identities of correspondence analysis are a
+consequence of its large number of properties, that answer a lot of apparently 
+different problems.
+
+
+-----
+
+
+## Correspondence Analysis Map
+
+In order to explain Correspondence Analysis, and also to simplify some of the 
+computations on the data in `crosstable`, it's better if we reformat this object 
+as a matrix:
+
+```{r echo = TRUE}
+# cross-table in matrix format
+# (matrix of counts or frequencies)
+X = as.matrix(crosstable[,-1])
+rownames(X) = str_extract(crosstable$book, "\\w+")
+
+X
+```
+
+![Cross-table from 2 categorical variables](ca-fig2.png){fig-align="center" width=40%}
+
+<br>
+
+The previous row-analysis and column-analysis let us get an idea of how 
+categories in variable $V_1$ seem to be associated with categories in variable
+$V_2$. While these two analyses provide useful information, we have to carry
+out them separately. Interestingly, we can use correspondence analysis to 
+perform a similar exploration in a simultaneous way, without having to derive
+all the different kinds of probabilities and their associated tables.
+
+To perform a correspondence analysis we are going to use the `CA()` function 
+from the package `"FactoMineR"`. This function takes a data table or a matrix 
+with non-negative numbers, such our initial matrix `X`.
+
+
+### Simultaneous Representation of Rows and Columns
+
+From an exploratory data analysis standpoint, we can use Correspondence 
+Analysis to obtain a "map" (or scatterplot) to visually represent the 
+categories behind the crosstable of frequencies, like in the following graphic:
+
+
+```{r}
+austen_ca1 = CA(X)
+```
+
+By default, `CA()` produces its own plot (see figure above). You can turn off
+this behavior with the argument `graph = FALSE`
+
+```{r eval = FALSE}
+# no default plot
+austen_ca1 = CA(X, graph = FALSE)
+```
+
+If we want to use `ggplot()`, we need to do a bit of data manipulation:
+
+```{r}
+# table with row and column coordinates (i.e. factor scores)
+ca_dat = data.frame(
+  rbind(austen_ca1$row$coord[ ,1:2], 
+        austen_ca1$col$coord[ ,1:2]))
+
+# type of book or symbol
+ca_dat$type = c(rep("book", nrow(austen_ca1$row$coord)), 
+                rep("symbol", nrow(austen_ca1$col$coord)))
+
+# correspondence analysis scatterplot
+ggplot(ca_dat, aes(x = Dim.1, y = Dim.2, color = type)) +
+  geom_hline(yintercept = 0, col = "gray60") +
+  geom_vline(xintercept = 0, col = "gray60") +
+  geom_point() +
+  geom_text(label = rownames(ca_dat), alpha = 0.8) +
+  scale_x_continuous(limits = c(-0.4, 0.8)) +
+  labs(title = "Correspondence Analysis map",
+       x = sprintf("Dim-1 (%0.2f%s)", austen_ca1$eig[1,2], "%"),
+       y = sprintf("Dim-2 (%0.2f%s)", austen_ca1$eig[2,2], "%"))
+```
+
+
+__What does CA do?__: Without going down the technical rabbit hole behind CA, 
+it can be said that CA transforms a data table into two sets of new variables 
+called __factor scores__: one set for the rows, and one set for the columns. 
+These factor scores give the best representation of the similarity structure of, 
+respectively, the rows and the columns of the table.
+
+In the above map, rows and columns are represented as points whose coordinates 
+are the factor scores and where the dimensions are also called factors, or 
+simply dimensions. Interestingly, the factor scores of the rows and the columns 
+have the same variance and, therefore, the rows and columns can be conveniently
+represented in one single map.
+
+__How to Interpret Point Proximity__: Because of the way in which the coordinates 
+are obtained to produce the above CA map, we get a nice interpretation of the
+displayed data. When two row points (or two column points, respectively) are 
+close to each other, this means that these points have similar profiles, and 
+therefore they will be located exactly at the same place. 
+
+__What about the proximity between row and column points?__ It turns out that we
+can comment on the position of a row with respect to the positions of all of
+the columns but keeping in mind that it is impossible to draw conclusions
+about the distance between a specific row and a specific column.
+
+The first dimension opposes the categories _dashes_ and _colons_. This 
+opposition on the graph is associated to the book _Emma_ which has the largest
+proportion of _dashes_ compared to the rest of the books. The table below shows
+the relative frequencies between a given book and a given symbol. Notice the
+cell of `Emma` and `dashes`, which has the largest proportion.
+In contrast, _colons_ are more present in _Mansfield_ than in any other book.
+
+The book category _Sense_ is extremely close to the origin of the graphic, thus 
+indicating a profile near to the average book profile. Likewise the symbol
+category _commas_ is the closest to the origin, signaling that this symbol is
+also close to the use of the average symbol profile.
+
+
+-----
+
+
+## Another example of CA
+
+Let's consider another example performing a sentiment analysis and visualizing
+the results with a correspondence analysis map.
+
+We'll keep using all the books by Jane Austen. As usual, we begin by tokenizing
+the texts, then we remove stop-words, and after that we merge---via 
+`inner_join()`---sentiments from Bing's lexicon:
+
+```{r}
+word_sentims = austen_books() |>
+  unnest_tokens(output = word, input = text) |>
+  anti_join(stop_words, by = "word") |>
+  inner_join(sentiments, 
+             by = "word", 
+             relationship = "many-to-many") |>
+  count(book, word, name = "count", sort = TRUE)
+
+head(word_sentims, 10)
+```
+
+Notice that the most frequent word is __miss__ which we know is more likely to
+refer to a lady or woman instead of the verb "to miss". Therefore, we are going
+to remove it from `word_sentims`
+
+```{r}
+word_sentims = word_sentims |>
+  filter(word != "miss")
+
+head(word_sentims, 10)
+```
+
+The next step involves identifying, in a somewhat arbitrary way, words that 
+have a "large" count, for example a count greater than or equal to 68:
+
+```{r}
+selected_words = word_sentims |>
+  filter(count >= 68) |>
+  distinct(word) |>
+  pull()
+
+selected_words
+```
+
+With these `selected_words`, we filter them in from `word_sentims` to get a 
+subset `word_sentims2`:
+
+```{r}
+word_sentims2 = word_sentims |>
+  filter(word %in% selected_words)
+
+head(word_sentims2, 10)
+```
+
+Having obtained the table `word_sentims2`, we then proceed to obtain the 
+cross-table between books and the selected words
+
+```{r}
+crosstable2 = word_sentims2 |>
+  select(book, word, count) |>
+  pivot_wider(
+    names_from = word,
+    values_from = count)
+
+crosstable2
+```
+
+To apply correspondence analysis, we convert `crosstable` into a matrix `Y`. In
+case we had entries with missing values, we play safe and artificially replace 
+`NA` with 0.
+
+```{r}
+Y = as.matrix(crosstable2[,-1])
+Y[is.na(Y)] = 0
+rownames(Y) = str_extract(crosstable2$book, "\\w+")
+Y
+```
+
+The last step involves passing `Y` to `CA()` to obtain the necessary outputs
+and produce the correspondence analysis map with `ggplot()` and friends:
+
+```{r}
+# Correspondence Analysis
+austen_ca2 = CA(Y, graph = FALSE)
+
+# table with row and column coordinates (i.e. factor scores)
+ca_dat = data.frame(
+  rbind(austen_ca2$row$coord[ ,1:2], 
+        austen_ca2$col$coord[ ,1:2]))
+
+# type of book or word
+ca_dat$type = c(rep("book", nrow(austen_ca2$row$coord)), 
+                rep("word", nrow(austen_ca2$col$coord)))
+
+# correspondence analysis scatterplot
+ggplot(ca_dat, aes(x = Dim.1, y = Dim.2, color = type)) +
+  geom_hline(yintercept = 0, col = "gray60") +
+  geom_vline(xintercept = 0, col = "gray60") +
+  geom_point() +
+  geom_text(label = rownames(ca_dat), alpha = 0.8) +
+  scale_x_continuous(limits = c(-0.3, 0.4)) +
+  labs(title = "Correspondence Analysis map",
+       x = sprintf("Dim-1 (%0.2f%s)", austen_ca2$eig[1,2], "%"),
+       y = sprintf("Dim-2 (%0.2f%s)", austen_ca2$eig[2,2], "%"))
+```
+
+
+### Words with Positive Sentiments
+
+Out of curiosity, we can perform a similar analysis but this time using only 
+positive words (the same could be done with only negative words).
+
+```{r}
+positive_words = austen_books() |>
+  unnest_tokens(output = word, input = text) |>
+  anti_join(stop_words, by = "word") |>
+  count(book, word, name = "count") |>
+  inner_join(sentiments, 
+             by = "word", 
+             relationship = "many-to-many") |>
+  filter(sentiment == "positive") |>
+  arrange(desc(count))
+
+head(positive_words, 10)
+```
+
+Like in preceding example, here the idea is to identify common positive words.
+For instance, we can identify words that have a count greater than 50 (you can
+choose another threshold):
+
+```{r}
+selected_positive = positive_words |>
+  filter(count >= 50) |>
+  distinct(word) |>
+  pull()
+
+selected_positive
+```
+
+With these subset of positive words, we filter them in from `positive_words`
+and then obtain the cross-table between book categories and positive words:
+
+```{r}
+crosstable3 = positive_words |>
+  filter(word %in% selected_positive) |>
+  select(book, word, count) |>
+  pivot_wider(
+    names_from = word,
+    values_from = count)
+
+crosstable3
+```
+
+To pass the cross-table to `CA()`, we convert `crosstable3` into a matrix `Xpos`:
+
+```{r}
+Xpos = as.matrix(crosstable3[,-1])
+Xpos[is.na(Xpos)] = 0
+rownames(Xpos) = str_extract(crosstable3$book, "\\w+")
+Xpos
+```
+
+And finally we apply `CA()` to `Xpos` to get the CA map:
+
+```{r}
+ca_pos = CA(Xpos, graph = FALSE)
+
+# table with row and column coordinates (i.e. factor scores)
+ca_dat = data.frame(
+  rbind(ca_pos$row$coord[ ,1:2], 
+        ca_pos$col$coord[ ,1:2]))
+
+# type of book or word
+ca_dat$type = c(rep("book", nrow(ca_pos$row$coord)), 
+                rep("word", nrow(ca_pos$col$coord)))
+
+# correspondence analysis scatterplot
+ggplot(ca_dat, aes(x = Dim.1, y = Dim.2, color = type)) +
+  geom_hline(yintercept = 0, col = "gray60") +
+  geom_vline(xintercept = 0, col = "gray60") +
+  geom_point() +
+  geom_text(label = rownames(ca_dat), alpha = 0.8) +
+  scale_x_continuous(limits = c(-0.4, 0.5)) +
+  labs(title = "Correspondence Analysis map",
+       subtitle = "Words with positive sentiments",
+       x = sprintf("Dim-1 (%0.2f%s)", ca_pos$eig[1,2], "%"),
+       y = sprintf("Dim-2 (%0.2f%s)", ca_pos$eig[2,2], "%"))
+```
+
+

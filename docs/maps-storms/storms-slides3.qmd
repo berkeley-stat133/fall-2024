@@ -1,0 +1,432 @@
+---
+title: "North Atlantic Storms"
+subtitle: "Mapping Hurricanes Data III"
+author: "Gaston Sanchez"
+format: 
+  revealjs:
+    slide-number: true
+    show-slide-number: print
+    footer: "[Return to Home Page](../..)"
+    theme: ../custom.scss
+---
+
+
+```{r include=FALSE}
+library(tidyverse)
+library(lubridate)
+library(sf)
+library(rnaturalearth)
+library(plotly)
+# library(rnaturalearthhires)
+```
+
+
+## About
+
+Using the `storms` data, I want to show you a variety of examples for 
+displaying maps, for doing more data manipulation, and for obtaining more
+data visualizations.
+
+
+## Required Packages
+
+The content in these slides depend on the following packages[^1]:
+
+```{r}
+#| eval: false
+#| echo: true
+library(tidyverse)      # data wrangling and graphics
+
+library(lubridate)      # for working with dates-times data
+
+library(sf)             # for working with geospatial vector-data
+
+library(rnaturalearth)  # maps data
+
+library(gganimate)      # animations for ggplot
+
+library(plotly)         # web interactive plots
+```
+
+
+[^1]: you may also need `"gifski"` or `"magick"` for `"gganimate"`
+
+
+## Recap: Visualizing storms trajectories
+
+To visualize the trajectories of `storms`, we've discussed one simple approach 
+based on:
+
+1) Use map data from `"rnaturalearth"`
+
+2) Specifically, import map data as objects of class `"sf"`
+
+3) Make maps with:
+
+  ```r
+  # one option
+  ggplot(map_data) + geom_sf() + geom_...(storms, aes(long, lat)) + etc
+  
+  
+  # another option
+  ggplot() + geom_sf(map_data) + geom_...(storms, aes(long, lat)) + etc
+  ```
+
+
+## Recap: example
+
+```{r}
+#| label: map-1975
+#| eval: false
+#| echo: true
+# filtered storms
+storms75 = filter(storms, year == 1975)
+
+# map data (as "sf" object)
+map_world = ne_countries(returnclass = "sf")
+
+# map with storms trajectories
+ggplot(data = map_world) +
+  geom_sf(color = "gray60") +
+  coord_sf(xlim = c(-110, 0), 
+           ylim = c(10, 60)) +
+  geom_point(data = storms75,
+             aes(x = long, y = lat, color = name)) +
+  theme_minimal() + 
+  theme(legend.position = "none") +
+  labs(title = "North Atlantic Storms, 1975")
+```
+
+
+## Recap: example
+
+```{r}
+#| label: map-1975
+#| eval: true
+#| echo: false
+```
+
+
+# Number of Storms per Year
+
+
+## Exploration: Number of Storms per Year
+
+```{r}
+#| echo: true
+# not exactly the counts we're looking for
+storm_counts = storms |>
+  count(year, name)
+
+storm_counts
+```
+
+
+## Exploration: Number of Storms per Year
+
+```{r}
+#| echo: true
+# these are the counts we want
+storm_count_per_year = storms |>
+  count(year, name) |> 
+  count(year, name = "count")
+
+storm_count_per_year
+```
+
+
+## Exploration: Number of Storms per Year 
+
+```{r}
+#| code-fold: true
+#| code-summary: View Code
+#| echo: true
+#| message: false
+storm_count_per_year |>
+  ggplot(aes(x = year, y = count)) +
+  geom_col() +
+  theme_minimal() +
+  labs(title = "Number of Storms per Year (1975 - 2021)")
+```
+
+
+## Exploration: Number of Storms per Year 
+
+```{r}
+#| code-fold: true
+#| code-summary: View Code
+#| echo: true
+#| message: false
+storm_count_per_year |>
+  ggplot(aes(x = year, y = count)) +
+  geom_col(fill = "gray70") +
+  geom_smooth(se = FALSE, color = "red") +
+  theme_minimal() +
+  labs(title = "Number of Storms per Year (1975 - 2021)")
+```
+
+
+# Type of Storms Over Time
+
+## Exploration: Maximum Wind for each Storm
+
+```{r}
+#| echo: true
+# add `wind_max` column
+max_wind_storms = storms |>
+  group_by(year, name) |>
+  summarise(
+    wind_max = max(wind),
+    .groups = "drop")
+
+slice_head(max_wind_storms, n = 10)
+```
+
+
+## Exploration: adding wind-scale with `case_when()`
+
+```{r}
+#| label: wind-scale
+#| echo: true
+#| eval: false
+# adding a wind-scale column
+storms_status = max_wind_storms |>
+  mutate(wind_scale = case_when(
+      wind_max <= 33 ~ -1L,
+      wind_max <= 63 ~ 0L,
+      wind_max <= 82 ~ 1L,
+      wind_max <= 95 ~ 2L,
+      wind_max <= 112 ~ 3L,
+      wind_max <= 136 ~ 4L,
+      wind_max >= 137 ~ 5L
+    )
+  )
+
+slice_head(storms_status, n = 10)
+```
+
+
+## Exploration: adding wind-scale
+
+```{r}
+#| label: wind-scale
+#| echo: false
+#| eval: true
+```
+
+
+## Exploration: type of storms over time
+
+```{r}
+#| code-fold: true
+#| code-summary: View Code
+#| echo: true
+storms_status |>
+  count(year, wind_scale) |>
+ggplot() +
+  geom_col(aes(x = year, y = n, fill = factor(wind_scale))) +
+  labs(title = "Number of Storms per Year, and Status",
+       y = "Count") +
+  theme_minimal()
+```
+
+
+## Exploration: type of storms over time
+
+```{r}
+#| code-fold: true
+#| code-summary: View Code
+#| echo: true
+storms_status = storms_status |>
+  mutate(wind_scale = ordered(wind_scale))
+
+storms_status |>
+  count(year, wind_scale) |>
+ggplot() +
+  geom_col(aes(x = year, y = n, fill = wind_scale)) +
+  facet_wrap(~ wind_scale, scales = "free_y") +
+  labs(title = "Number of Storms Over Time, and Status",
+       y = "Count") +
+  theme_minimal() +
+  theme(panel.grid.minor = element_blank(),
+        legend.position = "none")
+```
+
+
+# Animations
+
+
+## Animation example: 2020 Hurricane Season
+
+![](hurricane-season-2020.gif)
+
+
+## Animations with gganimate
+
+- `"gganimate"` extends the grammar of graphics as implemented by `"ggplot2"` 
+to include the description of animation.
+
+- It provides a range of new grammar classes that can be added to the plot 
+object in order to customize how it should change with time.
+
+- I will show you just one example.
+
+
+## ggplot + gganimate
+
+- As usual, start your graphic with `ggplot()`
+
+- Add layers with graphical primitives, i.e. _geoms_
+
+- Optionally, add formatting specification(s)
+
+- Add animation specification(s)
+
+
+## Start with ggplot
+
+```{r}
+#| label: map-2020
+#| echo: true
+#| eval: false
+storms2020 = filter(storms, year == 2020)
+
+map_world = ne_countries(returnclass = "sf")
+
+map_storms2020 = ggplot(data = map_world) +
+  geom_sf() +
+  geom_point(data = storms2020, 
+             aes(x = long, y = lat, color = name, size = wind), 
+             alpha = 0.9) +
+  coord_sf(xlim = c(-110, 0), ylim = c(5, 60)) +
+  theme_minimal() + 
+  theme(legend.position = "none")
+
+map_storms2020
+```
+
+
+## Start with ggplot
+
+```{r}
+#| label: map-2020
+#| eval: true
+#| echo: false
+```
+
+
+## For convenience, we add a `datetime` column
+
+- We create a `date` column by joining `year`, `month`, and `day`
+
+- We also create a `time` column by joining `hour` with `"00:00"`
+
+- And then we create a `datetime` column using the `ymd_hms()` function 
+from package `"lubridate"`
+
+<br>
+
+```{r}
+#| eval: true
+#| echo: true
+storms2020 = storms |>
+  filter(year == 2020) |>
+  mutate(date = paste0(year, "-", month, "-", day),
+         time = paste0(hour, ":00:00"),
+         datetime = ymd_hms(paste(date, time)))
+```
+
+
+## Adding transitions
+
+```{r}
+#| eval: false
+#| echo: true
+anim2020 = ggplot(data = map_world) +
+  geom_sf() +
+  geom_point(data = storms2020, 
+             aes(x = long, y = lat, color = name, size = wind), 
+             alpha = 0.9) +
+  coord_sf(xlim = c(-110, 0), ylim = c(5, 60)) +
+  theme_minimal() + 
+  theme(legend.position = "none") +
+  labs(title = 'Date: {frame_time}', x = '', y = '') + 
+  transition_time(datetime) +
+  shadow_wake(wake_length = 0.7) +
+  ease_aes('linear')
+```
+
+
+## Optional: saving animation in gif file
+
+```{r}
+#| eval: false
+#| echo: true
+anim_save(
+  filename = "hurricane-season-2020.gif", 
+  animation = anim2020,
+  nframes = 200, 
+  fps = 10)
+```
+
+![](hurricane-season-2020.gif)
+
+
+# Animations with `"plotly"`
+
+
+## Plotly Interactive graphics with `ggplotly()`
+
+- As you know, you can take a `ggplot` object and feed it to `ggplotly()`
+
+- `ggplotly()` converts the graphic to a `plotly` object
+
+- Interestingly, you can also make animated views with `"plotly"`
+
+
+## Animation with `"plotly"`
+
+In the _ggplot_ command, include a `frame` aesthetic to indicate the variable 
+that will be used to produce the animation frames. For example: `frame=year`
+
+```{r}
+#| warning: false
+#| echo: true
+#| eval: true
+storms2020 = filter(storms, year %in% 2000:2020)
+
+map_world = ne_countries(returnclass = "sf")
+
+# messy ggplot
+ggmess = ggplot(data = map_world) +
+  geom_sf(color = "gray60") +
+  coord_sf(xlim = c(-110, 0), ylim = c(10, 60)) +
+  geom_path(data = storms2020, 
+             aes(x = long, y = lat, group = name, frame = year), 
+             color = "#1726FF", alpha = 0.8) +
+  theme_minimal() + 
+  theme(legend.position = "none")
+```
+
+Then, pass the ggplot object to `ggplotly()`
+
+
+## Animated view
+
+```{r}
+#| code-fold: true
+#| code-summary: View Code
+#| echo: true
+ggplotly(ggmess) |>
+  animation_opts(frame = 1200, transition = 0)
+```
+
+
+# Shiny App
+
+
+## Hurricane Seasons
+
+
+![](shiny-storms-basic.png){width=50%}
+<https://github.com/data133/shiny/blob/main/mapping-storms1-basic/app.R>

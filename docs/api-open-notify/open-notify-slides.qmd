@@ -1,0 +1,357 @@
+---
+title: "Open Notify API"
+subtitle: "Data from API's"
+author: "Gaston Sanchez"
+format: 
+  revealjs:
+    slide-number: true
+    show-slide-number: print
+    footer: "[Return to Home Page](../..)"
+    theme: ../custom.scss
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, error = TRUE)
+library(tidyverse)
+library(leaflet)
+library(httr)
+library(jsonlite)
+```
+
+
+## About
+
+In these slides we describe an example to get data from an API with R.
+
+
+## Required Packages
+
+The content in these slides depend on the following packages:
+
+```{r}
+#| eval: false
+#| echo: true
+library(tidyverse)   # data wrangling and graphics
+
+library(leaflet)     # for working with geospatial vector-data
+
+library(httr)        # for HTTP requests
+
+library(jsonlite)    # for working with JSON data
+```
+
+
+# Open Notify API
+
+
+## Open Notify API <http://open-notify.org/> {.nostretch}
+
+![](open-notify1.png){width=60%}
+
+## About Open Notify
+
+__Open Notify__ is an open source project to provide a simple programming 
+interface (API) for some of NASA's  data. 
+
+This API is developed and maintained by Nathan Bergey.
+
+<http://open-notify.org/about>
+
+
+## Open Notify API: Current ISS Location {.nostretch}
+
+![](open-notify2.png){width=70%}
+
+
+## Open Notify API: Current ISS Location {.nostretch}
+
+![](open-notify3.png){width=70%}
+
+
+## Current ISS Location
+
+URL:
+
+<http://api.open-notify.org/iss-now.json>
+
+<br>
+
+
+Returned ISS Location [^1] data in JSON format:
+
+```
+{"iss_position": {"longitude": "-58.8531", "latitude": "-28.5444"}, "message": "success", "timestamp": 1699732761}
+```
+
+<br>
+
+[timestamp is the number of seconds since Jan-01-1970 (UTC)]{.lolit}
+
+[^1]: Keep in mind that the current location will be different.
+
+
+# Getting Data: Approach 1
+
+
+## Getting Data in R: Approach 1
+
+A simple approach to get the location of the ISS is to use `readLines()` to 
+import the data---returned by the URL---in R.
+
+Because the data is in JSON format, we then use `from JSON()` to convert it
+into an R list:
+
+```{r}
+#| echo: true
+#| eval: false
+iss_loc_url = "http://api.open-notify.org/iss-now.json"
+
+iss_loc_json = readLines(iss_loc_url)
+
+iss_loc_list = fromJSON(iss_loc_json)
+```
+
+. . .
+
+A much simpler approach is to overpass `readLines()`:
+
+```{r}
+#| echo: true
+#| eval: false
+iss_loc_url = "http://api.open-notify.org/iss-now.json"
+
+iss_loc_list = fromJSON(iss_loc_url)
+```
+
+
+## Getting Data in R: Approach 1 (cont'd)
+
+```{r}
+#| echo: true
+#| eval: false
+iss_loc_url = "http://api.open-notify.org/iss-now.json"
+
+iss_loc_json = readLines(iss_loc_url)
+
+iss_loc_list = fromJSON(iss_loc_json)
+
+iss_loc_list
+```
+
+```{r}
+#| echo: false
+#| eval: true
+#| warning: false
+iss_loc_json = readLines("iss-loc-json.txt")
+iss_loc_list = fromJSON(iss_loc_json)
+iss_loc_list
+```
+
+
+## Map with `"leaflet"`
+
+```{r}
+#| code-fold: true
+#| code-summary: View Plot Code
+#| echo: true
+iss_loc_dat = data.frame(
+  lng = as.numeric(iss_loc_list$iss_position$longitude),
+  lat = as.numeric(iss_loc_list$iss_position$latitude)
+)
+
+leaflet(data = iss_loc_dat) |>
+  addTiles() |>
+  addCircleMarkers(
+    radius = 50,
+    stroke = FALSE, 
+    fillOpacity = 0.3) |>
+  addMarkers() |>
+  setView(lng = iss_loc_dat$lng, lat = iss_loc_dat$lat, zoom = 3)
+```
+
+
+## Map with `"leaflet"`, adding icon of ISS
+
+```{r}
+#| code-fold: true
+#| code-summary: View Plot Code
+#| echo: true
+# url of ISS icon from Wikimedia Commons (png file)
+wikimedia = "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/"
+iss = "International_Space_Station.svg/"
+png = "320px-International_Space_Station.svg.png"
+iss_icon = paste0(wikimedia, iss, png)
+
+# define icon properties
+issIcon <- makeIcon(
+  iconUrl = iss_icon,
+  iconWidth = 100,
+  iconHeight = 70,
+  iconAnchorX = 50,
+  iconAnchorY = 35)
+
+# leaflet map
+leaflet(data = iss_loc_dat) |>
+  addTiles() |>
+  addCircleMarkers(
+    lng = ~lng, 
+    lat = ~lat,
+    radius = 70,
+    stroke = FALSE, 
+    fillOpacity = 0.3) |>
+  addMarkers(
+    lng = ~lng, 
+    lat = ~lat, 
+    icon = issIcon) |> 
+  setView(lng = iss_loc_dat$lng, lat = iss_loc_dat$lat, zoom = 2)
+```
+
+
+# Getting Data: Approach 2
+
+## Getting Data in R: Approach 2
+
+Another approach to get the location of the ISS is to:
+
+1) make an HTTP request with `GET()`
+
+2) extract the content from the request object
+
+```{r}
+#| echo: true
+#| eval: false
+res = GET("http://api.open-notify.org/iss-now.json")
+res
+```
+
+```
+Response [https://api.open-notify.org/astros.json]
+  Date: 2023-11-11 20:51
+  Status: 200
+  Content-Type: application/json
+  Size: 113 B
+```
+
+```{r}
+#| echo: true
+#| eval: false
+names(res)
+```
+
+```
+[1] "url"         "status_code" "headers"     "all_headers" "cookies"    
+[6] "content"     "date"        "times"       "request"     "handle" 
+```
+
+
+## Getting Data in R: Approach 2 (cont'd)
+
+```{r}
+#| echo: true
+#| eval: false
+# res$content is a "raw" vector (i.e. binary data format)
+res$content
+```
+
+```
+  [1] 7b 22 69 73 73 5f 70 6f 73 69 74 69 6f 6e 22 3a 20 7b 22 6c
+ [21] 61 74 69 74 75 64 65 22 3a 20 22 2d 31 32 2e 36 36 30 38 22
+ [41] 2c 20 22 6c 6f 6e 67 69 74 75 64 65 22 3a 20 22 2d 39 2e 35
+ [61] 30 37 33 22 7d 2c 20 22 6d 65 73 73 61 67 65 22 3a 20 22 73
+ [81] 75 63 63 65 73 73 22 2c 20 22 74 69 6d 65 73 74 61 6d 70 22
+[101] 3a 20 31 36 39 39 38 39 34 37 31 32 7d
+```
+
+<br>
+
+```{r}
+#| echo: true
+#| eval: false
+# convert to character type
+rawToChar(res$content)
+```
+
+```
+[1] "{\"iss_position\": {\"latitude\": \"-28.5444\", \"longitude\": \"-58.8531\"}, \"message\": \"success\", \"timestamp\": 1699732761}"
+```
+
+
+## Getting Data in R: Approach 2 (cont'd)
+
+```{r}
+#| echo: true
+#| eval: false
+iss_loc_list = fromJSON(rawToChar(res$content))
+
+iss_loc_list
+```
+
+```{r}
+#| echo: false
+#| eval: true
+#| warning: false
+iss_loc_json = readLines("iss-loc-json.txt")
+iss_loc_list = fromJSON(iss_loc_json)
+iss_loc_list
+```
+
+
+# People in Space
+
+## People in Space
+
+URL:
+
+<http://api.open-notify.org/astros.json>
+
+<br>
+
+
+Returned number of people [^2] in JSON format:
+
+```
+{"message": "success", "people": [{"name": "Jasmin Moghbeli", "craft": "ISS"}, {"name": "Andreas Mogensen", "craft": "ISS"}, {"name": "Satoshi Furukawa", "craft": "ISS"}, {"name": "Konstantin Borisov", "craft": "ISS"}, {"name": "Oleg Kononenko", "craft": "ISS"}, {"name": "Nikolai Chub", "craft": "ISS"}, {"name": "Loral O'Hara", "craft": "ISS"}], "number": 7}
+```
+
+[^2]: Keep in mind that the current astronauts will be different.
+
+
+## Getting Data with GET request
+
+```{r}
+#| echo: true
+#| eval: false
+res = GET("http://api.open-notify.org/astros.json")
+
+res
+```
+
+```
+Response [https://api.open-notify.org/astros.json]
+  Date: 2023-11-11 20:52
+  Status: 200
+  Content-Type: application/json
+  Size: 360 B
+```
+
+
+## Getting Data with GET request (cont'd)
+
+```{r}
+#| echo: true
+#| eval: false
+iss_astros_list = fromJSON(rawToChar(res$content))
+
+iss_astros_list
+```
+
+```{r}
+#| echo: false
+#| eval: true
+#| warning: false
+iss_astros_json = readLines("iss-astros-json.txt")
+iss_astros_list = fromJSON(iss_astros_json)
+iss_astros_list
+```
+
+

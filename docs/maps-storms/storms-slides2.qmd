@@ -1,0 +1,191 @@
+---
+title: "North Atlantic Storms"
+subtitle: "Mapping Hurricanes Data II"
+author: "Gaston Sanchez"
+format: 
+  revealjs:
+    slide-number: true
+    show-slide-number: print
+    footer: "[Return to Home Page](../..)"
+    theme: ../custom.scss
+---
+
+
+```{r include=FALSE}
+library(tidyverse)
+library(leaflet)
+library(sf)
+library(rnaturalearth)
+```
+
+
+# Maps
+
+
+## Leaflet: Web Interactive Maps
+
+```{r}
+# all tropycal cyclones in 1975
+storms |>
+  filter(year == 1975) |>
+  leaflet() |>
+  setView(lng = -50, lat = 30, zoom = 2) |>
+  addProviderTiles(provider = 'CartoDB') |>
+  addCircleMarkers(
+    lng = ~long, 
+    lat = ~lat,
+    radius = 1)
+```
+
+
+## Leaflet
+
+[Leaflet](https://leafletjs.com/) is a JavaScript library used to build 
+interactive maps for websites and web mapping applications.
+
+. . .
+
+The R package `"leaflet"` lets you create and customize _Leaflet_ maps in R. 
+
+. . .
+
+These maps can be used directly from the R console, from RStudio, in Markdown 
+documents (e.g. `qmd`, `Rmd`), and in Shiny applications.
+
+
+## Basic Usage
+
+You create a Leaflet map with these basic steps:
+
+1) Create a map widget by calling `leaflet()`.
+
+2) Add layers (i.e. features) to the map by using layer functions (e.g. 
+`addTiles`, `addMarkers`, `addPolygons`) to modify the map widget.
+
+3) Repeat step 2 as desired.
+
+4) Print the map widget to display it.
+
+
+## Leaflet: Basic Example
+
+```{r}
+#| code-fold: true
+#| code-summary: View Code
+#| echo: true
+# view with marker at UC Berkeley
+leaflet() |>
+  addTiles() |> # default OpenStreetMap map tiles
+  addMarkers(lng = -122.2579, lat = 37.8718, popup = "Berkeley")
+```
+
+
+## Basic Example: Map and Marker
+
+```{r}
+#| code-fold: true
+#| code-summary: View Code
+#| echo: true
+# view with marker at Berkeley, CA
+leaflet() |>
+  addTiles() |>
+  setView(lng = -122, lat = 38, zoom = 8) |>
+  addMarkers(lng = -122.27, lat = 37.87, popup = "Berkeley")
+```
+
+
+## Basic Example: Map and Marker (cont'd)
+
+```{r}
+#| code-fold: true
+#| code-summary: View Code
+#| echo: true
+# view with marker at Berkeley, CA
+leaflet() |>
+  addTiles() |>
+  setView(lng = -100, lat = 37, zoom = 4) |>
+  addMarkers(lng = -122.27, lat = 37.87, popup = "Berkeley")
+```
+
+
+## Map Tiles
+
+Leaflet uses map tiles from:
+
+- OpenStreetMap (OSM): <https://www.openstreetmap.org/>
+
+    + OSM is simply the database with all the data in xml-vector format.
+
+- CartoDB: <https://carto.com/basemaps/>
+
+
+## Adding Data Objects
+
+Both `leaflet()` and the map layer functions have an optional `data` parameter 
+that is designed to receive spatial data in one of several forms:
+
+- From base R:
+    + lng/lat matrix
+    + data frame with lng/lat columns
+- From the `"sf"` package:
+    + the data frame of class `"sf"`
+- From the `"maps"` package
+    + the data frame from returned from `map()`
+
+
+## Example: adding `"sf"` data polygons
+
+```{r}
+usa_states = ne_states(
+  country = "United States of America", 
+  returnclass = "sf")
+
+leaflet(data = usa_states) |> 
+  addTiles() |>
+  setView(lng = -90, lat = 40, zoom = 3) |>
+  addPolygons(fillColor = rainbow(10), stroke = FALSE)
+```
+
+
+
+## Leaflet Maps
+
+```{r}
+#| code-fold: true
+#| code-summary: View Code
+#| echo: true
+storms |>
+  filter(year == 1975) |>
+leaflet() |>
+  setView(lng = -50, lat = 30, zoom = 3) |>
+  addTiles() |>
+  addProviderTiles(provider = "NASAGIBS.ViirsEarthAtNight2012") |>
+  addCircleMarkers(
+    lng = ~long, 
+    lat = ~lat,
+    radius = 1, 
+    color = "#DDFF03")
+```
+
+
+## Leaflet Maps
+
+```{r}
+#| code-fold: true
+#| code-summary: View Code
+#| echo: true
+storms |>
+  filter(year == 1975) |>
+leaflet() |>
+  setView(lng = -50, lat = 30, zoom = 3) |>
+  addTiles() |>
+  addProviderTiles(provider = "NASAGIBS.ViirsEarthAtNight2012") |>
+  addCircleMarkers(
+    lng = ~long, 
+    lat = ~lat,
+    radius = 1, 
+    color = "#DDFF03", 
+    weight = ~wind/5)
+```
+
+

@@ -1,0 +1,436 @@
+---
+title: "Correspondence Analysis 1"
+subtitle: "UC Berkeley, STAT 133, Fall 2024"
+format: 
+  html:
+    toc: true
+    number-sections: true
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, error = TRUE)
+```
+
+This is a companion file to the Stat 133 lectures on "Text Mining". You'll need
+the following packages:
+
+```{r message=FALSE}
+# used packages
+library(tidyverse)    # base tidy data tools
+library(tidytext)     # text mining; gets along with tidyverse
+library(janeaustenr)  # Jane Austen's novels
+library(FactoMineR)   # Multivariate Statistics methods
+```
+
+
+-----
+
+
+## Jane Austen's Novels
+
+As you know, the package `"janeaustenr"` contains the six novels by Jane Austen:
+
+- Emma               
+- Mansfield Park     
+- Northanger Abbey   
+- Persuasion  
+- Pride and Prejudice  
+- Sense and Sensibility
+
+The text of each novel is available in vector format: e.g. `prideprejudice`,
+`emma`, `persuasion`. 
+But you can also find the text of all six novels in a single data frame (tibble) 
+by using the function `austen_books()`
+
+```{r eval = FALSE}
+austen_books()
+```
+
+
+-----
+
+
+## Detecting Associations with Correspondence Analysis (CA)
+
+Say we are interested in studying the use of punctuation symbols across all 
+Austen's novels:
+
+- commas: `","`
+- semicolons: `";"`
+- colons: `":"`
+- quotations: `'\\"'`
+- apostrophes: `"'"`
+- question marks: `"?"`
+- exclamation symbols: `"!"`
+- dashes (pairs): `"--"`
+
+We can use `str_count()` to count the frequencies of these types of symbols,
+and then get the their total sum for each book:
+
+```{r}
+crosstable = austen_books() |>
+  mutate(
+    commas = str_count(text, ","),
+    colons = str_count(text, ":"),
+    semicolons = str_count(text, ";"),
+    quotes = str_count(text, '\\"'),
+    apostrophes = str_count(text, "'"),
+    questions = str_count(text, "\\?"),
+    exclamations = str_count(text, "\\!"),
+    dashes = str_count(text, "--")
+  ) |>
+  group_by(book) |>
+  summarise(
+    commas = sum(commas),
+    colons = sum(colons),
+    semis = sum(semicolons),
+    quotes = sum(quotes),
+    aposts = sum(apostrophes),
+    quests = sum(questions),
+    bangs = sum(exclamations),
+    dashes = sum(dashes)
+  )
+
+crosstable
+```
+
+The above table, technically speaking, is an example of a __cross-table__, also
+referred to as a _2-way table_ or a _contingency_ table. The important thing
+about this table is that it contains counts, which in turn are non-negative
+numbers.
+
+From a statistical point of view, this table is the result of __crossing__
+the categories of 2 qualitative (i.e. categorical) variables:
+
+- Variable $V_1$: name of book or novel
+
+- Variable $V_2$: type of punctuation symbol
+
+![Cross-table from 2 categorical variables](ca-fig1.png){fig-align="center" width=70%}
+
+
+With this kind of table, we could ask questions like:
+
+- Is there an association between books and punctuation symbols?
+
+- Do some books tend to have more (or less) of a certain punctuation symbol?
+
+To answer this kind of questions, we can use a statistical multivariate 
+method known as __Correspondence Analysis__ (CA).
+
+Originally, CA was developed to analyze contingency tables in which a sample of 
+observations is described by two nominal variables, but it was rapidly extended 
+to the analysis of any data table with non-negative entries.
+
+On a side note, we should mention that CA was often discovered (and rediscovered), 
+and so variations of CA can be found under several different names such as
+"dual scaling," "optimal scaling," "homogeneity analysis," or "reciprocal 
+averaging." The multiple identities of correspondence analysis are a
+consequence of its large number of properties, that answer a lot of apparently 
+different problems.
+
+
+-----
+
+
+## Table of relative frequencies
+
+In order to explain Correspondence Analysis, and also to simplify some of the 
+computations on the data in `crosstable`, it's better if we reformat this object 
+as a matrix:
+
+```{r echo = TRUE}
+# cross-table in matrix format
+X = as.matrix(crosstable[,-1])
+rownames(X) = str_extract(crosstable$book, "\\w+")
+
+X
+```
+
+![Cross-table from 2 categorical variables](ca-fig2.png){fig-align="center" width=40%}
+
+
+### Relative Frequencies or Probabilities
+
+The first step involves converting the frequencies or counts in `X` into 
+_relative frequencies_ (i.e. proportions) by dividing the cells in `X` over 
+the total count of punctuation symbols:
+
+```{r}
+Xprobs = X / sum(X)
+round(Xprobs, 4)
+```
+
+You can think of the proportions in `Xprobs` as __joint probabilities__. For 
+instance, the probability of Sense and Sensibility AND commas is about 0.0967
+
+$$
+Prob(V_1 = \text{Sense} \ \text{ AND } \ V_2 = \text{commas}) \approx 0.0967
+$$
+
+
+The following diagram illustrates a table of probabilities derived from the
+cross-table between two variables $V_1$ and $V_2$. The relative frequency 
+between the $i$-th category of $V_1$ and the $j$-th category of $V_2$ is 
+denoted as $f_{ij}$
+
+$$
+f_{ij} = \frac{x_{ij}}{n}
+$$
+
+![](ca-fig3.png){fig-align="center" width=40%}
+
+
+### Marginal Probabilities
+
+From the table of probabilities $f_{ij}$, we can calculate marginal probabilities.
+
+![](ca-fig4.png){fig-align="center" width=70%}
+
+__Column Margin__. The column margin, depicted in blue in the preceding figure,
+with its $j$-th term denoted as $f_{.j}$ is given by the sum of all the entries 
+in each column, column by column:
+
+$$
+f_{.j} = \sum_{i=1}^{I} f_{ij}
+$$
+
+These marginal probabilities can be easily obtained with `colSums()`
+
+```{r}
+# column margin
+col_margin = colSums(Xprobs)
+round(col_margin, 4)
+```
+
+Think of this proportions as marginal probabilities:
+
+$$
+Prob(V_2 = \text{commas}) \approx 0.5531
+$$
+
+<br>
+
+__Row Margin__. The row margin, depicted in red in the preceding figure,
+with its $i$-th term denoted as $f_{i.}$  is given by the sum of all the entries 
+in each row, row by row:
+
+$$
+f_{i.} = \sum_{j=1}^{J} f_{ij}
+$$
+
+These marginal probabilities can be easily obtained with `rowSums()`
+
+```{r}
+# row margin
+row_margin = rowSums(Xprobs)
+round(row_margin, 4)
+```
+
+Think of this proportions as **marginal probabilities**:
+
+$$
+Prob(V_1 = \text{Sense}) \approx 0.1732
+$$
+
+
+-----
+
+
+## Independence Model
+
+Let's review the kind of probabilities that we have so far: 
+
+- __joint probabilities__: $f_{ij}$
+
+- __marginal probability__ of rows: $f_{i.}$ 
+
+- __marginal probability__ of columns: $f_{.j}$
+
+From basic probability rules, we know that if two events $A$ and $B$ are
+__independent__, their joint probability $P(A \text{ and } B)$ is given by the 
+product of the marginal probabilities, that is:
+
+$$
+P(A \text{ and } B) = P(A) \times P(B)
+$$
+
+In other words, if the $i$-th row is independent from the $j$-th column, 
+the joint probability $f_{ij}$ is given by
+
+$$
+f_{ij} = f_{i.} \times f_{.j}
+$$
+
+
+### Relative Frequencies under Independence 
+
+What if the categories of $V_1$ are independent from the categories in $V_2$? 
+In other words, what would the joint probabilities should like if there was no
+association between the books and the punctuation symbols? Well, if this was 
+the case then the table of joint probabilities should be approximately:
+
+```{r}
+# under independence
+Xindep = row_margin %o% col_margin
+round(Xindep, 4)
+```
+
+To visualize the joint probability distributions under the assumption of 
+independence, we can make a mosaicplot like the following one.
+
+```{r}
+mosaicplot(t(Xindep), las = 1, border = NA, main = "Independence Model")
+```
+
+The independence model stipulates that the joint probability $f_{ij}$ is
+dependent on the marginal probabilities $f_{i.}$ and $f_{.j}$ alone. 
+
+Studying the association between two categorical variables requires us to 
+position the data in terms of a given starting point: in this case the 
+absence of a relationship given by the independence model. The more a given
+joint probability $f_{ij}$ departures from the expected probability
+$f_{i.} \times f_{.j}$ under independence, the stronger the association will
+between the "events" $i$-th and $j$-th. This is one of the core ideas behind
+Correspondence Analysis.
+
+
+-----
+
+
+## Row Analysis
+
+Using the table of probabilities (`Xprobs`), we can divide its entries $f_{ij}$ 
+by the row margin $f_{i.}$ (i.e. marginal probabilities of books)
+
+![](ca-fig5.png){fig-align="center" width=80%}
+
+```{r}
+# row profiles (i.e. conditional probabilities on books)
+row_profiles = sweep(Xprobs, MARGIN = 1, STATS = row_margin, FUN = "/")
+round(row_profiles, 4)
+```
+
+The entries in this table are basically **conditional probabilities**:
+
+$$
+Prob(V_2 = \text{commas} \ | \ V_1 = \text{Sense}) = 0.5585
+$$
+
+A property of this table is that its row-sums are equal to 1:
+
+```{r}
+rowSums(row_profiles)
+```
+
+<br>
+
+__Average Book profile__: We can take into account the average book profile 
+given by the marginal probabilities in `col_margin`
+
+```{r}
+Rows = rbind(row_profiles, average = col_margin)
+round(Rows, 4)
+```
+
+Under the assumption of independence (i.e. no association between $i$-th 
+category and $j$-th category), the conditional probabilities 
+$f_{ij}/f_{i.}$ should be close to the marginal probabilities $f_{.j}$:
+
+$$
+\frac{f_{ij}}{f_{i.}} = f_{.j}
+$$
+
+The more associated $i$-th and $j$-th are, the bigger the discrepancy between 
+$f_{ij}/f_{i.}$ and $f_{.j}$.
+
+One way to visualize departure from independence is with a mosaicplot of the 
+above table of conditional probabilities or _row profiles_ (see below).
+Notice that we are also including the marginal probabilities of `col_margin`
+which is the average book profile.
+
+```{r}
+mosaicplot(
+  t(Rows),
+  las = 1, 
+  border = NA, 
+  col = rainbow(ncol(Rows)), 
+  main = "Row Profiles")
+```
+
+From this picture, we can immediately tell that:
+
+- Commas `","` are the most used punctuation symbol; also the use of commas seems
+to be evenly distributed across all books.
+
+- In contrast, colons `":"` are the least used symbol; notice that Mansfield has
+the largest proportion of colons.
+
+- Semicolons `";"` also seem to be evenly distributed across all books, although 
+not as much as commas.
+
+- Dashes `"--"` exhibit the largest amount of variability across different 
+books; Persuasion being the book with the least amount of dashes, whereas 
+Emma is the novel with most dashes (compared to other books).
+
+
+-----
+
+
+## Column Analysis
+
+We can repeat the same analysis of the preceding section but this time applied
+on the columns of the probability table. This time we divide the entries 
+$f_{ij}$ by the column margin $f_{.j}$ (i.e. marginal probabilities of symbols)
+
+![](ca-fig6.png){fig-align="center" width=80%}
+
+
+```{r}
+# column profiles (i.e. conditional probabilities on symbols)
+col_profiles = sweep(Xprobs, MARGIN = 2, STATS = col_margin, FUN = "/")
+round(col_profiles, 4)
+```
+
+<br>
+
+__Average Symbol profile__: We can take into account the average symbol profile 
+given by the marginal probabilities in `row_margin`
+
+```{r}
+# adding average column profile
+Cols = cbind(col_profiles, average = row_margin)
+round(Cols, 4)
+```
+
+Similarly, we can get a mosaicplot to visualize the distribution of these 
+conditional probabilities.
+Notice that we are also including the marginal probabilities of `row_margin`
+which is the average symbol profile.
+
+```{r}
+mosaicplot(
+  t(Cols),
+  las = 1, 
+  border = NA, 
+  col = rainbow(nrow(Cols)), 
+  main = "Column Profiles")
+```
+
+From this mosaicplot we can see that:
+
+- Commas and semicolons have similar distributions.
+
+- Similarly, quotes and question marks also have similar distributions.
+
+- Commas have the closest distribution to the average profile.
+
+- Compared to average profile, colons and dashes are the symbols that 
+deviate the most from the average profile.
+
+- As we have previously detected, Emma is the book that has the largest 
+proportion of dashes; in contrast Persuasion has the least proportion of dashes.
+
+- Also, Mansfield has the largest proportion of colons.
+

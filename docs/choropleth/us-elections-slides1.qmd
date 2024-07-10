@@ -1,0 +1,459 @@
+---
+title: "US Presidential Elections 2020"
+subtitle: "Mapping Elections Data I"
+author: "Gaston Sanchez"
+format: 
+  revealjs:
+    slide-number: true
+    show-slide-number: print
+    footer: "[Return to Home Page](../..)"
+    theme: ../custom.scss
+---
+
+
+```{r include=FALSE}
+library(tidyverse)
+library(sf)
+library(rnaturalearth)
+library(maps)
+library(plotly)
+```
+
+
+## Required Packages
+
+The content in these slides depend on the following packages:
+
+```{r}
+#| eval: false
+#| echo: true
+library(tidyverse)      # data wrangling and graphics
+
+library(sf)             # for working with geospatial vector-data
+
+library(rnaturalearth)  # maps data (e.g. US States)
+
+library(maps)           # maps data (e.g. US Counties)
+
+library(plotly)         # interactive plots
+```
+
+
+## About
+
+Visualizing US Presidential Elections (2020)
+
+
+# US Presidential Elections 2020
+
+
+## Data from MIT Election Lab {.nostretch}
+
+![](mit-election-data1.png){width=50%}
+
+<http://electionlab.mit.edu/>
+
+
+## County Presidential Election (2000-2020) {.nostretch}
+
+![](mit-election-data2.png){width=60%}
+
+<https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/VOQCHQ>
+
+
+## Citation: Data Source
+
+Data: County Presidential Election Returns 2000-2020
+
+Source: MIT Election Data + Science Lab
+
+<https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/VOQCHQ>
+
+MIT Election Data and Science Lab, 2018, "County Presidential Election Returns 2000-2020", https://doi.org/10.7910/DVN/VOQCHQ, Harvard Dataverse, V11, UNF:6:HaZ8GWG8D2abLleXN3uEig== [fileUNF]
+
+License: Public Domain CC0 1.0
+
+
+## Data Available in CSV format {.nostretch}
+
+![](mit-election-data3.png){width=80%}
+
+
+## US Presidential Election 2000-2020 Data
+
+CSV file available in bCourses (see **Files/data**)
+
+```{r}
+#| label: read-csv
+#| eval: true
+#| echo: true
+dat = read_csv(
+  file = "countypres_2000-2020.csv", 
+  col_types = c("icccccccdddc")) |>
+  mutate(
+    state = tolower(state),
+    county_name = tolower(county_name)
+  )
+```
+
+
+## US Presidential Election 2000-2020 Data
+
+```{r}
+#| eval: true
+#| echo: true
+# first 6 columns
+dat |> select(1:6) |> slice_head(n = 8)
+```
+
+
+## US Presidential Election 2000-2020 Data (cont'd)
+
+```{r}
+#| eval: true
+#| echo: true
+# last 6 columns
+dat |> select(7:12) |> slice_head(n = 10)
+```
+
+
+## 2020 Presidential Election
+
+Let's focus on the 2020 Presidential Election
+
+```{r}
+#| echo: true
+dat2020 = filter(dat, year == 2020)
+
+dat2020 |> distinct(candidate)
+```
+
+
+## 2020 Presidential Election, California Results
+
+```{r}
+#| echo: true
+dat2020 |> 
+  filter(state == "california") |>
+  select(county_name, candidate:totalvotes) |>
+  slice_head(n = 5)
+```
+
+
+## Expressing votes relative to total in county
+
+Let's add a column `propvotes` to get the proportion of votes that each 
+candidate obtained in every county:
+
+propvotes  = candidatevotes / totalvotes
+
+```{r}
+#| label: prop-votes
+#| eval: true
+#| echo: true
+votes_california = dat |>
+  filter(state == "california" & year == 2020) |>
+  mutate(propvotes = round(candidatevotes / totalvotes, 2)) |>
+  select(county_name, candidate, propvotes, candidatevotes)
+```
+
+
+## Analysis of California
+
+Number of votes that each candidate received in each of the counties in 
+California
+
+```{r}
+#| eval: true
+#| echo: true
+votes_california |> 
+  group_by(county_name, candidate) |>
+  summarise(sum_votes = sum(candidatevotes))
+```
+
+
+# Maps
+
+
+## Map of US (contiguous states)
+
+We've seen how to plot a map of US
+
+```{r}
+#| label: usa-map
+#| eval: false
+#| echo: true
+# map data (as "sf" object)
+us_states_sf = ne_states(
+  country = "United States of America", 
+  returnclass = "sf")
+
+ggplot(data = us_states_sf) +
+  geom_sf() +
+  coord_sf(xlim = c(-125, -60), ylim = c(20, 55)) +
+  theme_minimal()
+```
+
+
+## Map of US (contiguous states)
+
+```{r}
+#| label: usa-map
+#| eval: true
+#| echo: false
+```
+
+
+## Map of US Counties
+
+`"rnaturalearth"` does not come with a built-in map data of US Counties. 
+But we can use the `"county"` map-data from the package `"maps"`.
+
+To be consistent with the way we handle vector data, we convert the `"county"`
+map object into an `"sf"` object with `st_as_sf()`.
+
+```{r}
+#| label: map-counties
+#| eval: false
+#| echo: true
+us_counties_sf = st_as_sf(maps::map("county", plot = FALSE, fill = TRUE))
+
+ggplot(data = us_counties_sf) +
+  geom_sf() +
+  coord_sf(xlim = c(-125, -60), ylim = c(20, 55)) +
+  theme_minimal()
+```
+
+
+## Map of US Counties
+
+```{r}
+#| label: map-counties
+#| eval: true
+#| echo: false
+```
+
+
+# Map of California Counties
+
+
+## Map Data of California Counties
+
+- We have map-data of US states: `us_states_sf`
+
+- We have map-data of US counties: `us_counties_sf`
+
+- It would be nice to have map-data of California Counties.
+
+How do get map-data of California Counties? This requires a bit of string
+matching via `str_detect()`:
+
+```{r}
+#| echo: true
+# matching "california" in ID column
+cal_counties_sf = us_counties_sf |>
+  filter(str_detect(ID, "^california"))
+```
+
+
+## Map of California Counties
+
+With filtered counties of California `cal_counties_sf`, we can make a map:
+
+```{r}
+#| label: cal-counties
+#| eval: false
+#| echo: true
+ggplot(data = cal_counties_sf) +
+  geom_sf() +
+  theme_minimal()
+```
+
+
+## Map of California Counties
+
+```{r}
+#| label: cal-counties
+#| eval: true
+#| echo: false
+```
+
+
+## What's in `cal_counties_sf`?
+
+```{r}
+#| eval: true
+#| echo: true
+cal_counties_sf |> slice_head(n = 10)
+```
+
+
+## Adding Column of County Name
+
+For sake of convenience, we need to add a column `county` to the map-data
+`cal_counties_sf` (so that we have the name of the county)
+
+```{r}
+#| eval: true
+#| echo: true
+cal_counties_sf = cal_counties_sf |>
+  mutate(county = str_remove(ID, "california,"))
+
+head(cal_counties_sf$county)
+```
+
+<br>
+
+```{r}
+#| code-fold: true
+#| code-summary: View equivalent code
+#| eval: false
+#| echo: true
+cal_counties_sf$county = str_remove(
+  cal_counties_sf$ID,
+  "california,"
+)
+```
+
+
+## What relevant data do we have so far?
+
+- 2020 votes-data from California: `votes_california`
+
+- Map-data of California counties: `cal_counties_sf`
+
+We need to __join__ these data sets in order to combine the votes information
+with the map-data.
+
+
+## Joining map-data with elections-data
+
+Join California map-data with votes-data, via `inner_join()`
+
+```{r}
+#| eval: true
+#| echo: true
+# data cal_counties_sf has column 'county'
+# data votes_california has column 'county_name'
+cal_votes_map = inner_join(
+  cal_counties_sf,
+  votes_california, 
+  by = c("county" = "county_name"))
+```
+
+
+## Joining map-data with elections-data
+
+```{r}
+#| eval: true
+#| echo: true
+cal_votes_map |> slice_head(n = 8)
+```
+
+
+## Mapping Votes (facet by candidate)
+
+```{r}
+#| code-fold: true
+#| code-summary: View code
+#| eval: true
+#| echo: true
+ggplot(cal_votes_map) +
+  geom_sf(aes(fill = propvotes)) +
+  scale_fill_gradient(low = "#FFF7F5", high = "#FF0000") +
+  facet_wrap(~ candidate) +
+  theme_void()
+```
+
+
+## Looking for an alternative color scheme
+
+We can use a __Viridis Color__ palette.
+
+<https://ggplot2.tidyverse.org/reference/scale_viridis.html>
+
+<br>
+
+The function `scale_fill_viridis_c()` allows us to choose a continuous scale.
+
+Its argument `direction = -1` gives a reversing order (from yellow to dark
+blue).
+
+
+## Mapping Votes (5th attempt)
+
+```{r}
+#| code-fold: true
+#| code-summary: View code
+#| eval: true
+#| echo: true
+# Viridis Color
+ggplot(cal_votes_map) +
+  geom_sf(aes(fill = propvotes)) +
+  scale_fill_viridis_c(name = "Prop. of Votes", direction = -1) +
+  facet_wrap(~ candidate) +
+  theme_void()
+```
+
+
+## Map of Joe Biden's votes
+
+```{r}
+#| code-fold: true
+#| code-summary: View code
+#| eval: true
+#| echo: true
+cal_votes_map |>
+  filter(candidate == "JOSEPH R BIDEN JR") |>
+ggplot() +
+  geom_sf(aes(fill = propvotes)) +
+  scale_fill_viridis_c(name = "Prop. of Votes", direction = -1) +
+  theme_void() +
+  labs(title = "Joe Biden's Proportion of Votes")
+```
+
+
+## Joe Biden's votes: top-5 counties
+
+```{r}
+#| eval: true
+#| echo: true
+votes_california |>
+  filter(candidate == "JOSEPH R BIDEN JR") |>
+  arrange(desc(propvotes)) |>
+  slice_head(n = 5)
+```
+
+
+## Joe Biden's votes: bottom-5 counties
+
+```{r}
+#| eval: true
+#| echo: true
+votes_california |>
+  filter(candidate == "JOSEPH R BIDEN JR") |>
+  arrange(propvotes) |>
+  slice_head(n = 5)
+```
+
+
+## Map with `ggplotly()` {.nostretch}
+
+```{r}
+#| code-fold: true
+#| code-summary: View code
+#| eval: true
+#| echo: true
+joe_biden = cal_votes_map |>
+  filter(candidate == "JOSEPH R BIDEN JR")
+
+joe_biden_map = ggplot(data = joe_biden, aes(label = county)) +
+  geom_sf(aes(fill = propvotes)) +
+  scale_fill_viridis_c(name = "Prop. of Votes", direction = -1) +
+  theme_void() +
+  labs(title = "Joe Biden's Proportion of Votes")
+
+ggplotly(joe_biden_map)
+```
+
+

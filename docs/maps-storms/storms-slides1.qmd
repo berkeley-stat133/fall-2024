@@ -1,0 +1,355 @@
+---
+title: "North Atlantic Storms"
+subtitle: "Mapping Hurricanes Data I"
+author: "Gaston Sanchez"
+format: 
+  revealjs:
+    slide-number: true
+    show-slide-number: print
+    footer: "[Return to Home Page](../..)"
+    theme: ../custom.scss
+---
+
+
+```{r include=FALSE}
+library(tidyverse)
+library(sf)
+library(rnaturalearth)
+# library(rnaturalearthhires)
+```
+
+
+## Data `storms`
+
+```{r}
+storms
+```
+
+
+# Plotting Storms Paths
+
+
+## Plot storms' paths
+
+```{r}
+#| code-fold: true
+#| code-summary: View Plot Code
+#| echo: true
+storms |>
+  filter(year == 1975) |>
+  ggplot(aes(x = long, y = lat, group = name)) +
+  geom_point() +
+  labs(title = "North Atlantic Storms (1975)")
+```
+
+
+## Plot storms' paths
+
+```{r}
+#| code-fold: true
+#| code-summary: View Plot Code
+#| echo: true
+storms |>
+  filter(year == 1975) |>
+  ggplot(aes(x = long, y = lat, group = name)) +
+  geom_point() +
+  geom_path() + 
+  labs(title = "North Atlantic Storms (1975)")
+```
+
+
+## Plot storms' paths
+
+```{r}
+#| code-fold: true
+#| code-summary: View Plot Code
+#| echo: true
+storms |>
+  filter(year == 1975) |>
+  ggplot(aes(x = long, y = lat, group = name, color = name)) +
+  geom_point(size = 1) +
+  geom_path() + 
+  labs(title = "North Atlantic Storms (1975)")
+```
+
+
+## Plot storms' paths
+
+```{r}
+#| code-fold: true
+#| code-summary: View Plot Code
+#| echo: true
+storms |>
+  filter(year == 1975) |>
+  ggplot(aes(x = long, y = lat, group = name, color = name)) +
+  geom_point(size = 1) +
+  geom_path(arrow = arrow(length = unit(0.1, "inches"))) + 
+  labs(title = "North Atlantic Storms (1975)")
+```
+
+
+## Plot storms' paths
+
+```{r}
+#| code-fold: true
+#| code-summary: View Plot Code
+#| echo: true
+storms |>
+  filter(year == 1975) |>
+  ggplot(aes(x = long, y = lat, group = name, color = name)) +
+  geom_point(size = 0.5, alpha = 0.5) +
+  geom_path(arrow = arrow(length = unit(0.1, "inches"))) + 
+  facet_wrap(~ month) +
+  labs(title = "North Atlantic Storms (1975)") +
+  theme_bw()
+```
+
+
+# Maps
+
+
+## Wouldn't this be nice?
+
+```{r}
+#| echo: false
+world_countries = ne_countries(returnclass = "sf")
+
+storms75 = storms |> filter(year == 1975)
+
+ggplot() +
+  geom_sf(data = world_countries) +
+  coord_sf(xlim = c(-110, 0), ylim = c(5, 65)) +
+  geom_point(data = storms75, 
+          aes(x = long, y = lat, group = name, color = name),
+          size = 0.5, alpha = 0.5) +
+  geom_path(data = storms75, 
+          aes(x = long, y = lat, group = name, color = name),
+          arrow = arrow(length = unit(0.1, "inches"))) + 
+  theme(panel.background = element_blank(),
+        axis.ticks = element_blank(), # hide tick marks
+        axis.text = element_blank()) + # hide degree values of lat & lon
+  labs(title = "North Atlantic Storms (1975)",
+       x = "", 
+       y = "")
+```
+
+
+## What about something like this?
+
+```{r}
+#| echo: false
+world_countries = ne_countries(returnclass = "sf")
+
+some_storms = storms |> filter(year %in% 2000:2009)
+
+ggplot() +
+  geom_sf(data = world_countries) +
+  coord_sf(xlim = c(-110, 0), ylim = c(5, 65)) +
+  geom_path(data = some_storms, color = "#1C3EFF", alpha = 0.9, 
+          aes(x = long, y = lat, group = name)) +
+  facet_wrap(~ year, nrow = 2) +
+  theme(panel.background = element_blank(),
+        axis.ticks = element_blank(), # hide tick marks
+        axis.text = element_blank()) + # hide degree values of lat & lon
+  labs(title = "North Atlantic Storms (2000-2009)",
+       x = "", 
+       y = "")
+```
+
+
+## Maps in R
+
+Our first approach involves packages:
+
+- `"tidyverse"` (data wrangling and exploration)
+
+- `"sf"` (simple features)
+
+- `"rnaturalearth"` (maps data)
+
+
+## Main Idea
+
+Assuming that you have an `"sf"` (simple features) object (i.e. map data),
+you pass this to `ggplot()` and use the `geom_sf()` layer.
+
+```{r}
+#| eval: false
+#| echo: true
+# (abstract code)
+ggplot() + 
+  geom_sf(data = map_object)
+```
+
+. . .
+
+<br>
+
+Or also (with more customizing options)
+
+```{r}
+#| eval: false
+#| echo: true
+# (abstract code)
+ggplot() + 
+  geom_sf(data = map_object) +
+  coord_sf(...)
+```
+
+
+## Map Data from `"rnaturalearth"`
+
+Examples:
+
+- `ne_coastline(returnclass = "sf")`
+
+- `ne_countries(returnclass = "sf")`
+
+- `ne_countries(country = "mexico", returnclass = "sf")`
+
+
+
+## Coast Line World Map
+
+```{r}
+#| code-fold: true
+#| code-summary: View Code
+#| echo: true
+world_coast = ne_coastline(returnclass = "sf")
+
+ggplot() + 
+  geom_sf(data = world_coast)
+```
+
+
+## Map of a given continent (e.g. North America)
+
+```{r}
+#| code-fold: true
+#| code-summary: View Code
+#| echo: true
+map_north_america = ne_countries(
+  continent = "north america", 
+  returnclass = "sf")
+
+ggplot() + 
+  geom_sf(data = map_north_america) +
+  theme(panel.background = element_blank())
+```
+
+
+## Map of a given country (e.g. Mexico)
+
+```{r}
+#| code-fold: true
+#| code-summary: View Code
+#| echo: true
+map_mexico1 = ne_countries(country = "mexico", returnclass = "sf")
+
+ggplot() + 
+  geom_sf(data = map_mexico1) +
+  theme(panel.background = element_blank())
+```
+
+
+## Map of a given country, with states (e.g. Mexico)
+
+```{r}
+#| code-fold: true
+#| code-summary: View Code
+#| echo: true
+# (requires pkg "rnaturalearthhires")
+# remotes::install_github("ropensci/rnaturalearthhires")
+map_mexico2 = ne_states(country = "mexico", returnclass = "sf")
+
+ggplot() + 
+  geom_sf(data = map_mexico2) +
+  theme(panel.background = element_blank())
+```
+
+
+## Adding Data to a Map
+
+```{r}
+#| eval: false
+#| echo: true
+# (abstract code)
+ggplot() + 
+  geom_sf(data = map_object) +
+  geom_...(data = data_table, aes(...))
+```
+
+. . .
+
+<br>
+
+Or also:
+
+```{r}
+#| eval: false
+#| echo: true
+# (abstract code)
+ggplot() + 
+  geom_sf(data = map_object) +
+  geom_...(data = data_table, aes(...)) +
+  geom_...(data = data_table, aes(...)) 
+```
+
+
+## Adding Data to a Map
+
+```{r}
+#| code-fold: true
+#| code-summary: View Code
+#| echo: true
+storms75 = storms |> filter(year == 1975)
+
+ggplot() + 
+  geom_sf(data = map_north_america) +
+  geom_point(data = storms75, 
+             aes(x = long, y = lat, group = name, color = name)) +
+  theme(panel.background = element_blank()) +
+  labs(title = "North Atlantic Storms (1975)")
+```
+
+
+## Adding Data to a Map
+
+```{r}
+#| code-fold: true
+#| code-summary: View Code
+#| echo: true
+storms75 = storms |> filter(year == 1975)
+
+ggplot() + 
+  geom_sf(data = map_north_america) +
+  geom_point(data = storms75, size = 0.5,
+             aes(x = long, y = lat, group = name, color = name)) +
+  geom_path(data = storms75, 
+             aes(x = long, y = lat, group = name, color = name)) +
+  theme(panel.background = element_blank()) +
+  labs(title = "North Atlantic Storms (1975)")
+```
+
+
+## Adding Data to a Map
+
+```{r}
+#| code-fold: true
+#| code-summary: View Code
+#| echo: true
+storms75 = storms |> filter(year == 1975)
+
+ggplot() +
+  geom_sf(data = world_countries) +
+  coord_sf(xlim = c(-110, 0), ylim = c(5, 65)) +
+  geom_path(data = storms75, 
+          aes(x = long, y = lat, group = name, color = name)) +
+  facet_wrap(~ year, nrow = 2) +
+  theme(panel.background = element_blank(),
+        axis.ticks = element_blank(), # hide tick marks
+        axis.text = element_blank()) + # hide degree values of lat & lon
+  labs(title = "North Atlantic Storms (1975)",
+       x = "", 
+       y = "")
+```
