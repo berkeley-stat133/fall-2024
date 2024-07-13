@@ -24,11 +24,11 @@
           name: "Vectors, part 1 (notes)"
           href: "https://www.gastonsanchez.com/R-coding-basics/1-01-vectors-intro.html"
           auxil:
-            id: "Demo"
-            href: ""
+            id: "Slides"
+            href: "slides/stat133-01-objs1-vectors-part1.pdf"
           auxil2:
-            id: "Demo"
-            href: ""
+            id: "Demo (TBD)"
+            href: "."
         - type: "Lectur2"
           id: ""
           name: "Vectors, part 2 (notes)"
@@ -54,8 +54,11 @@
           name: Vectors, part 3 (notes)
           href: "https://www.gastonsanchez.com/R-coding-basics/1-03-vectors-creation.html"
           auxil:
-            id: "Demo"
-            href: ""
+            id: "Slides"
+            href: "slides/stat133-01-objs1-vectors-part2.pdf"
+          auxil2:
+            id: "Demo (TBD)"
+            href: "."
         - type: "Lectur2"
           id: ""
           name: "Vectors, part 4 (notes)"
@@ -91,8 +94,8 @@
           name: Matrices, part 1 (notes)
           href: "https://www.gastonsanchez.com/R-coding-basics/3-01-matrices-intro.html"
           auxil:
-            id: "Demo"
-            href: ""
+            id: "Slides"
+            href: "slides/stat133-01-objs2-matrices-factors.pdf"
         - type: "Lectur2"
           id: ""
           name: Matrices, part 2 (notes)
@@ -104,8 +107,8 @@
           name: Lists (notes)
           href: "https://www.gastonsanchez.com/R-coding-basics/4-01-lists.html"
           auxil:
-            id: "Demo"
-            href: ""
+            id: "Slides"
+            href: "slides/stat133-01-objs3-lists.pdf"
     - date: "Sep 12"
       items:
         - type: "Labwork"
@@ -118,9 +121,6 @@
           id: ""
           name: "Shiny Friday: Future Value"
           href: "https://github.com/data133/shiny/blob/main/future-value2-sliders/app.R"
-          auxil:
-            id: "Video"
-            href: ""
         - type: "Homework"
           id: ""
           name: "HW 2: Lists and Matrices"
@@ -140,8 +140,8 @@
           name: Intro to Functions (notes)
           href: "https://www.gastonsanchez.com/R-coding-basics/5-01-functions-intro.html"
           auxil:
-            id: "Demo"
-            href: ""
+            id: "Slides"
+            href: "slides/stat133-02-prog1-intro-functions.pdf"
         - type: "Lectur2"
           id: ""
           name: R Compound Expressions (notes)
@@ -153,8 +153,8 @@
           name: If-else statements (notes)
           href: "https://www.gastonsanchez.com/R-coding-basics/5-03-conditionals.html"
           auxil:
-            id: "Demo"
-            href: ""
+            id: "Slides"
+            href: "slides/stat133-02-prog2-if-else.pdf"
     - date: "Sep 19"
       items:
         - type: "Labwork"
@@ -167,9 +167,6 @@
           id: ""
           name: "Shiny Friday: Old Faithful (enriched app)"
           href: "https://github.com/data133/shiny/blob/main/old-faithful3-average-radio/app.R"
-          auxil:
-            id: "Video"
-            href: ""
         - type: "Homework"
           id: ""
           name: "HW 3: Functions"
@@ -188,6 +185,9 @@
           id: ""
           name: Graphics with ggplot2 (notes)
           href: "https://www.gastonsanchez.com/R-tidy-hurricanes/2-01-intro-ggplot.html"
+          auxil:
+            id: "Slides"
+            href: "slides/stat133-01-objs4-data-frames.pdf"
     - date: "Sep 25"
       items:
         - type: "Lecture"
@@ -195,8 +195,8 @@
           name: More graphics with ggplot2 (notes)
           href: "https://www.gastonsanchez.com/R-tidy-hurricanes/3-02-storms-1975.html"
           auxil:
-            id: "Demo"
-            href: ""
+            id: "Slides"
+            href: "slides/stat133-03-tables1-grammar-graphics.pdf"
     - date: "Sep 26"
       items:
         - type: "Labwork"
@@ -213,9 +213,6 @@
           id: ""
           name: "Shiny Friday: graphics with ggplot"
           href: "https://github.com/data133/shiny/blob/main/nba-histograms1-basic/app.R"
-          auxil:
-            id: "Video"
-            href: ""
         - type: "Homework"
           id: ""
           name: "HW4: Graphics with ggplot2"
@@ -234,6 +231,9 @@
           id: ""
           name: Manipulating tables with dplyr (notes)
           href: "https://www.gastonsanchez.com/R-tidy-hurricanes/2-02-intro-dplyr.html"
+          auxil:
+            id: "Slides"
+            href: "slides/stat133-03-tables2-intro-dplyr.pdf"
     - date: "Oct 2"
       items:
         - type: "Lecture"
@@ -241,8 +241,8 @@
           name: More dplyr (notes)
           href: "https://www.gastonsanchez.com/R-tidy-hurricanes/2-03-intro-pipes.html"
           auxil:
-            id: "Demo"
-            href: ""
+            id: "Slides"
+            href: "slides/stat133-03-tables2-intro-dplyr.pdf"
     - date: "Oct 3"
       items:
         - type: "Labwork"
@@ -255,9 +255,6 @@
           id: ""
           name: "Shiny Friday: Top-n mtcars"
           href: "https://github.com/data133/shiny/blob/main/mtcars-topn-barchart/app.R"
-          auxil:
-            id: "Video"
-            href: ""
         - type: "Homework"
           id: ""
           name: "HW5: Data Wrangling"
@@ -277,17 +274,17 @@
           name: Iterations (notes)
           href: "https://www.gastonsanchez.com/R-coding-basics/5-04-for-loop.html"
           auxil:
-            id: "Demo"
-            href: ""
+            id: "Slides"
+            href: "slides/stat133-02-prog3-for-loop.pdf"
     - date: "Oct 9"
       items:
         - type: "Lecture"
           id: ""
           name: More Iterations and Simulations (slides)
-          href: "slides/stat133-02-prog4-apply-loops.pdf"
+          href: "https://www.gastonsanchez.com/R-coding-basics/5-05-while-loop.html"
           auxil:
-            id: "Demo"
-            href: ""
+            id: "Slides"
+            href: "slides/stat133-02-prog4-apply-loops.pdf"
     - date: "Oct 10"
       items:
         - type: "Labwork"
@@ -300,9 +297,6 @@
           id: ""
           name: "Shiny Friday: Top-n mtcars (continued)"
           href: "https://github.com/data133/shiny/blob/main/future-value3-simulations/app.R"
-          auxil:
-            id: "Video"
-            href: ""
         - type: "Homework"
           id: ""
           name: "HW6: Iterations"
@@ -322,8 +316,8 @@
           name: Intro to Regular Expressions (notes)
           href: "https://www.gastonsanchez.com/R-for-strings/08-regex-intro.html"
           auxil:
-            id: "Demo"
-            href: ""
+            id: "Slides"
+            href: "slides/stat133-04-regex1-part1.pdf"
         - type: "Lectur2"
           id: ""
           name: Character sets (notes)
@@ -335,8 +329,8 @@
           name: Anchors (notes)
           href: "https://www.gastonsanchez.com/R-for-strings/10-regex-anchors.html"
           auxil:
-            id: "Demo"
-            href: ""
+            id: "Slides"
+            href: "slides/stat133-04-regex2-part2.pdf"
         - type: "Lectur2"
           id: ""
           name: Quantifiers (notes)
@@ -353,9 +347,6 @@
           id: ""
           name: Look Arounds (notes)
           href: "https://www.gastonsanchez.com/R-for-strings/12-regex-boundaries.html"
-          auxil:
-            id: "Demo"
-            href: ""
         - type: "Homework"
           id: ""
           name: "Shiny App-1"
@@ -375,8 +366,8 @@
           name: Text Mining, introduction (notes)
           href: "https://www.tidytextmining.com/tidytext"
           auxil:
-            id: "Demo"
-            href: ""
+            id: "Slides"
+            href: "slides/stat133-05-text1-mining-intro.pdf"
     - date: "Oct 23"
       items:
         - type: "Lecture"
@@ -384,8 +375,8 @@
           name: Text Mining, word frequencies (notes)
           href: "https://www.tidytextmining.com/tidytext"
           auxil:
-            id: "Demo"
-            href: ""
+            id: "Slides"
+            href: "slides/stat133-05-text2-mining-tidytext.pdf"
     - date: "Oct 24"
       items:
         - type: "Labwork"
@@ -402,12 +393,9 @@
           id: ""
           name: Text Mining, part 3
           href: "."
-          auxil:
-            id: "Demo"
-            href: ""
         - type: "Midterm"
           id: ""
-          name: ""
+          name: "More information TBA"
           href: ""
 - week: 10
   days:
@@ -424,7 +412,7 @@
           name: "Sentiment Analysis 1 (notes)"
           href: "https://www.tidytextmining.com/sentiment."
           auxil:
-            id: "Demo"
+            id: "Doc"
             href: ""
     - date: "Oct 30"
       items:
@@ -433,12 +421,12 @@
           name: "Sentiment Analysis 2 (notes)"
           href: "https://www.tidytextmining.com/sentiment"
           auxil:
-            id: "Demo"
+            id: "Doc"
             href: "."
         - type: "Lecture"
           id: ""
-          name: "Correspondence Analysis"
-          href: "."
+          name: "Correspondence Analysis (notes)"
+          href: "docs/tm-correspondence/text-mining-corresp-analysis1.html"
     - date: "Oct 31"
       items:
         - type: "Labwork"
@@ -449,8 +437,8 @@
       items:
         - type: "Lecture"
           id: ""
-          name: "Correspondence Analysis (cont'd)"
-          href: "."
+          name: "More Correspondence Analysis (notes)"
+          href: "docs/tm-correspondence/text-mining-corresp-analysis2.html"
         - type: "Homework"
           id: ""
           name: "Shiny App-2"
@@ -470,8 +458,8 @@
           name: "Mapping Storms, simple features (notes)"
           href: "https://www.gastonsanchez.com/R-tidy-hurricanes/5-03-maps-sf.html"
           auxil:
-            id: "Demo"
-            href: ""
+            id: "Slides"
+            href: "docs/maps-storms/storms-slides1.html"
     - date: "Nov 6"
       items:
         - type: "Lecture"
@@ -479,8 +467,8 @@
           name: "Mapping Storms, leaflet (notes)"
           href: "https://www.gastonsanchez.com/R-tidy-hurricanes/5-04-maps-leaflet.html"
           auxil:
-            id: "Demo"
-            href: ""
+            id: "Slides"
+            href: "docs/maps-storms/storms-slides2.html"
     - date: "Nov 7"
       items:
         - type: "Labwork"
@@ -492,10 +480,10 @@
         - type: "Lecture"
           id: ""
           name: "Mapping Storms (part 3)"
-          href: "."
+          href: ""
           auxil:
-            id: "Demo"
-            href: ""
+            id: "Slides"
+            href: "docs/maps-storms/storms-slides3.html"
 - week: 12
   days:
     - date: "About"
@@ -517,8 +505,8 @@
           name: "Choropleth maps (1)"
           href: "."
           auxil:
-            id: "Demo"
-            href: ""
+            id: "Slides"
+            href: "docs/choropleth/us-elections-slides1.html"
     - date: "Nov 13"
       items:
         - type: "Labwork"
@@ -531,9 +519,6 @@
           id: ""
           name: "Choropleth maps (2)"
           href: "."
-          auxil:
-            id: "Demo"
-            href: ""
         - type: "Homework"
           id: ""
           name: "Shiny App-3"
@@ -553,8 +538,8 @@
           name: "JSON data (notes)"
           href: "https://www.gastonsanchez.com/R-web-technologies/3-01-json.html"
           auxil:
-            id: "Demo"
-            href: ""
+            id: "Slides"
+            href: "docs/api-open-notify/open-notify-slides.html"
         - type: "Lectur2"
           id: ""
           name: "APIs (notes)"
@@ -566,8 +551,8 @@
           name: "XML 1 (notes)"
           href: "https://www.gastonsanchez.com/R-web-technologies/2-01-xml.html"
           auxil:
-            id: "Demo"
-            href: ""
+            id: "Slides"
+            href: "slides/stat133-07-web2-xml-intro.pdf"
         - type: "Lectur2"
           id: ""
           name: "XML 2 (notes)"
@@ -585,8 +570,8 @@
           name: "Xpath (notes)"
           href: "https://www.gastonsanchez.com/R-web-technologies/2-03-xpath.html"
           auxil:
-            id: "Demo"
-            href: ""
+            id: "Slides"
+            href: "slides/stat133-07-web3-parsing-xml.pdf"
 - week: 14
   days:
     - date: "About"
@@ -601,9 +586,6 @@
           id: ""
           name: "Web Scraping: HTML (notes)"
           href: "https://www.gastonsanchez.com/R-web-technologies/2-04-html.html"
-          auxil:
-            id: "Demo"
-            href: ""
     - date: "Nov 27"
       items:
         - type: "Lecture"
@@ -636,18 +618,12 @@
           id: ""
           name: "Web Scraping (2)"
           href: "."
-          auxil:
-            id: "Demo"
-            href: ""
     - date: "Dec 4"
       items:
         - type: "Lecture"
           id: ""
           name: "Web Scraping (3)"
           href: "."
-          auxil:
-            id: "Demo"
-            href: ""
     - date: "Dec 5"
       items:
         - type: "Labwork"
