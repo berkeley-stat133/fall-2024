@@ -72,13 +72,13 @@ The lectures tend to be focused on the data analysis concepts, while learning ho
 
 ## ⏳ Waitlisted Students and Late Joining
 
-If you are on the waiting list or have a pending application or added the course late, you must still do all coursework and complete labs and homework by the deadlines. __We will not be offering extensions if you are admitted into the course later.__ So it is your responsibility to stay up to date on the assignments.
+If you are on the waiting list or have a pending application or added the course late, you must still do all coursework and complete labs and homework by the deadlines. __We will not be offering extensions if you are admitted/enrolled into the course later.__ So it is your responsibility to stay up to date on the assignments.
 
 Unfortunately, doing all the work is not a guarantee of enrollment. You will only be enrolled if there is space in your lab. Enrollment will proceed by CalCentral.
 
 
 
-## 🔬 Labs (8% of final grade)
+## 🔬 Labs (10% of final grade)
 
 - Weekly labs are an essential part of the course and we will introduce concepts not necessarily covered in lecture.
 - Thursdays are the official days for lab section.
@@ -133,7 +133,7 @@ Please plan ahead and pace yourself. Don't wait until the last day to do an assi
 
  
 
-## 📝 Midterm (8% of final grade)
+## 📝 Midterm (7% of final grade)
 
 - There will be one midterm assigned on Friday Oct-25th.
 - More information about the midterm will be announced as we approach its due date.
@@ -141,7 +141,7 @@ Please plan ahead and pace yourself. Don't wait until the last day to do an assi
 
 
 
-## 📝 Final Exam (22% of final grade)
+## 📝 Final Exam (21% of final grade)
 
 - There will be one final exam.
 - The final exam will be on Wed Dec-18th (7pm-10pm), as scheduled by the University.
