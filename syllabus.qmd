@@ -24,14 +24,14 @@ Because Stat 133 is one of the core courses for Statistics majors, the underlyin
 
 By the end of the course, students will:
 
-- Construct and execute basic programs in R using elementary programming techniques and tidyverse packages
-- Visualize information and data using appropriate graphical techniques
-- Import data from files or the internet
-- Munge raw data into a tidy format
-- Create visualizations using geospatial data
-- Parse and analyze text documents
-- Create reproducible documents
-- Construct interactive web applications
+- Construct and execute basic programs in R using elementary programming techniques and tidyverse packages.
+- Visualize information and data using appropriate graphical techniques.
+- Import data from files or the internet.
+- Munge raw data into a tidy format.
+- Create visualizations using geospatial data.
+- Parse and analyze text documents.
+- Create reproducible documents.
+- Construct interactive web applications.
 
 We don't expect that you become a jedi data scientist, an R ninja, or a super coder. That takes YEARS of practice, training, learning, and collaboration. Instead, we want to give you a good foundation around tools for computational data analysis.
 
