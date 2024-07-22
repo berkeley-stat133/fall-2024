@@ -1,0 +1,285 @@
+---
+title: "Practice: Graphics with ggplot2 (part 1)"
+subtitle: "Stat 133"
+author: "Gaston Sanchez"
+format: 
+  html:
+    toc: true
+    number-sections: true
+    theme: simplex
+embed-resources: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, error = TRUE)
+```
+
+
+::: {.callout-note}
+## Learning Objectives
+
+- Define a function that takes arguments
+- Return a value from a function
+- Test a function
+- Set default values for function arguments
+:::
+
+The content of this module is an adapted excerpt from Winston Chang's 
+[R Graphics Cookbook](https://r-graphics.org/). Specifically, see 
+_Appendix A: Understanding ggplot2_.
+
+
+# First contact with `ggplot()`
+
+In this module you will learn how to create graphics with `"ggplot2"` which is
+part of the `"tidyverse"` ecosystem of packages.
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+library(tidyverse)
+```
+
+The package `"ggplot2"` is probably the most popular package in R to create
+_beautiful_ static graphics. Compared to the functions in the base package 
+`"graphics"`, the package `"ggplot2`" follows a somewhat different philosophy, 
+and it tries to be more consistent and modular as possible.
+
+
+-----
+
+
+# Nobel Prizes Toy Data
+
+We'll walk through a simple example using a toy data set based on Nobel Prizes. 
+First, we'll make a table with some Nobel prizes data in Economics and 
+Chemistry, from USA, France, Germany and UK (years 1901-2019).
+
+```{r echo = TRUE}
+# nobel prizes data
+econ_chem = data.frame(
+  Country = c('USA', 'France', 'Germany', 'UK'),
+  Economics = c(47, 3, 1, 6),
+  Chemistry = c(56, 8, 24, 23)
+)
+
+econ_chem
+```
+
+With this data, we may be interested in obtaining a graphic like the following
+scatter plot: 
+
+```{r echo = FALSE}
+ggplot(econ_chem, aes(x = Economics, y = Chemistry)) +
+geom_point()
+```
+
+
+-----
+
+
+# Some Terminology
+
+Before we go any further, it'll be helpful to define some of the terminology
+used in `ggplot2`:
+
+- The __data__ is what we want to visualize. It consists of _variables_, which
+are stored as columns in a tabular object (e.g. `data.frame`, `tibble`)
+
+- __Geoms__ are the geometric objects that are drawn to represent the data,
+such as bars, lines, points, polygons, etc.
+
+- Aesthetic attributes, or __aesthetics__, are visual properties of geoms, 
+such as $x$ and $y$ positions, line color, fill color, point shapes, etc.
+
+- There are __mappings__ from data values to aesthetics.
+
+- __Scales__ control the mapping from the values in the data space to values
+in the aesthetic space. A continuous $y$ scale maps larger numerical values to
+vertically higher positions in space.
+
+- __Guides__ show the viewer how to map the visual properties back to the data
+space. The most commonly used guides are the tick marks and labels on an axis.
+
+In a data graphic, there is a mapping (or correspondence) from properties 
+of the data to visual properties in the graphic. The data properties are
+typically numerical or categorical values, while the visual properties include
+the $x$ and $y$ positions of points, colors of lines, height of bars, and so on.
+
+On the surface, representing a number with an $x$ coordinate may seem very 
+different from representing a number with a color of a point, but at an abstract
+level, they are the same.
+
+In the _grammar of graphics_, this deep similarity is not just recognized, but
+made central.
+
+
+-----
+
+
+# Basic Scatterplot
+
+A basic `ggplot()` specification looks like this:
+
+```{r eval=FALSE, echo=TRUE}
+ggplot(data = econ_chem, aes(x = Economics, y = Chemistry))
+```
+
+This creates a `ggplot` object using the data frame `econ_chem`. It also 
+specifies default _aesthetic mappings_ within `aes()`:
+
+- `x = Economics` maps the column `Economics` to the $x$ position
+
+- `y = Chemistry` maps the column `Chemistry` to the $y$ position
+
+`"ggplot2"` has a simple requirement for data structures: they must be stored
+in data frames or tibbles, and each type of variable that is mapped to an 
+aesthetic must be stored in its own column.
+
+After we've given `ggplot()` the data frame and the aesthetic mappings, there's
+one more critical component. We need to tell it what _geometric objects_ to
+put there. At this point, `"ggplot2"` doesn't know if we want bars, lines, points,
+or something else to be drawn on the graph.
+
+We'll add `geom_point()` to draw points, resulting in a scatter plot:
+
+```{r}
+#| fig-cap: "A basic scatter plot"
+#| fig-align: center
+ggplot(data =econ_chem, aes(x = Economics, y = Chemistry)) +
+geom_point()
+```
+
+
+
+## Storing a `ggplot` object
+
+If you are going to reuse some of these components, you can store them in 
+variables. We can save the `ggplot` object in an object called `gg`, and then
+add `geom_point()` to it.
+
+```{r fig.keep='none'}
+gg = ggplot(econ_chem, aes(x = Economics, y = Chemistry)) 
+
+gg + geom_point()
+```
+
+
+## More Mappings
+
+We can also __map__ the variable `Country` to the color of the points, by 
+putting `aes()` inside the call to `geom_point()`, and specifying 
+`color = Country`
+
+```{r}
+gg + geom_point(aes(color = Country))
+```
+
+This doesn't alter the default aesthetic mappings that we defined previously,
+inside of `ggplot(...)`. What it does is add an aesthetic mapping for this
+particular geom, `geom_point()`. If we added other geoms, this mapping would 
+not apply to them.
+
+
+## Setting Values
+
+Contrast this aesthetic _mapping_ with aesthetic __setting__. This time, we
+won't use `aes()`; we'll just set the value of `color` directly to `"red"`.
+And we'll also increase the size of the dots by setting `size`:
+
+```{r}
+gg + geom_point(color = "red", size = 3)
+```
+
+
+## Customizing Scales
+
+We can also modify the `scales`; that is, the mappings from data to visual
+attributes. Here, we'll change the $x$ scale so that it has a larger range:
+
+```{r}
+gg + geom_point() + scale_x_continuous(limits = c(0, 60))
+```
+
+<br>
+
+If we go back to the example with the `color = Country` mapping, we can also
+modify the color scale and customize them with our own values:
+
+```{r}
+gg + 
+  geom_point(aes(color = Country)) +
+  scale_color_manual(values = c("blue", "orange", "cyan", "magenta"))
+```
+
+
+-----
+
+
+# Themes, Annotations, etc
+
+Some aspects of a graph's appearance fall outside the scope of the grammar of
+graphics. These include the color of the background and grid lines in the
+graphing area, the fonts used in the axis labels, annotations, text in the 
+graph title & subtitle, legend details, and things like that. These are 
+controlled with auxiliary functions such as `labs()`, `theme()`, or `annotate()`.
+
+```{r}
+gg + 
+  geom_point(aes(color = Country), size = 3) +
+  scale_x_continuous(limits = c(0, 60)) +
+  scale_y_continuous(limits = c(0, 60)) +
+  labs(title = "Economics and Chemistry Nobel Prizes (1901-2019)",
+       subtitle = "(USA eclipses other countries)",
+       x = "Prizes in Economics",
+       y = "Prizes in Chemistry") +
+  annotate(geom= "text", x = 47, y = 52, label = "USA") +
+  theme(legend.position = "bottom") +
+  theme_minimal()
+```
+
+
+-----
+
+
+# Web interactive ggplot graphics with `"plotly"`
+
+Graphics created with _ggplot_ are static graphics (i.e. lack interactive 
+features). However, you can use functions from the package `"plotly"` (this is
+NOT part of `"tidyverse"`) to take a ggplot object and make it into a
+web-interactive plot.
+
+As usual, you will need to install `"plotly"`. Assuming this package is installed,
+simply call it with `library()`
+
+```{r echo=TRUE, warning=FALSE, message=FALSE}
+library(plotly)
+```
+
+
+Let's take the previous scatter plot, and assign the `ggplot` to its own object
+`econ_chem_scatter`. After that, pass this object to `ggplotly()`. A web
+interactive graphic will be produced, which you can zoom-in or zoom-out, hover 
+over the points to see their specific values, reset axes, etc.
+
+```{r}
+# create ggplot object
+econ_chem_scatter = gg + 
+  geom_point(aes(color = Country), size = 3) +
+  scale_x_continuous(limits = c(0, 60)) +
+  scale_y_continuous(limits = c(0, 60)) +
+  labs(title = "Economics and Chemistry Nobel Prizes (1901-2019)",
+       subtitle = "(USA eclipses other countries)",
+       x = "Prizes in Economics",
+       y = "Prizes in Chemistry") +
+  annotate(geom= "text", x = 47, y = 52, label = "USA") +
+  theme(legend.position = "bottom") +
+  theme_minimal()
+
+# convert ggplot to plotly
+ggplotly(econ_chem_scatter)
+```
+
+<br>
+
+Notice that not all elements specified in the `ggplot` object are preserved
+when passed to `ggplotly()`. For example, the generated `plotly` has no 
+subtitle.

@@ -1,0 +1,450 @@
+---
+title: "Practice: Regular Expressions (part 2)"
+subtitle: "Stat 133"
+author: "Gaston Sanchez"
+format: 
+  html:
+    toc: true
+    number-sections: true
+    theme: simplex
+embed-resources: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, error = TRUE)
+```
+
+::: {.callout-note}
+## Learning Objectives
+
+- Getting familiar with regex functions from `"stringr"`
+- Use regex operations to clean/process "messy" data
+- Focus on detection and extraction of string patterns
+:::
+
+
+# Regular Expressions with `"stringr"`
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+library(tidyverse) # data wrangling and graphics
+library(rvest)     # for web scraping
+library(plotly)    # web-interactive plots
+```
+
+The goal of this module is for you to get a first contact with the most common 
+regex functions in `"stringr"` (see below). While R provides a set of built-in 
+functions for regex pattern matching, I prefer to use `"stringr"` functions
+which are more consistent and user friendly.
+
+To be more precise, the purpose of this document is to give you a little bit of
+regex practice with functions such as:
+
+- `str_match()`
+- `str_detect()`
+- `str_extract()`
+- `str_locate()`
+- `str_sub()`
+- `str_split()`
+- `str_remove()`
+- `str_replace()`
+
+
+## Stringr cheatsheet
+
+We recommend having at hand the stringr cheatsheet (available in bCourses)
+
+<https://bcourses.berkeley.edu/courses/1526481/files/folder/cheatsheets?preview=86322354>
+
+
+-----
+
+
+# Women's Discus Data 
+
+You will be working with the data set for the 
+_Women's discus throw world record progression_, available in wikipedia:
+
+<https://en.wikipedia.org/wiki/Women%27s_discus_throw_world_record_progression>
+
+![](women-discus-screenshot.png){fig-align="center" width=70%}
+
+
+## Getting the Data
+
+Perhaps the simplest and most straightforward way to get the data in R is
+by passing the URL to a function that lets you import HTML files such as 
+`read_html()`:
+
+```{r echo=TRUE, eval=FALSE}
+# assemble url
+wiki = "https://en.wikipedia.org/wiki/"
+women_discus = "Women%27s_discus_throw_world_record_progression"
+url = paste0(wiki, women_discus)
+
+# import HTML file
+doc = read_html(url)
+class(doc)
+```
+
+```{r echo=FALSE}
+doc = read_html("women-discus-throw.html")
+class(doc)
+```
+
+As you can tell, `doc` is an object of class `"xml_document"` that contains,
+among other things, the HTML table with the data of discus world records.
+
+
+## Another option to get the data
+
+Another option to get the data involves a 2-step process: 
+
+1) download the html file of the wikipedia page to your working directory, 
+
+2) then import this file in R. 
+
+This is my preferred method for working with data from the web, following good 
+practices to avoid making recurrent and unnecessary requests to the server 
+where the data is hosted.
+
+```{r echo=TRUE, eval=FALSE}
+# step 1) download a copy of the HTML file, 
+# (run this code in R's console!!!)
+wiki = "https://en.wikipedia.org/wiki/"
+women_discus = "Women%27s_discus_throw_world_record_progression"
+url = paste0(wiki, women_discus)
+download.file(wiki_women_discus, "women-discus-throw.html")
+```
+
+Assuming that you've downloaded the html content in the file 
+`women-discus-throw.html`, and that this file is in your working directory,
+you can then import it with `read_html()`:
+
+```{r echo=TRUE, eval=FALSE}
+# step 2) extract HTML table into a data.frame
+doc = read_html("women-discus-throw.html")
+```
+
+To extract the HTML tables from `doc` you use the `html_table()` function:
+
+```{r echo=TRUE}
+tbls = html_table(doc)
+length(tbls)
+```
+
+
+## Raw (messy) Table
+
+If you inspect all the extracted tables in `tbls`, you'll see that the table we 
+are interested in is the second one:
+
+```{r}
+dat = tbls[[2]]
+dat
+```
+
+
+-----
+
+
+# Extracting Mark (in meters)
+
+The column `Mark` contains a character string with the record expressed 
+both in meters and feet-inches. We want to extract only the value associated
+to meters.
+
+My suggestion is to always start small. In this case, you can get a subset of
+values on which to test your regex patterns:
+
+```{r echo=TRUE}
+tmp = head(dat$Mark)
+tmp
+```
+
+With the values in `tmp`, you can match the numeric values of meters with a 
+pattern that matches a string __beginning__ with two digits, followed by a dot 
+`"."`, followed by two more digits
+
+```{r echo=TRUE}
+str_extract(tmp, "^[0-9][0-9]\\.[0-9][0-9]")
+```
+
+
+## Your Turn: Meters
+
+a) Use `str_extract()` with a pattern that matches a string __beginning__ with 
+two digits, followed by a dot `"."`, followed by two more digits. Come up with 
+three different regex patterns that meet these criteria.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show answer"
+#| eval: FALSE
+
+# pattern 1
+str_extract(tmp, "^[0-9][0-9]\\.[0-9][0-9]")
+
+# pattern 2
+str_extract(tmp, "^[0-9]{2}\\.[0-9]{2}")
+
+# pattern 3
+str_extract(tmp, "^[[:digit:]]{2}\\.[[:digit:]]{2}")
+```
+
+
+b) Once you have a simple pattern, use it on the entire column `Mark` and get a
+__numeric vector__ `mark`:
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show answer"
+
+# numeric vector mark
+mark = as.numeric(str_extract(dat$Mark, "^[0-9]{2}\\.[0-9]{2}"))
+```
+
+
+-----
+
+
+# Extracting Athlete Name
+
+The second task involves extracting the first and last names of the athletes. 
+If you inspect the column `Athlete`, you will see that all its values are 
+formed with the first name, the last name, and the country inside parenthesis:
+
+```{r echo=TRUE}
+ath = head(dat$Athlete)
+ath
+```
+
+
+## Your Turn: play with `ath`
+
+a) Work with the sample vector `ath` and try to `str_extract()` the first name.
+You can look for a pattern consisting of a _word at the beginning of the string_.
+This involves using the _beginning of the string anchor_ `"^"`, and the _word_ 
+pattern `"\\w+"` (i.e. one or more alphanumeric characters):
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show answer"
+#| eval: FALSE
+str_extract(ath, "^\\w+")
+```
+
+
+b) Now use the patterns _whitespace_ `"\\s"` and _word_ `"\\w+"` to attempt 
+extracting the athlete's last name `"\\s\\w+"`; _hint_: to remove the extra matched 
+space you can use `str_trim()`
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show answer"
+#| eval: FALSE
+ath_last = str_extract(ath, "\\s\\w+")
+str_trim(ath_last)
+```
+
+
+c) Once you are done working with `ath`, use your code to extract the first and 
+last names of all athletes; use vectors `first_name` and `last_name` for this
+purpose:
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show answer"
+#| eval: TRUE
+
+# first and last name of all athletes
+first_name = str_extract(dat$Athlete, "^\\w+")
+
+last_str = str_extract(dat$Athlete, "\\s\\w+")
+last_name = str_trim(last_str)
+```
+
+
+## Your Turn: Athlete's Initials
+
+Use `first_name` and `last_name` to select the first letter in each vector
+in order to form a new vector `initials` containing the initials of each 
+athlete's name: e.g. `"J.T.", "T.L.", "G.H.", ...`
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show answer"
+#| eval: TRUE
+
+# initials vector
+first_initial = str_extract(first_name, "\\w")
+last_initial = str_extract(last_name, "\\w")
+initials = paste0(first_initial, ".", last_initial, ".")
+```
+
+
+-----
+
+
+# Country
+
+The column __Athlete__ also contains the athlete's country---abbreviated---within parenthesis:
+
+```{r echo=TRUE}
+ath = head(dat$Athlete)
+ath
+```
+
+
+## Your Turn: Athlete's country
+
+a) Use `str_extract()` with a regex pattern that matches the country
+abbreviation formed by three consecutive upper case letters. Come up with three 
+different regex patterns that lets you get these characters:
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show answer"
+#| eval: FALSE
+
+# pattern 1
+str_extract(ath, "[A-Z][A-Z][A-Z]")
+
+# pattern 2
+str_extract(ath, "[A-Z]{3}")
+
+# pattern 3
+str_extract(ath, "[[:upper:]]{3}")
+```
+
+
+b) Once you have the right pattern, use your code to extract the country
+abbreviations on the entire column to produce a vector `country`
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show answer"
+#| eval: TRUE
+country = str_extract(dat$Athlete, "[A-Z][A-Z][A-Z]")
+```
+
+
+-----
+
+
+# Date
+
+The date values are in the column `Date`:
+
+```{r echo=TRUE}
+dts = head(dat$Date)
+dts
+```
+
+
+## Your Turn: play with `dts`
+
+With the `dts` vector, extract in separate vectors the 
+values of day, month name, and year: you can try using patterns such as: 
+
+- digit: `"[0-9]"`, `"\\d"`, 
+
+- non-digits: `"\\D"`
+
+- word-character: `"\\w"`:
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show answer"
+#| eval: TRUE
+
+# days
+day = as.numeric(str_extract(dat$Date, "^[0-9]+"))
+
+# months
+month = str_trim(str_extract(dat$Date, "\\D+"))
+
+# years
+year = as.numeric(str_extract(dat$Date, "\\d{4}"))
+```
+
+
+-----
+
+
+# Clean Data Frame
+
+We are assuming that you have created vectors for all the cleaned components: 
+
+- `mark` (in meters)
+- `first_name` (first name of athlete)
+- `last_name` (last name of athlete)
+- `initials` (name initials)
+- `country`(athlete's country)
+- `day` (number of day)
+- `month` (name of month)
+- `year` (number of year)
+
+
+## Your Turn: assemble table `discus`
+
+Create a data frame `discus` with all the above vectors used as columns of this
+table. The `head()` of your table should look like this:
+
+```{r discus, echo=FALSE}
+discus = data.frame(
+  mark = mark,
+  first_name = first_name,
+  last_name = last_name,
+  initials = initials,
+  country = country,
+  day = day,
+  month = month,
+  year = year
+)
+
+head(discus)
+```
+
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show answer"
+#| eval: FALSE
+discus = data.frame(
+  mark = mark,
+  first_name = first_name,
+  last_name = last_name,
+  initials = initials,
+  country = country,
+  day = day,
+  month = month,
+  year = year
+)
+```
+
+
+-----
+
+
+# Timeline graph
+
+Graph a timeline to visualize the progression of world records: use `year` 
+for the x-axis, and `mark` for the y-axis. To be more specific, create a 
+`"ggplot"` object and then pass it to `ggplotly()`; you could get something
+like this:
+
+```{r}
+#| label: timeline
+#| code-fold: true
+#| code-summary: "Show answer"
+#| warning: false
+gg = ggplot(data = discus, aes(x = year, y = mark)) +
+  geom_line(color = "#FF2E66") +
+  geom_point(color = "#FF2E66", aes(text = last_name)) + 
+  labs(title = "Women's discus throw world record progression") +
+  theme_minimal()
+
+ggplotly(gg)
+```
+
+

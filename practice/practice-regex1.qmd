@@ -1,0 +1,283 @@
+---
+title: "Practice: Regular Expressions (part 1)"
+subtitle: "Stat 133"
+author: "Gaston Sanchez"
+format: 
+  html:
+    toc: true
+    number-sections: true
+    theme: simplex
+embed-resources: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, error = TRUE)
+```
+
+::: {.callout-note}
+## Learning Objectives
+
+- Getting familiar with regex functions from `"stringr"`
+- Use regex operations to clean/process "messy" data
+- Focus on detection and extraction of string patterns
+:::
+
+
+# Regular Expressions with `"stringr"`
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+library(tidyverse)
+```
+
+
+# Practice Regex patterns
+
+Consider the following character with the names of some animals:
+
+```{r echo=TRUE}
+animals = c(
+  'dog', 'cat', 'bird', 'dolphin', 'lion', 'zebra', 'tiger', 
+  'wolf', 'whale', 'eagle', 'pig', 'osprey', 'kangaroo', 'koala')
+```
+
+Let's match the pattern `dog` with `str_match()`
+
+```{r echo=TRUE}
+str_match(animals, pattern = 'dog')
+```
+
+As you can tell, the output of `str_match()` is an array with as many rows as
+elements in the input vector. If there is a match, the matched string pattern 
+is displayed. If there is no match, then you get a missing value `NA`
+
+You can use `str_detect()` to check if there is a match:
+
+```{r echo=TRUE}
+str_detect(animals, 'dog')
+```
+
+
+To _extract_ the matched pattern, you can use `str_extract()`:
+
+```{r echo=TRUE}
+str_extract(animals, pattern = 'dog')
+```
+
+
+
+Sometimes you may want to extract the elements of the input vector associated to
+a match. For instance, say we are interested in those animals that contain the
+letter `"a"`. We can use the output of `str_detect()` to do logical subsetting
+
+```{r}
+animals[str_detect(animals, 'a')]
+```
+
+
+## Your turn
+
+Use logical subsetting with `str_detect()`, to find the names of animals with:
+
+a) zero or more `o` 
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show answer"
+#| eval: false
+animals[str_detect(animals, 'o*')]
+```
+
+
+b) zero or one `o`
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show answer"
+#| eval: false
+animals[str_detect(animals, 'o?')]
+```
+
+
+c) at least 1 `o`: `"dog" "dolphin" "lion" "wolf" "osprey" "kangaroo" "koala"`
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show answer"
+#| eval: false
+animals[str_detect(animals, 'o+')]
+```
+
+
+d) exactly 2 `o`'s together: `"kangaroo"`
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show answer"
+#| eval: false
+animals[str_detect(animals, 'o{2}')]
+```
+
+
+e) one `o`, but not two `o`'s together: `"dog" "dolphin" "lion" "wolf" "osprey" "koala"`
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show answer"
+#| eval: false
+animals[str_detect(animals, 'o[^o]')]
+```
+
+
+f) two vowels together: `"lion" "eagle" "kangaroo" "koala"`
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show answer"
+#| eval: false
+animals[str_detect(animals, '[aeiou]{2}')]
+```
+
+
+g) two or more consonants together: `"bird" "dolphin"  "zebra" "wolf" "whale" "eagle" "osprey" "kangaroo"`
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show answer"
+#| eval: false
+animals[str_detect(animals, '[^aeiou]{2,}')]
+```
+
+
+h) three consonants together: `"dolphin" "osprey"`
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show answer"
+#| eval: false
+animals[str_detect(animals, '[^aeiou]{3}')]
+```
+
+
+i) three letters only: `"dog" "cat" "pig"`
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show answer"
+#| eval: false
+animals[str_detect(animals, '^[a-z]{3}$')]
+```
+
+
+j) four letters only: `"bird" "lion" "wolf"`
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show answer"
+#| eval: false
+animals[str_detect(animals, '^[a-z]{4}$')]
+```
+
+
+-----
+
+
+# File Names
+
+Here's another character vector with some file names and their extensions:
+
+```{r}
+files <- c(
+  'sales1.csv', 'orders.csv', 'sales2.csv',
+  'sales3.csv', 'europe.csv', 'usa.csv', 'mex.csv',
+  'CA.csv', 'FL.csv', 'NY.csv', 'TX.csv',
+  'sales-europe.csv', 'sales-usa.csv', 'sales-mex.csv')
+```
+
+
+## Your turn
+
+a) Find the file names containing numbers
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show answer"
+#| eval: false
+files[str_detect(files, '[0123456789]')]
+
+files[str_detect(files, '[0-9]')]
+
+files[str_detect(files, '[[:digit:]]')]
+```
+
+
+b) Find the file names containing no numbers
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show answer"
+#| eval: false
+files[!str_detect(files, '[0-9]')]
+```
+
+
+c) Find the file names containing lower case letters (including file extension)
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show answer"
+#| eval: false
+files[str_detect(files, '[[:lower:]]')]
+```
+
+
+d) Find the file names containing lower case letters (just the name, not the file extension)
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show answer"
+#| eval: false
+files[!str_detect(files, '[[:upper:]]')]
+```
+
+
+e) Find the file names containing a dash
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show answer"
+#| eval: false
+files[str_detect(files, '-')]
+```
+
+
+f) Find the file names containing no dash
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show answer"
+#| eval: false
+files[!str_detect(files, '-')]
+```
+
+
+g) Create a vector of files by replacing the 'csv' extension into 'txt' extension
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show answer"
+#| eval: false
+str_replace(files, pattern = "csv", replacement = "txt")
+```
+
+
+h) Extract just the file name (without the extension)
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show answer"
+#| eval: false
+str_replace(files, pattern = "\\.csv", replacement = "")
+
+str_remove(files, pattern = "\\.csv")
+```
+

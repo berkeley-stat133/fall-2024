@@ -1,0 +1,339 @@
+---
+title: "Practice: Importing tables with `readr`"
+subtitle: "Stat 133"
+author: "Gaston Sanchez"
+format: 
+  html:
+    toc: true
+    number-sections: true
+    theme: simplex
+embed-resources: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, error = TRUE)
+```
+
+::: {.callout-note}
+## Learning Objectives
+
+- Get to know various options to import data tables in R
+- Practice using reading tables functions from package `"utils"`
+- Practice using reading tables functions from package `"readr"`
+:::
+
+
+# Importing Data Tables with `"readr"`
+
+In this module, you will start learning how to import tables in R using
+functions from the _tidyverse_ package `"readr"` . 
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+library(tidyverse)
+```
+
+
+## Data Files
+
+This module has a companion folder that contains the text files listed below
+(see bCourses, `Files/` tab, folder `data/`, subfolder `importing-tables/`):
+
+- `starwarstoy.csv`: this is a typical CSV file
+
+- `starwarstoy2.csv`: this is a typical CSV file
+
+- `starwarsfwf.txt`: this is a _fixed width format_ (fwf) file
+
+- `starwarstoy2.txt`: this is a text file with both metadata and data
+
+The following exercises will allow you to practice importing data into a 
+tabular object (e.g. `data.frame`, `tibble`) using base `"utils"` functions
+`read.table()` and friends, as well as functions from package `"readr"`.
+
+
+-----
+
+
+# Example: CSV file `starwars.csv`
+
+Consider the CSV file `starwarstoy.csv`. This is a comma separated value file,
+with the following contents:
+
+```{.text code-line-numbers="true"}
+name,gender,height,weight
+Luke Skywalker,male,1.72,77
+Leia Skywalker,female,1.5,49
+Han Solo,male,1.8,80
+Obi-Wan Kenobi,male,1.82,77
+```
+
+As you can tell, the content of the file consists of five lines of text. 
+
+The first line corresponds to the names of the variables or fields:
+
+- `name`
+- `gender`
+- `height`
+- `weight`
+
+Lines 2 to 5 correspond to the values of four Star Wars characters
+(Luke, Leia, Han, and Obi-Wan)
+
+
+## How do you import this data in R?
+
+R has a set of built-in functions for importing a great variety of data files.
+For sake of convenience, we are going to describe importing tools from the
+`"tidyverse"` package `"readr"`.
+
+
+### Quick & Dirty Import
+
+Assuming the file `starwarstoy.csv` is in your working directory, one 
+quick-and-dirty way to import it in R is with the function `read_csv()`,
+as shown below:
+
+```{r echo=TRUE}
+# quick-and-dirty import
+dat = read_csv(file = "starwarstoy.csv")
+```
+
+<br>
+
+Notice the message provided by `read_csv()`. It detected that the input file
+uses `","` as the field delimiter. Likewise, it has made an educated guess
+for the data-types of the columns: `name` and `gender` have been encoded as
+`character`, whereas `height` and `weight` have been encoded as `double`.
+
+Once the data has been imported, you can use `dat` like any other object.
+It is important to notice that the output of `"readr"` functions is a `tibble`
+
+```{r echo=TRUE}
+dat
+```
+
+
+
+
+### A More Formal Import
+
+A more formal way to import the file with `read_csv()` is to specify not just
+the name of the input file, but also the data-type of each column. The latter
+specification can be given with the argument `col_types` and the auxiliary
+function `cols()`.
+
+The arguments passed to `cols()` involve pairs of column names and their types.
+In turn, data types are specified with parsing functions such as `col_logical()`, 
+`col_character()`, `col_integer()`, `col_double()`, etc.
+
+```{r echo=TRUE, eval=FALSE}
+# more formal import
+dat = read_csv(
+  file = "starwarstoy.csv", 
+  col_types = cols(
+    name = col_character(),
+    gender = col_character(),
+    height = col_double(),
+    weight = col_double()
+  ))
+```
+
+
+### Yet Another Import
+
+An alternative way to specify the data-types of the columns is to use one-letter
+abbreviations instead of the parsing functions, for example (but not limited to):
+
+- `"l"`: logical
+
+- `"i"`: integer
+
+- `"d"`: double
+
+- `"c"`: character
+
+Here's how to use abbreviations for the data-types:
+
+```{r echo=TRUE, eval=FALSE}
+# abbreviations for column data-types
+dat = read_csv(
+  file = "starwarstoy.csv", 
+  col_types = cols(
+    name = "c",
+    gender = "c",
+    height = "d",
+    weight = "d"
+  ))
+```
+
+But wait, there's more! You can write a more compact command without the
+use of the auxiliary `cols()` function. All you have to do is pass a string
+with the abbreviations to the argument `col_types`. For example, the command
+below passes the string `"ccdd"` to `col_types`:
+
+```{r echo=TRUE, eval=FALSE}
+# more compact command
+dat = read_csv(
+  file = "starwarstoy.csv", 
+  col_types = "ccdd")
+```
+
+The way the string `"ccdd"` works is fairly simple: the first `c` is for 
+the first column, the next `c` is for the second column, and so on and so forth.
+
+
+## Your Turn: importing `starwarstoy2.csv`
+
+The file `starwarstoy2.csv` has the following content:
+
+```{.text code-line-numbers="true"}
+name,gender,height,weight,jedi,species,weapon
+"Luke Skywalker",male,1.72,77,jedi,human,lightsaber
+"Leia Skywalker",female,1.5,49,no_jedi,human,blaster
+"Obi-Wan Kenobi",male,1.82,77,jedi,human,lightsaber
+"Han Solo",male,1.8,80,no_jedi,human,blaster
+"R2-D2",male,0.96,32,no_jedi,droid,unarmed
+"C-3PO",male,1.67,75,no_jedi,droid,unarmed
+"Yoda",male,0.66,17,jedi,yoda,lightsaber
+"Chewbacca",male,2.28,112,no_jedi,wookiee,bowcaster
+```
+
+
+Use `read_csv()` to import this CSV file. Make sure to specify reasonable 
+data types for each of the columns. Try to do this using at least 2 different
+options for the `col_types` argument.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show answer"
+#| eval: FALSE
+
+# somewhat abbreviated
+dat2 = read_csv(
+  file = "starwarstoy.csv", 
+  col_types = cols(
+    name = "c",
+    gender = "c",
+    height = "d",
+    weight = "i",
+    jedi = "c",
+    species = "c",
+    weapon = "c"
+  ))
+
+
+# super abbreviated
+dat2 = read_csv(
+  file = "starwarstoy.csv", 
+  col_types = "ccdiccc")
+```
+
+
+
+## Your Turn: Fixed Width Format
+
+The file `starwarsfwf.txt` has the following content:
+
+```{.text code-line-numbers="true"}
+            name gender height weight
+"Luke Skywalker"   male   1.72     77
+"Leia Skywalker" female    1.5     49
+"Han Solo"         male    1.8     80
+"Obi-Wan Kenobi"   male   1.82     77
+```
+
+See the documentation of the `"readr"` function `read_fwf()`, and use this
+function to import the data in `starwarsfwf.txt`. 
+
+One suggestion to complete this operation is to specify arguments:
+
+- name of the `file`
+
+- column positions and names---argument `col_positions`---via the function 
+`fwf_widths()`
+
+- skip the first line---because column names are being already specified via
+`fwf_widths()`
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show answer"
+#| eval: FALSE
+
+fwf = read_fwf(
+  file = "starwarsfwf.txt",
+  col_positions = fwf_widths(
+    widths = c(16, 7, 7, 7), 
+    col_names = c('name', 'gender', 'height', 'weight')),
+  skip = 1)
+```
+
+
+## Your Turn: File with metadata
+
+Take a look at the file `starwarstoy2.txt`. 
+
+```{.text code-line-numbers="true"}
+# Description: Toy data set of some Star Wars characters
+# Format: Tab separated values
+# height units in meters
+# weight units in kilograms
+
+# column names
+name
+gender
+height
+weight
+jedi
+
+# rows
+"Luke Skywalker"	male	1.72	77	TRUE
+"Leia Skywalker"	female	1.5	49	FALSE
+"Obi-Wan Kenobi"	male	1.82	77	TRUE
+"Han Solo"	male	1.8	80	FALSE
+```
+
+As you can tell, this file has three sections:
+
+- The first four lines of text have some general information with the 
+description of the file, its format, and units of measurement for `height`
+and `weight`
+
+- The next section, from line 7 to 11, indicates the names of the columns
+
+- The last section, from line 14 to 17, have the actual data table
+
+Your goal is to write commands, without hardcoding any values, in order to 
+import the data table (with their corresponding column names). We recommend
+the following strategy:
+
+1) use `read_lines()` to import the first 11 lines in a character vector,
+
+2) from the character vector of step (1), extract those elements that 
+correspond to the column names; this will give you a character vector with 
+just the column names,
+
+3) use `read_tsv()` to import the data values starting at line 14 (i.e. by
+skipping the first 13 lines), specifying the column names previously extracted 
+in the character vector of step (2); as well as providing sensible values for
+the `col_types` argument.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show answer"
+#| eval: FALSE
+
+# step 1
+first_lines = read_lines("starwarstoy2.txt", n_max = 11)
+
+# step 2
+column_names = tail(first_lines, 5)
+
+# step 3
+sw2 = read_tsv(
+  file = "starwarstoy2.txt", 
+  skip = 13, 
+  col_names = column_names,
+  col_types = "ccddl")
+```
+

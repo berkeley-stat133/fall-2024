@@ -1,0 +1,408 @@
+---
+title: "Practice: Intro to Iterations"
+subtitle: "Stat 133"
+author: "Gaston Sanchez"
+format: 
+  html:
+    toc: true
+    number-sections: true
+    theme: simplex
+embed-resources: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, error = TRUE)
+```
+
+
+# Introduction
+
+In this module, we review various constructs and idioms in R to handle iterative
+computations:
+
+- `for()` loop
+- `while()` loop
+- `repeat` loop
+- `apply()`, `lapply()`, `sapply()` functions
+- `sweep()`
+
+
+-----
+
+# About Loops
+
+- Many times we need to perform a procedure several times
+
+- In other words, we have to perform the same operation several times as long 
+as some condition is fulfilled
+
+- For this purpose we use __loops__
+
+- The main idea is that of __iteration__ or __repetition__
+
+- R provides three basic paradigms to handle this situations: `for()` loops,
+`while` loops, and `repeat` loops. 
+
+
+## Example: Summation Series
+
+Consider the following summation series:
+
+$$
+\sum_{k=0}^{n} \frac{1}{2^k} = 1 + \frac{1}{2} + \frac{1}{4} + \frac{1}{8} + \dots + \frac{1}{2^n}
+$$
+
+### Using vectorized code
+
+Assuming $n = 5$, we can compute the summation series using vectorized code.
+First, we generate each of the individual terms $1/2^k$ with values for 
+$k = 0, 1, \dots, n$. And then we add those terms:
+
+```{r}
+n = 5
+k = 0:n
+
+# individual terms
+terms = rep(1/(2^k))
+terms
+
+# series
+sum(terms)
+```
+
+
+### Using a `for` loop
+
+For learning purposes, we are going to ask you to forget about vectorization for a moment. And instead let's see how to use a `for` loop.
+
+In the following loop, we generate each individual `term` at each iteration,
+storing them in a vector `terms`. We also accumulate each `term` in the 
+object `series_sum`:
+
+```{r}
+# input (5 terms)
+n = 5
+
+# initialize terms and series objects
+terms = 0
+series_sum = 0
+
+# generate individual terms and accumulate them
+for (k in 0:n) {
+  term <- 1 / (2^k)
+  print(term)
+  terms[k+1] <- term
+  series_sum = series_sum + term
+}
+
+series_sum
+```
+
+## Example: Arithmetic Series
+
+Consider the following arithmetic series:
+
+$$
+a_n = a_1 + (n-1)d, \qquad n = 2, 3, \dots
+$$
+
+For instance, when $a_1 = 3$, $d = 3$, the terms $a_2, \dots, a_5$ are given by:
+
+\begin{align*}
+a_2 &= a_1 + (2 - 1) d = 6 \\
+a_3 &= a_2 + (3 - 1) d = 9 \\
+a_4 &= a_3 + (4 - 1) d = 12 \\
+a_5 &= a_4 + (5 - 1) d = 15 \\
+\end{align*}
+
+
+### Using a `for` loop
+
+Here's one way to obtain the above series using a `for` loop:
+
+```{r}
+# Arithmetic Series
+a1 = 3
+d = 3
+num = 5
+
+# output
+series = rep(0, num)
+
+# iterations
+for (n in 1:num) {
+  an = a1 + (n-1)*d
+  series[n] <- an
+}
+
+series
+```
+
+
+## Geometric Sequence
+
+A sequence such as $3, 6, 12, 24, 48$ is an example of a geometric sequence. 
+In this type of sequence, the $n$-th term is obtained as: 
+
+$$
+a_n = a_1 \times r^{n-1}
+$$
+
+where: $a_1$ is the first term, $r$ is the common ratio, and $n$ is the number 
+of terms.
+
+
+### Your Turn: `for` loop
+
+- Write a for loop to compute the sum of the first $n$ terms of:
+3 + 6 + 12 + 24 + ... 
+
+- Obtain the geometric series up to $n = 10$.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show answer"
+#| eval: TRUE
+# inputs
+a1 = 3
+r = 2
+num = 10
+
+# output
+series = rep(0, num)
+
+# iterations
+for (n in 1:num) {
+  an = a1 * r^(n-1)
+  series[n] <- an
+}
+```
+
+<br>
+
+
+## Average
+
+As you know, the average of $n$ numbers $x_1, x_2, \dots, x_n$ is given by the 
+following formula:
+
+$$
+\bar{x} = \frac{1}{n} \sum_{i=1}^{n} x_i = \frac{x_1 + x_2 + \dots + x_n}{n}
+$$
+
+
+### Your Turn: Average
+
+Write R code, using both a `for` loop, and a `while` loop, to compute the 
+average of the vector `x = 1:100`. Don't use `sum()` or `mean()`.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show answer"
+#| eval: TRUE
+x = 1:100
+n = length(x)
+
+sum_entries = 0
+
+for (i in 1:n) {
+  sum_entries <- sum_entries + x[i]
+}
+
+avg = sum_entries / n
+```
+
+<br>
+
+
+-----
+
+# `apply()` and `sweep()` functions
+
+In this part we want to show you some interesting and convenient functions
+in R for applying a function to the elements of various kinds of objects.
+
+- `apply()`: apply a function to the elements of an `array` (e.g. a `matrix`)
+
+- `lapply()`: apply a function to the elements of a `list`
+
+- `sapply()`: _simplified_ apply a function to the elements of a `list`
+
+
+## Example: Column-means with a loop
+
+Consider the following matrix (based on data frame `mtcars`)
+
+```{r echo=TRUE}
+mat = as.matrix(mtcars[1:10,1:5])
+mat
+```
+
+A common statistical operation involves computing summary statistics (e.g. mean,
+median, min, max) of the variables in a table. For example, say you want to 
+calculate column-means. This could be done using a `for` loop that 
+iterates over all columns, computing the mean for each of them:
+
+```{r echo=TRUE}
+# pre-allocate (i.e. initialize) vector of means
+col_means = c(0, ncol(mat))
+
+# iterate over all columns of mat
+for (j in 1:ncol(mat)) {
+  col_means[j] = mean(mat[ ,j])
+}
+
+# assign names
+names(col_means) = colnames(mat)
+col_means
+```
+
+
+
+## Example: Column-means with `apply()`
+
+Interestingly, instead of using a loop, you can also use `apply()` which allows 
+you to __apply__ a function to the columns, or the rows, or both cols-rows, of 
+a matrix. The three main arguments of `apply()` are:
+
+- `X`: input array (including a matrix)
+
+- `MARGIN`: dimension index (1 = rows, 2 = columns) on which the function
+will be applied
+
+- `FUN`: the function to be applied
+
+So, to obtain the column means of `mat`, we apply the `mean()` function 
+(`FUN = mean`) to each column (`MARGIN = 2`) of the input matrix `mat`
+
+```{r echo=TRUE}
+col_means = apply(X = mat, MARGIN = 2, FUN = mean)
+col_means
+```
+
+
+## Example: Column-means with `apply()`
+
+Sometimes you may want to apply a computation for which R has no built-in 
+function. This can be done by passing an anonymous function to the argument
+`FUN`. Recall that an _anonymous_ function is a function that has no name.
+Here's an example to calculate column-means with our own anonymous function:
+
+```{r echo=TRUE}
+col_avgs = apply(
+  X = mat, 
+  MARGIN = 2, 
+  FUN = function(x) sum(x) / length(x)
+)
+
+col_avgs
+```
+
+If the body of the anonymous function involves several lines of code, you just
+have to use curly braces to wrap the body of the function:
+
+```{r echo=TRUE}
+col_avgs = apply(
+  X = mat, 
+  MARGIN = 2, 
+  FUN = function(x) {
+    n = length(x)
+    sum(x) / n
+  }
+)
+
+col_avgs
+```
+
+Alternatively, you can create your own (non-anonymous) function first, and then
+pass it to `apply()`
+
+```{r}
+average = function(x, na.rm = FALSE) {
+  if (na.rm) {
+    x = x[!is.na(x)]
+  }
+  sum(x) / length(x)
+}
+
+col_avgs = apply(X = mat, MARGIN = 2, FUN = average)
+col_avgs
+```
+
+Notice that the function `average()` takes two arguments: `x` and `na.rm`.
+When we pass a function to `apply()` that takes more than one argument, these
+additional arguments can also be provided to `apply()`. The way you do this is
+by specifying them after the argument `FUN`, for example:
+
+```{r}
+col_avgs = apply(X = mat, MARGIN = 2, FUN = average, na.rm = TRUE)
+col_avgs
+```
+
+
+
+## `sweep()` example
+
+Having obtained column-means, we can mean-center the values in `mat`, that is,
+compute deviations from the mean for each column.
+Again, you could write a loop to do this:
+
+```{r}
+# pre-allocate (i.e. initialize) matrix object
+mat_centered = matrix(0, nrow = nrow(mat), ncol = ncol(mat))
+
+for (j in 1:ncol(mat)) {
+  mat_centered[ ,j] = mat[ ,j] - col_means[j]
+}
+mat_centered
+```
+
+
+The same can be accomplished without writing  a loop thanks to the function 
+`sweep()`
+
+```{r}
+mat_centered = sweep(mat, MARGIN = 2, STATS = col_means, FUN = "-")
+mat_centered
+```
+
+- `MARGIN = 2` indicates sweeping column-by-column
+- `STATS` is the statistic to be taking into account
+- `FUN` is the function applied (with the given `STATS`)
+
+
+
+## Your Turn: `apply()`
+
+Consider the matrix `mat` defined above.
+
+a) Use `apply()` to get a vector with column maxima (see below).
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show answer"
+#| eval: TRUE
+col_max = apply(mat, MARGIN = 2, FUN = max)
+```
+
+```{r}
+#| echo: FALSE
+col_max
+```
+
+
+b) Use `sweep()` to scale the columns of `mat` by dividing them by the column 
+maxima (see below).
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show answer"
+#| eval: TRUE
+mat_scaled = sweep(mat, MARGIN = 2, STATS = col_max, FUN = "/")
+```
+
+```{r}
+#| echo: FALSE
+mat_scaled
+```
+

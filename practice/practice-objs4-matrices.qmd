@@ -1,0 +1,265 @@
+---
+title: "Practice: Matrices"
+subtitle: "Stat 133"
+author: "Gaston Sanchez"
+format: 
+  html:
+    toc: true
+    number-sections: true
+    theme: simplex
+embed-resources: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, error = TRUE)
+```
+
+::: callout-note
+## Learning Objectives
+
+-   Create Matrices with `matrix()`
+-   Create Matrices with `cbind()` and `rbind()`
+-   Subset (subscript) matrices with brackets `mat[row,col]`
+:::
+
+# Matrices and `matrix()`
+
+An R matrix provides a rectangular data object: to handle data in a two-dimensional array.
+
+The function `matrix()` is the primary function to create matrices in R. `matrix()` takes---ideally---a vector `x` as input, and returns a matrix arranging the elements in `x` according to the specified number of rows `nrow` and columns `ncol`. For example:
+
+```{r}
+# example 1
+m1 <- matrix(1:6, nrow = 2, ncol = 3)
+m1
+```
+
+```{r}
+# example 2
+m2 <- matrix(1:6, nrow = 3, ncol = 2)
+m2
+```
+
+A few important aspects about R matrices:
+
+-   R internally stores matrices as vectors.
+
+-   Which means that matrices are also **atomic** (i.e. all the elements in a matrix must be of the same data type).
+
+-   Matrices in R are stored **column-major** (i.e. by columns).
+
+-   This is like Fortran, Matlab, and Julia, but not like C or Python (e.g. numpy)
+
+## Argument `byrow`
+
+The `matrix()` function comes with the `byrow` argument that allows you to arrange values by-row instead of by-column; here's an example:
+
+```{r}
+# example 2
+m3 <- matrix(1:6, nrow = 2, ncol = 3, byrow = TRUE)
+m3
+```
+
+Keep in mind that `m3` is still stored column-major. You can confirm this by asking R to vectorize `m3`
+
+```{r}
+as.vector(m3)
+```
+
+## Another `matrix()` example
+
+How do you create the following matrix?
+
+```{r hpmat1, echo = FALSE}
+# vector of names
+hp <- c("Harry", "Ron", "Hermione",
+        "Potter", "Weasley", "Granger")
+
+# matrix filled up by rows
+matrix(hp, nrow = 3)
+```
+
+Here's one way to create the preceding matrix:
+
+```{r hpmat1}
+```
+
+Here's another way to create the same matrix:
+
+```{r hpmat2}
+# vector of names
+hp <- c("Harry", "Potter", "Ron", "Weasley", 
+        "Hermione", "Granger")
+
+# matrix filled up by rows
+matrix(hp, nrow = 3, byrow = TRUE)
+```
+
+## Dimensions and Names
+
+Matrices have:
+
+-   `length()`: number of cells
+
+-   `typeof()`: data type (recall that matrices are atomic)
+
+-   `dim()`: dimensions; number of rows and columns
+
+    -   `nrow()`: number of rows
+    -   `ncol()`: number of columns
+
+We also have functions that let you set/get the names for either the rows or the columns (or both) of a matrix:
+
+-   `rownames()`
+
+-   `colnames()`
+
+-   `dimnames()`
+
+```{r}
+# rownames
+set.seed(123)
+A <- matrix(runif(12), nrow = 3, ncol = 4)
+rownames(A) <- paste0("row", 1:nrow(A))
+A
+
+rownames(A)
+```
+
+```{r}
+set.seed(123)
+B <- matrix(runif(12), nrow = 3, ncol = 4)
+colnames(B) <- paste0("col", 1:ncol(B))
+B
+
+colnames(B)
+```
+
+```{r}
+set.seed(123)
+C <- matrix(runif(12), nrow = 3, ncol = 4)
+rownames(C) <- paste0("row", 1:nrow(C))
+colnames(C) <- paste0("col", 1:ncol(C))
+C
+
+dimnames(C)
+```
+
+## Recycling in matrices
+
+Recycling rules also apply to matrices, for example:
+
+```{r}
+x <- letters[1:4]
+X <- matrix(x, nrow = 4, ncol = 3)
+X
+```
+
+Here are more recycling examples:
+
+```{r}
+# "empty" matrices
+mat_chr <- matrix("", nrow = 4, ncol = 3)
+
+mat_num <- matrix(0, nrow = 4, ncol = 3)
+
+mat_lgl <- matrix(NA, nrow = 4, ncol = 3)
+```
+
+## Row and Column binding
+
+Another way to form matrices is by joining or *binding* either vectors or matrices by rows---with `rbind()`---or by columns---with `cbind()`. For example:
+
+```{r}
+a <- c(2, 4, 6)
+b <- c(1, 3, 5)
+```
+
+```{r}
+# column bind
+cbind(a, b)
+```
+
+```{r}
+cbind(m3, b)
+```
+
+```{r}
+# row bind
+rbind(b, a)
+```
+
+```{r}
+rbind(m2, a)
+```
+
+------------------------------------------------------------------------
+
+# Subsetting Matrices
+
+To do subsetting (i.e. subscripting, indexing) on a matrix, you use bracket notation, passing two indexing vectors separated by a comma: the first one for indexing rows, the second one for indexing columns.
+
+```{r}
+# cell in row 1, column 3 of matrix m1
+m1[1,3]
+```
+
+```{r}
+# 2nd column of matrix m2
+m2[ ,2]
+```
+
+```{r}
+# 1st row of matrix m3
+m3[1, ]
+```
+
+Keep in mind that you can also specify a single indexing vector inside brackets, without any commas:
+
+```{r}
+# 2nd element
+m1[2]
+```
+
+And you can also specify double brackets:
+
+```{r}
+# 2nd element
+m1[[2]]
+```
+
+::: callout-warning
+Keep in mind that the two preceding subsetting examples are not commonly used among R users. While they are perfectly valid commands, we prefer to explicitly denote the comma `,` while subsetting matrices.
+:::
+
+
+------------------------------------------------------------------------
+
+# Some Matrix Algebra Operators and Functions
+
+In case you are curious about what kind of common matrix operators and linear algebra functions are available in R:
+
+| Operator  | Description         | Example    |
+|-----------|---------------------|------------|
+| `+`       | addition            | `A + B`    |
+| `-`       | subtraction         | `A - B`    |
+| `*`       | elementwise product | `A * B`    |
+| `%*%`     | matrix product      | `A %*% B`  |
+| `t()`     | transpose           | `t(A)`     |
+| `det()`   | determinant         | `det(A)`   |
+| `diag()`  | extract diagonal    | `diag(A)`  |
+| `solve()` | inverse             | `solve(A)` |
+
+::: callout-note
+Make sure the dimensions of matrices are conformable when using an operator or some calculation on them.
+:::
+
+| Function      | Description                       |
+|---------------|-----------------------------------|
+| `upper.tri()` | upper triangular part of a matrix |
+| `lower.tri()` | upper triangular part of a matrix |
+| `eigen()`     | eigenvalue decomp.                |
+| `svd()`       | singular value decomp.            |
+| `lu()`        | Triangular decomposition          |
+| `qr()`        | QR decomposition                  |
+| `chol()`      | Cholesky decomposition            |

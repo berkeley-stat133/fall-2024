@@ -1,0 +1,373 @@
+---
+title: "Practice: Loops"
+subtitle: "Stat 133"
+author: "Gaston Sanchez"
+format: 
+  html:
+    toc: true
+    number-sections: true
+    theme: simplex
+embed-resources: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, error = TRUE)
+```
+
+::: {.callout-note}
+## Learning Objectives
+
+- Get familiar with the syntax of a `for` loop
+- Write simple `for` loops
+:::
+
+
+# About Loops
+
+- Many times we need to perform a procedure several times
+
+- In other words, we have to perform the same operation several times as long 
+as some condition is fulfilled
+
+- For this purpose we use __loops__
+
+- The main idea is that of __iteration__ or __repetition__
+
+- R provides three basic paradigms to handle this situations: `for()` loops,
+`while` loops, and `repeat` loops.
+
+
+-----
+
+
+# Examples: Counting Letters
+
+Consider the following vector `letrs` which contains various letters:
+
+```{r echo=TRUE}
+letrs <- c(
+  'y', 'd', 'g', 'a', 'b', 'w', 'k', 'n', 'r', 's', 
+  'a', 'u', 'u', 'j', 'v', 'n', 'j', 'g', 'i', 'o', 
+  'u', 'e', 'i', 'y', 'n', 'e', 'e', 'b', 'j', 'y', 
+  'l', 'o', 'a', 't', 'c', 'f', 'j', 'j', 'f', 'o', 
+  't', 't', 'z', 'l', 'y', 'w', 'f', 'y', 'h', 'l', 
+  'y', 'w', 'x', 'f', 'z', 'g', 's', 'j', 'f', 'x', 
+  'n', 'b', 'm', 'r', 'v', 'n', 'f', 'a', 's', 's', 
+  'h', 'f', 'w', 'l', 'f', 'h', 'g', 'k', 'q', 'd', 
+  'm', 'h', 'y', 'p', 'y', 'w', 'n', 't', 'g', 'm', 
+  'v', 'l', 'p', 'a', 'm', 'u', 'f', 'q', 'i', 'g'
+)
+```
+
+
+## Counting `a`'s with vectorized code
+
+Say we are interested in counting the number of letters `"a"`. This can be 
+easily done in R with some vectorized code:
+
+```{r echo=TRUE}
+sum(letrs == 'a')
+```
+
+For learning purposes, we are going to ask you to forget about vectorization
+for a moment. And instead let's see how to use __loops__.
+
+
+## Counting `a`'s with a `for` loop
+
+Alternatively, we can also write a `for` loop that iterates through each 
+element of `letrs`, testing whether we have an `"a"`, and if yes, the count 
+increases by one.
+
+```{r echo=TRUE}
+# start at count zero
+count_a = 0
+
+for (pos in 1:length(letrs)) {
+  # increase count if letter is an 'a'
+  if (letrs[pos] == 'a') {
+    count_a = count_a + 1
+  }
+}
+
+count_a
+```
+
+
+## Counting `x`, `y` and `z` with a `for` loop
+
+Say we are interested in counting the number of `x`, `y` and `z` letters,
+using a `for` loop. Here's one possibility:
+
+```{r echo=TRUE}
+# start at count zero
+count_xyz = 0
+
+for (pos in 1:length(letrs)) {
+  # increase count if letter is x, y, or z
+  if (letrs[pos] %in% c('x', 'y', 'z')) {
+    count_xyz = count_xyz + 1
+  }
+}
+
+count_xyz
+```
+
+
+## Stopping a loop with `break`
+
+Say we are interested in counting the number of `x`, `y` and `z` letters,
+using a `for` loop, but this time, we only want to count until we get the 
+fifth occurrence. 
+
+```{r}
+# start at count zero
+count_xyz = 0
+
+for (pos in 1:length(letrs)) {
+  # increase count if letter is x, y, or z
+  if (letrs[pos] %in% c('x', 'y', 'z')) {
+    count_xyz = count_xyz + 1
+  }
+  # break loop if count gets to fifth occurrence
+  if (count_xyz == 5) {
+    break
+  }
+}
+
+count_xyz
+```
+
+Notice the use of the `break` statement to decide whether the loop should
+stop from iterating.
+
+
+-----
+
+
+# Your Turn: Counting Letters
+
+## Number of letters different from `"b"`
+
+Consider the vector `letrs` defined in the previous section. Write a __for__ 
+loop in order to count the number of letters __different__ from `"b"`
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show answer"
+#| eval: false
+
+# start count at zero
+count_not_b = 0
+
+for (pos in 1:length(letrs)) {
+  # increase count if letter is not a 'b'
+  if (letrs[pos] != 'b') {
+    count_not_b = count_not_b + 1
+  }
+}
+
+count_not_b
+```
+
+
+## Number of `"f"` or `"w"` in even positions
+
+Consider the vector `letrs`. Write a __for__ loop in order to count
+the number of letters equal to `f` or `w` that are in __even__ positions (e.g. 
+2, 4, ..., 100). _Hint_: the function `seq()` is your friend.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show answer"
+#| eval: false
+
+# start count at zero
+count_fw = 0
+
+for (pos in seq(2, 100, by = 2)) {
+  # increase count if letter is 'f' or 'w'
+  if (letrs[pos] == 'f' | letrs[pos] == 'w') {
+    count_fw = count_fw + 1
+  }
+}
+
+count_fw
+```
+
+
+## Counting vowels
+
+Consider the vector `letrs`. Write a __for__ loop in order to count
+the number of vowels, until reaching exactly 15 vowels. How many iterations were
+necessary to obtain 15 vowels?
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show answer"
+#| eval: false
+
+# start count at zero
+count_vowels = 0
+
+for (pos in 1:length(letrs)) {
+  # increase count if letter is a vowel
+  if (letrs[pos] %in% c('a', 'e', 'i', 'o', 'u')) {
+    count_vowels = count_vowels + 1
+  }
+  if (count_vowels == 15) {
+    break
+  }
+}
+
+# number of iterations
+pos
+```
+
+
+-----
+
+
+# Summation Series
+
+
+a) Write a for loop to compute the following series. Test your code with
+different values for $n$. Does the sum of the series converge as $n$ increase?
+
+$$
+\sum_{k=0}^{n} \frac{1}{2^k} = 1 + \frac{1}{2} + \frac{1}{4} + \frac{1}{8} + \dots + \frac{1}{2^n}
+$$
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show answer"
+#| eval: false
+
+# Summation Series of 1/2
+n = 10
+series = 0
+sum_series = 0
+
+for (k in 0:n) {
+  term = 1 / (2^k)
+  series[k+1] = term
+  sum_series = sum_series + term
+}
+
+# with n=10, the series is
+series
+
+# the sum of the series is
+sum_series
+```
+
+
+
+b) Write a for loop to compute the following series. Test your code with
+different values for $n$. Does the sum of the series converge as $n$ increase?
+
+$$
+\sum_{k=0}^{n} \frac{1}{9^k} =1 + \frac{1}{9} + \frac{1}{81} + \dots + \frac{1}{9^n}
+$$
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show answer"
+#| eval: false
+
+# Summation Series of 1/9
+n = 20
+
+# outputs
+series = 0
+sum_series = 0
+
+# iterations
+for (k in 0:n) {
+  term = 1 / (9^k)
+  series[k+1] = term
+  sum_series = sum_series + term
+}
+
+# with n=10, the series is
+series
+
+# the sum of the series is
+sum_series
+```
+
+
+## Arithmetic Series
+
+Consider the following arithmetic series 
+
+$$
+a_n = a_1 + (n-1)d
+$$
+
+Write a for loop to compute this series when $a_1 = 3$, and $d = 3$. For 
+instance: $3 + 6 + 12 + 24 + \dots$. 
+Test your code with different values for $n$. Does the series converge as $n$ 
+increase?
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show answer"
+#| eval: false
+
+# inputs
+a1 = 3
+d = 3
+num = 10
+
+# outputs
+series = rep(0, num)
+sum_series = 0
+
+# iterations
+for (n in 1:num) {
+  an = a1 + (n-1)*d
+  series[n] = an
+  sum_series = sum_series + an
+}
+
+# series does not converge as 'n' increases
+```
+
+
+## Geometric Sequence
+
+A sequence such as $3, 6, 12, 24, 48$ is an example of a geometric sequence. 
+In this type of sequence, the $n$-th term is obtained as: 
+
+$$
+a_n = a_1 \times r^{n-1}
+$$
+
+where: $a_1$ is the first term, $r$ is the common ratio, and $n$ is the number 
+of terms.
+
+Write a for loop to compute the sum of the first $n$ terms of:
+$3 + 6 + 12 + 24 + \dots$. 
+Test your code with different values for $n$. Does the series converge as $n$ 
+increase?
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show answer"
+#| eval: false
+
+# inputs
+a1 = 3
+r = 2
+
+# outputs
+summ = 0
+
+for (n in 1:10) {
+  an = a1 * r^(n-1)
+  summ = summ + an
+}
+
+# series does not converge as 'n' increases
+```

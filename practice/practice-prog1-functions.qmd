@@ -1,0 +1,559 @@
+---
+title: "Practice: Functions (part 1)"
+subtitle: "Stat 133"
+author: "Gaston Sanchez"
+format: 
+  html:
+    toc: true
+    number-sections: true
+    theme: simplex
+embed-resources: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, error = TRUE)
+```
+
+
+::: {.callout-note}
+## Learning Objectives
+
+- Define a function that takes arguments
+- Return a value from a function
+- Test a function
+- Set default values for function arguments
+:::
+
+
+The goal of this module is to give you practice writing very simple functions.
+The following exercises are mostly designed for those of you without any 
+programming experience.
+If you have previous programming experience, you can move to the next module.
+
+
+-----
+
+
+# Function Basics
+
+To define a new function in R you use the function `function()`. Actually, 
+you need to specify a name for the function, and then assign `function()`
+to the chosen name. You also need to define optional arguments (i.e. inputs). 
+And of course, you must write the code (i.e. the body) so the function does 
+something when you use it:
+```r
+# anatomy of a function
+some_name <- function(arguments) {
+  # body of the function
+}
+```
+
+
+-----
+
+
+# From Fahrenheit to Celsius
+
+Let's consider a typical programming example that involves converting 
+fahrenheit degrees into celsius degrees. The conversion formula is
+$(F - 32) \times 5/9 = C$. Here's some R code to convert 100 fahrenheit 
+degrees into Celsius degrees:
+
+```{r echo = TRUE}
+# fahrenheit degrees
+far_deg <- 100
+
+# convert to celsius
+(far_deg - 32) * (5/9)
+```
+
+What if you want to convert 90 fahrenheit degrees in Celsius degrees?
+One option would be to rewrite the previous lines as:
+
+```{r echo = TRUE}
+# fahrenheit degrees
+far_deg <- 90
+
+# convert to celsius
+(far_deg - 32) * (5/9)
+```
+
+However, retyping many lines of code can be very boring, tedious, and 
+inefficient. To make your code reusable in a more efficient manner, you will
+have to write functions.
+
+
+## Writing a simple function
+
+So, how do you create a function? The first step is to write code and make
+sure that it works. In this case we already have the code that converts a
+number in Fahrenheit units into Celsius.
+
+The next step is to __encapsulate__ the code in the form of a function. You
+have to choose a name, some argument(s), and determine the output. Here's one
+example with a function `fahrenheit_to_celsius()`
+
+```{r echo = TRUE}
+fahrenheit_to_celsius <- function(x) {
+  (x - 32) * (5/9)
+}
+
+fahrenheit_to_celsius(100)
+```
+
+If you want to get the conversion of 90 fahrenheit degrees, you just simply
+execute it again by changing its argument:
+
+```{r echo = TRUE}
+fahrenheit_to_celsius(90)
+```
+
+And because we are using arithmetic operators (i.e. multiplication, subtraction,
+division), the function is also vectorized:
+
+```{r echo = TRUE}
+fahrenheit_to_celsius(c(90, 100, 110))
+```
+
+Sometimes it is recommended to add a default value to one (or more) of the
+arguments. In this case, we can give a default value of `x = 1`. When the
+user executes the function without any input, `fahrenheit_to_celsius` returns
+the value of 1 fahrenheit degree to Celsius degrees:
+
+```{r echo = TRUE}
+fahrenheit_to_celsius <- function(x = 1) {
+  (x - 32) * (5/9)
+}
+
+# default execution
+fahrenheit_to_celsius()
+```
+
+
+-----
+
+
+# Unit Conversion Functions
+
+## miles to kilometers
+
+Write a function `miles_to_kms()` that converts miles into kilometers: 1 mile
+is equal to 1.6 kilometers. Give the argument a default value of 1.
+
+```{r miles2kms}
+#| code-fold: true
+#| code-summary: "Show answer"
+miles_to_kms = function(x = 1) {
+  x * 1.6
+}
+```
+
+
+## gallons to liters
+
+Write a function `gallon_to_liters()` that converts gallons to liters: 1 gallon
+is equal to 3.78541 liters:
+
+```{r gallons2liters}
+#| code-fold: true
+#| code-summary: "Show answer"
+gallon_to_liters = function(x = 1) {
+  x * 3.78541
+}
+```
+
+
+## seconds to years
+
+According to Wikipedia, in 2015 the life expectancy of a person born in the US 
+was 79 years. Consider the following question: Can a newborn baby in USA expect 
+to live for one billion ($10^9$) seconds? 
+
+To answer this question, write a function `seconds2years()` that takes
+a number in seconds and returns the equivalent number of years. Assume a
+year with 365 days.
+Test the function with `seconds2years(1000000000)`
+
+```{r secs2years}
+#| code-fold: true
+#| code-summary: "Show answer"
+#| eval: FALSE
+seconds2years = function(x = 1) {
+  x / (365 * 24 * 60 * 60)
+}
+
+seconds2years(1000000000)
+```
+
+
+-----
+
+
+# Simple Math Functions
+
+Consider the following mathematical functions:
+
+$$
+f(x) = x^2,   \quad g(x) = 2x + 5
+$$
+
+
+## Function `f()`
+
+Write a function `f()` based on the above equation.
+
+```{r funf}
+#| code-fold: true
+#| code-summary: "Show answer"
+f = function(x = 1) {
+  x^2
+}
+```
+
+Test your function with:
+
+```r
+f(2)
+f(-5)
+```
+
+
+## Function `g()`
+
+Write a function `g()` based on the above equation.
+
+```{r fung}
+#| code-fold: true
+#| code-summary: "Show answer"
+g = function(x = 1) {
+  2*x + 5
+}
+```
+
+Test your function with:
+
+```r
+g(0)
+g(-5/2)
+```
+
+
+## Composite function `fog()`
+
+Write code to create the composite function `fog()`: $f \circ g(x)$
+
+```{r fog}
+#| code-fold: true
+#| code-summary: "Show answer"
+fog = function(x = 1) {
+  f(g(x))
+}
+```
+
+Test your composite function with:
+
+```r
+fog(2)
+fog(-5)
+```
+
+
+## Composite function `gof()`
+
+Write code to create the composite function `gof()`: $g \circ f(x)$
+
+```{r gof}
+#| code-fold: true
+#| code-summary: "Show answer"
+gof = function(x = 1) {
+  g(f(x))
+}
+```
+
+Test your composite function with:
+
+```r
+gof(0)
+gof(-5/2)
+```
+
+
+-----
+
+
+# Polynomials
+
+In this problem we want to see whether the graph of a given polynomial
+will cross or touch the _x_ axis in a given interval. 
+
+Let's begin with the polynomial: $f(x) = x^2 (x -1)$. The first thing 
+to do is write a function for the polynomial, for instance:
+
+```{r echo = TRUE}
+poly1 <- function(x) {
+  (x^2) * (x - 1)
+}
+```
+
+Once you have a function for the polynomial, you can create a set of pairs of
+points $x$ and $y = f(x)$, and then use them to graph the polynomial
+
+```{r echo = TRUE}
+# set of points
+x <- seq(-4, 4, length.out = 30)
+y <- poly1(x)
+
+# graph polynomial
+plot(x, y, type = 'l', lwd = 3, col = "#FB7215", las = 1)
+abline(h = 0, v = 0, col = '#888888aa', lwd = 1.5)
+title(main = expression(paste(f(x), ' = ', x^2, (x - 1))))
+```
+
+
+## Some polynomials
+
+Write functions and graph the following polynomials in the x-axis interval
+-4 to 4:
+
+a. $f(x) = x^3$
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show answer"
+#| eval: FALSE
+poly2 <- function(x) {
+  x^3
+}
+
+x <- seq(-4, 4, length.out = 30)
+y <- poly2(x)
+
+# graph polynomial
+plot(x, y, type = 'l', lwd = 3, col = "#FB7215", las = 1)
+abline(h = 0, v = 0, col = '#888888aa', lwd = 1.5)
+title(main = expression(paste(f(x), ' = ', x^3)))
+```
+
+
+b. $f(x) = (x^2 - 1)(x + 3)^3$
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show answer"
+#| eval: FALSE
+poly3 <- function(x) {
+  (x^2 - 1) * (x + 3)^3
+}
+
+x <- seq(-4, 4, length.out = 30)
+y <- poly3(x)
+
+# graph polynomial
+plot(x, y, type = 'l', lwd = 3, col = "#FB7215", las = 1)
+abline(h = 0, v = 0, col = '#888888aa', lwd = 1.5)
+title(main = expression(paste(f(x), ' = ', (x^2 - 1), (x + 3)^3)))
+```
+
+
+c. $f(x) = (x^2 - 1)(x^2 - 9)$
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show answer"
+#| eval: FALSE
+poly4 <- function(x) {
+  (x^2 - 1) * (x^2 - 9)
+}
+
+x <- seq(-4, 4, length.out = 30)
+y <- poly4(x)
+
+# graph polynomial
+plot(x, y, type = 'l', lwd = 3, col = "#FB7215", las = 1)
+abline(h = 0, v = 0, col = '#888888aa', lwd = 1.5)
+title(main = expression(paste(f(x), ' = ', (x^2 - 1), (x^2 - 9))))
+```
+
+
+-----
+
+
+# Pythagoras
+
+The Pythagoras formula is used to compute the length of the hypotenuse, $h$, of 
+a right triangle with legs of length $a$ and $b$.
+
+$$
+h = \sqrt{(a^2 + b^2)}
+$$
+
+a) Write a function `pythagoras()` that takes two arguments `a` and `b`, and 
+returns the length of the hypotenuse. Test your `pythagoras()` with two leg 
+values: `pythagoras(3, 4)`
+
+```{r pythagoras}
+#| code-fold: true
+#| code-summary: "Show answer"
+pythagoras <- function(a, b) {
+  sqrt(a^2 + b^2)
+}
+```
+
+
+b) Rewrite your function `pythagoras()` in a way that it will accept one or 
+two leg lengths. If only one leg length is specified, this will be used for
+both legs. In other words, you should be able to invoke the function with 
+just one leg value: `pythagoras(5)`
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show answer"
+pythagoras <- function(a, b = a) {
+  sqrt(a^2 + b^2)
+}
+```
+
+
+-----
+
+
+# Quartiles
+
+You can use the `summary()` function with a numeric vector to obtain descriptive
+statistics:
+
+```{r echo = TRUE}
+set.seed(345)
+x1 <- rnorm(100)
+summary(x1)
+```
+
+
+## First Quartile
+
+We can write a function to compute the first quartile of a numeric vector;
+this can be easily done with the advantage of the `quantile()` function:
+
+```{r echo = TRUE}
+quartile1 <- function(x) {
+  quantile(x, probs = 0.25)
+}
+
+# test it
+quartile1(mtcars$wt)
+```
+
+
+## Argument `na.rm`
+
+Many functions that work on vectors have a special argument: `na.rm`. This 
+parameter is a logical value to indicate whether NAs should be removed or not.
+Because the `quantile()` function does come with the `na.rm` argument, we can 
+take advantage of it and pass it to our `quartile1()` function:
+
+```{r echo = TRUE}
+quartile1 <- function(x, na.rm = FALSE) {
+  quantile(x, probs = 0.25, na.rm = na.rm)
+}
+```
+
+Let's get the weight of cars and add some missing values:
+
+```{r echo = TRUE}
+weight_na = mtcars$wt
+weight_na[c(1, 10, 20)] = NA
+```
+
+If you apply `quartile1()` on `weight_na` using the default call, you will get an 
+error:
+
+```{r}
+quartile1(weight_na)
+```
+
+To remove missing values, you can use `na.rm = TRUE`:
+
+```{r}
+quartile1(weight_na, na.rm = TRUE)
+```
+
+
+## Your Turn: function `quartiles()`
+
+As you know, there are three quartile values---lower quartile, median, and 
+upper quartile---to divide the data set into four ranges, each containing 25% 
+of the data points.
+
+Write a function `quartiles()` that computes the three quartiles of a numeric
+vector. BTW: take advantage of `quantile()`'s vectorization behavior. Include 
+an argument `na.rm` to decide whether missing values should be removed. Give a 
+default value of `na.rm = FALSE`.
+
+Test `quartiles()` on vectors `mtcars$wt` and `weight_na`.
+
+```{r quartiles}
+#| code-fold: true
+#| code-summary: "Show answer"
+quartiles <- function(x = 1, na.rm = FALSE) {
+  quantile(x, probs = c(0.25, 0.50, 0.75), na.rm = na.rm)
+}
+```
+
+
+-----
+
+
+# Gaussian Function
+
+The Gaussian (Normal) function, given in the equation below, is one of the 
+most widely used functions in science and statistics:
+
+$$
+f(x) = \frac{1}{\sqrt{2 \pi} \ s} \ \exp \left \{ -\frac{1}{2} \left (\frac{x - m}{s} \right)^2 \right \}
+$$
+
+The parameters $s$ and $m$ are real numbers, where $s$ must be greater than 
+zero. 
+
+Make a function `gaussian()` that takes three arguments: `x`, `m`, and `s`. 
+Evaluate the function with $m = 0$, $s = 2$, and $x = 1$.
+
+```{r gaussian}
+#| code-fold: true
+#| code-summary: "Show answer"
+gaussian <- function(x = 1, m = 0, s = 1) {
+  constant = 1 / sqrt(2*pi)
+  exponent = exp(-0.5 * ((x-m)/s)^2)
+  output = constant * (1/s) * exponent
+  output
+}
+```
+
+Test your `gaussian()` function and compare it with the R function `dnorm()`
+
+```{r echo = TRUE}
+# compare with dnorm()
+dnorm(x = 1, mean = 0, sd = 2)
+```
+
+Now try `gaussian()` with a vector `seq(-4.5, 4.5, by = 0.1)`, and pass the values
+to `plot()` to get a normal curve. Here's code with values obtained from `dnorm()`
+
+```{r echo = TRUE}
+# you should get a plot like this one
+x_values <- seq(-4.5, 4.5, by = 0.1)
+y_values <- dnorm(x_values, mean = 0, sd = 2)
+plot(x_values, y_values, las = 1, type = "l", lwd = 2)
+```
+
+Your turn:
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show answer"
+#| eval: FALSE
+x_values <- seq(-4.5, 4.5, by = 0.1)
+y_values <- gaussian(x_values, m = 0, s = 2)
+plot(x_values, y_values, las = 1, type = "l", lwd = 2)
+```
+

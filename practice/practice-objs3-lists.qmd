@@ -1,0 +1,372 @@
+---
+title: "Practice: Lists"
+subtitle: "Stat 133"
+author: "Gaston Sanchez"
+format: 
+  html:
+    toc: true
+    number-sections: true
+    theme: simplex
+embed-resources: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, error = TRUE)
+```
+
+::: {.callout-note}
+## Learning Objectives
+
+- Create Lists
+- Subset (subscript) lists with double brackets `[[]]`
+- Subset (subscript) named elements with `$`
+:::
+
+
+# R Lists
+
+Consider the following information about 
+[Leia Organa](https://starwars.fandom.com/wiki/Leia_Organa_Solo):
+
+> Leia Organa is a force-sensitive woman, 150 cm tall, and weighs 49 kgs. 
+> She grew up in Alderaan, and she is a princess.
+
+Leia's information can be rearranged into an itemized structure such as:
+
+```
+- name
+  + first: Leia
+  + last: Organa
+- body measurements
+  + height: 150
+  + weight: 49
+- force sensitive: True 
+- homeworld: Alderaan
+```
+
+In R, how can we store Leia's information? One option is to create vectors,
+for instance:
+
+```{r echo = TRUE}
+name <- c("first" = "Leia", "last" = "Organa")
+
+body <- c("height" = 150, "weight" = 49)
+
+force <- TRUE
+
+home <- "Alderaan"
+```
+
+
+## Creating lists with `list()`
+
+Because all these vectors refer to Leia, we can take a step further and use an 
+__R list__ to put them all in one place:
+
+```{r echo = TRUE}
+leia <- list(
+  "name" = name,
+  "body" = body,
+  "force" = force,
+  "home" = home
+)
+
+leia
+```
+
+Notice how R display the contents of a list in which its elements have names.
+
+
+## List with unnamed elements
+
+To create a list use the function `list()`. You can pass any number of objects
+inside lists, separated by comma. Naming elements in a list is optional. This
+means that we could also create a list for Leia as follows:
+
+```{r comment = "", echo=TRUE}
+leia2 <- list(
+  name,
+  body,
+  force,
+  home
+)
+
+leia2
+```
+
+The lists `leia` and `leia2` store the same vectors, in the same order. The
+only difference is that `leia` has named elements, whereas `leia2` has 
+unnamed elements. Whenever possible, I highly recommend giving names to the 
+elements in a list because this makes it easier to understand which elements 
+are being manipulated referring to them by their names.
+
+
+## Lists are generic objects
+
+R lists are the most general class of data object in R. Any other object can
+be an element of a list, even other lists.
+
+For instance, let's implement `name` as a list instead of a vector:
+
+```{r echo = TRUE}
+name <- list("first" = "Leia", "last" = "Organa")
+name
+```
+
+And now let's create a new list `leia` in which the first element, `name`, 
+is the previously created list:
+
+```{r comment = "", echo = TRUE}
+leia <- list(
+  "name" = name,
+  "body" = body,
+  "force" = force,
+  "home" = home
+)
+
+leia
+```
+
+
+-----
+
+
+# Subsetting Lists
+
+The way you typically subset atomic objects is with __bracket notation__ using
+single brackets. Depending on the dimensions of the object, inside brackets you
+pass one or more indexing vectors:
+
+```{r echo = TRUE, results='hide'}
+# subsetting a vector
+vec = 5:1
+vec[1:3]
+
+# subsetting a matrix
+mat = matrix(seq(2, 12, by = 2), nrow = 2, ncol = 3)
+mat[2, c(1,3)]
+
+# subsetting a 3-dim array
+arr = array(1:12, dim = c(2, 2, 3))
+arr[1:2, 2, 3]
+```
+
+You can also use __double brackets__ to subset a __single element__ of an 
+atomic object:
+
+```{r echo = TRUE, results='hide'}
+# first element in vec
+vec[[1]]
+
+# fifth element in mat
+mat[[5]]
+```
+
+If you try to subset more than one element using double brackets, you'll get
+a nice error message:
+
+```{r echo = TRUE}
+# this fails
+vec[[1:2]]
+```
+
+
+## What about subsetting lists?
+
+R lists admit three kinds of subsetting:
+
+- with single brackets: `lis[2]`
+
+- with double brackets: `lis[[2]]`
+
+- with dollar sign (on a single named element): `lis$name`
+
+
+Run the following commands and try to understand how R is subsetting the list
+`leia`:
+
+```r
+leia[1]
+
+leia[1:2]
+
+leia[-1]
+
+leia[c(4, 2)]
+
+leia["name"]
+
+leia[c("home", "force")]
+
+leia[c(FALSE, TRUE, FALSE, TRUE)]
+```
+
+<br>
+
+Now inspect the next set of commands that use double brackets:
+
+```r
+leia[[1]]
+
+leia[[2]]
+
+leia[["name"]]
+
+leia[["unknown"]]
+```
+
+<br>
+
+When one or more elements of a list are named, you can also use the dollar `$` 
+operator to subset a single element by referring to its name. Quoting the
+name is optional:
+
+```r
+leia$"name"
+
+leia$home
+```
+
+Reflect on the similarities and differences of the various syntax in which
+the elements of a list can be subset.
+
+
+
+
+-----
+
+
+# Planets
+
+Here are some vectors with data about the planets of the Solar system.
+
+```{r echo = TRUE}
+planet <- c('Mercury',	'Venus', 'Earth', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune')
+
+mass <- c(0.33, 4.87, 5.97, 0.642, 1898, 568, 86.8, 102)
+
+temperature <- c(167L, 464L, 15L, -65L, -110L, -140L, -195L, -200L)
+
+moons <- c(0L, 0L, 1L, 2L, 79L, 62L, 27L, 14L)
+
+rings <- c(FALSE, FALSE, FALSE, FALSE, TRUE, TRUE, TRUE, TRUE)
+```
+
+
+## `solar` list
+
+a) Use these vectors to create a list `solar`. When printed, your `solar` list 
+should be displayed as:
+
+```
+$planet
+[1] "Mercury" "Venus"   "Earth"   "Mars"    "Jupiter" "Saturn"  "Uranus"  "Neptune"
+
+$mass
+[1]    0.330    4.870    5.970    0.642 1898.000  568.000   86.800  102.000
+
+$temperature
+[1]  167  464   15  -65 -110 -140 -195 -200
+
+$moons
+[1]  0  0  1  2 79 62 27 14
+
+$rings
+[1] FALSE FALSE FALSE FALSE  TRUE  TRUE  TRUE  TRUE
+```
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show answer"
+#| eval: FALSE
+
+# solar list
+solar <- list(
+  planet = planet,
+  mass = mass,
+  temperature = temperature,
+  moons = moons,
+  rings = rings
+)
+```
+
+
+## Manipulation of `solar`
+
+Use the list `solar` to write R commands---displaying the output---that answer 
+the following questions (use only the list `solar`, NOT the individual vectors):
+
+a) What is the name of the lightest planet? _Hint_: the `which.min()` function
+is your friend.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show answer"
+#| eval: FALSE
+solar$planet[which.min(solar$mass)]
+```
+
+
+b) What is the name of the heaviest planet? _Hint_: the `which.max()` function
+is your friend.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show answer"
+#| eval: FALSE
+solar$planet[which.max(solar$mass)]
+```
+
+
+c) What is the temperature of the planet with the most number of moons?
+_Hint_: the `which.max()` function is your friend.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show answer"
+#| eval: FALSE
+solar$temperature[which.max(solar$moons)]
+```
+
+
+d) What is the mass of the planet with one moon?
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show answer"
+#| eval: FALSE
+solar$mass[solar$moons == 1]
+```
+
+
+e) How many planets have temperatures less than or equal to zero?
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show answer"
+#| eval: FALSE
+sum(solar$temperature <= 0)
+```
+
+
+f) What is the 80th percentile of temperature for planets that have no rings?
+_Hint_: the `quantile()` function is your friend.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show answer"
+#| eval: FALSE
+quantile(solar$temperature[solar$rings == FALSE], 
+         probs = 0.80)
+```
+
+
+g) What is the name of the planet whose mass is furthest from the average mass 
+(of all planets)?
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show answer"
+#| eval: FALSE
+solar$planet[which.max(abs(solar$mass - mean(solar$mass)))]
+```

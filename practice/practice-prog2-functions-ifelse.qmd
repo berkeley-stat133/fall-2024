@@ -1,0 +1,402 @@
+---
+title: "Practice: Functions and if-else statements (part 2)"
+subtitle: "Stat 133"
+author: "Gaston Sanchez"
+format: 
+  html:
+    toc: true
+    number-sections: true
+    theme: simplex
+embed-resources: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, error = TRUE)
+```
+
+
+::: {.callout-note}
+## Learning Objectives
+
+- Create functions
+- Use conditional statements in your functions
+- Use `stop()` to stop execution of a function when applicable
+- Use `warning()` to provide a warning message when applicable
+- Include comments to document a function
+:::
+
+
+In this module you will practice writing simple functions, and some basic examples
+to make sure that the functions work as expected. In addition to writing the 
+functions, you should also practice documenting your functions. Writing this 
+type of documentation should become second nature.
+
+
+-----
+
+
+# Toy Example
+
+Here's an example of a function `rect_area()` that computes the area of a 
+rectangle. Notice the structure of the code below: the first lines correspond 
+to __documentation comments__ to indicate things such as the title, description,
+inputs, and outputs:
+
+```{r echo = TRUE}
+# title: area of rectangle
+# description: calculates the area of a rectangle
+# inputs:
+# - len length of the rectangle (numeric)
+# - wid width of the rectangle (numeric)
+# output: computed area
+rect_area <- function(len = 1, wid = 1) {
+  if (len < 0) {
+    stop("len must be positive")
+  }
+  if (wid < 0) {
+    stop("wid must be positive")
+  }
+  area = len * wid
+  return(area)
+}
+```
+
+
+Once the function has been created, we can test it with a couple of basic examples:
+
+```{r echo = TRUE}
+# default
+rect_area()
+
+# len=2, wid=3
+rect_area(len = 2, wid = 3)
+
+# bad len
+rect_area(len = -2, wid = 3)
+```
+
+
+## Roxygen Comments
+
+::: {.callout-tip title="Pro Tip"}
+Roxygen comments are a special style for writing a function's documentation.
+:::
+
+From time to time, you will encounter code in R that use a special type of 
+comments to define the documentation of a function: so-called __roxygen comments__. 
+These comments follow a specific syntax, and they are commonly used when 
+writing functions for an R package. Here's an example:
+
+```{r echo = TRUE}
+#' @title area of rectangle
+#' @description calculates the area of a rectangle
+#' @param len length of the rectangle (numeric)
+#' @param wid width of the rectangle (numeric)
+#' @return computed area
+rect_area <- function(len = 1, wid = 1) {
+  if (len < 0) {
+    stop("len must be positive")
+  }
+  if (wid < 0) {
+    stop("wid must be positive")
+  }
+  area <- len * wid
+  return(area)
+}
+```
+
+Once the function has been created, we can test it with a couple of basic examples:
+
+```{r}
+# default
+rect_area()
+
+# len=2, wid=3
+rect_area(len = 2, wid = 3)
+
+# bad len
+rect_area(len = -2, wid = 3)
+
+# bad wid
+rect_area(len = 2, wid = -3)
+```
+
+
+-----
+
+
+# Area of a circle
+
+Consider a circle with `radius = 2`. The area of this circle can be computed
+in R as:
+
+```{r}
+# area of circle with radius 2
+r = 2
+area = pi * r^2
+area
+```
+
+
+## Your Turn: `circle_area()` version 1
+
+Write a function `circle_area()` that calculates the area of a circle. 
+
+- This function must take one argument `radius`. 
+
+- Give `radius` a default value of 1.
+
+- Include comments to document your function! You can use regular
+comments, or if you feel brave enough try using roxygen comments.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show answer"
+
+#' @title area of circle
+#' @description computes the area of a circle of given radius
+#' @param radius numeric value
+#' @return area
+circle_area <- function(radius = 1) {
+  pi * radius^2
+}
+```
+
+Test your function with:
+
+- no specified arguments: i.e. `circle_area()`;
+- with `radius = 3`
+
+```{r echo = TRUE}
+# default (radius 1)
+circle_area()
+
+# radius 3
+circle_area(radius = 3)
+```
+
+
+## Your Turn: `circle_area()` version 2
+
+Modify your `circle_area()` function in order to include a `stop()` statement.
+If `radius` is negative, then the function should stop with a meaningful error
+message, perhaps something like: `"radius cannot be negative"`.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show answer"
+
+#' @title area of circle
+#' @description computes the area of a circle of given radius
+#' @param radius numeric value
+#' @return area
+circle_area <- function(radius = 1) {
+  if (radius < 0) {
+    stop('radius cannot be negative')
+  }
+  pi * radius^2
+}
+```
+
+Test your modified `circle_area()` with `radius = -2`; the function should 
+return a stop message:
+
+```{r echo = TRUE}
+# bad radius
+circle_area(radius = -2)
+```
+
+
+-----
+
+
+# Area of a Cylinder
+
+For a given cylinder of radius $r$ and height $h$ the surface area $A$ is given 
+in the following diagram:
+
+![](surface-area-cylinder.png){fig-align="center" width=50%}
+
+For example. Say you have a cylinder with radius = 2, and height = 3.
+
+```{r}
+# inputs
+r = 2  # radius
+h = 3  # height
+
+# output: area of cylinder
+2 * pi * r * h + 2 * pi * r^2
+```
+
+Notice that the formula of the area of a cylinder includes the area of a 
+circle: $\pi r^2$. 
+
+
+## Your Turn: `cylinder_area()` function
+
+Write a function `cylinder_area()`, that calls `circle_area()`, 
+to compute the area of a cylinder. 
+
+- This function must take two arguments: `radius` and `height`,
+
+- Give both arguments a default value of 1. 
+
+- The function should stop if any of `radius` or `height` are negative. Since
+you are calling `circle_area()`, you already have a `stop()` statement for a
+negative `radius`.
+
+- Include documentation comments.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show answer"
+
+#' @title area of cylinder
+#' @description computes the area of a cylinder
+#' @param radius numeric value
+#' @param height numeric value
+#' @return area
+cylinder_area <- function(radius = 1, height = 1) {
+  if (height < 0) {
+    stop('height must be positive')
+  }
+  lateral_area <- 2 * pi * radius * height
+  base_areas <- 2 * circle_area(radius)
+  lateral_area + base_areas
+}
+```
+
+
+For instance:
+
+```{r eval = TRUE}
+# default (radius 1, height 1)
+cylinder_area()
+
+# radius 2, height 3
+cylinder_area(radius = 2, height = 3)
+```
+
+These should return a meaningful error message:
+
+```{r, eval = TRUE}
+# bad radius
+cylinder_area(radius = -2, height = 1)
+
+# bad height
+cylinder_area(radius = 2, height = -1)
+```
+
+
+-----
+
+
+# Even and Odd Numbers
+
+Any number that can be exactly divided by 2 is called an __even__ number. 
+R provides the modulo operator, `"%%"` that can be used to determine if a 
+number is even or odd.
+
+To be more precise, the modulo operator returns the remainder or signed 
+remainder of a division.
+
+For example, `4 %% 2` evaluates to 0, because 4 divided by 2 has a quotient of 
+2 and a remainder of 0:
+
+```{r echo = TRUE}
+# 4 is exactly divisible by 2
+4 %% 2
+```
+
+In contrast, `5 %% 2` would evaluate to 1, because 5 divided by 2 has a 
+quotient of 2 and a remainder of 1
+
+```{r echo = TRUE}
+# 5 is not exactly divisible by 2
+5 %% 2
+```
+
+
+## Your Turn: `is_even()` function
+
+Write a function `is_even()` that determines whether a number is even 
+(i.e. multiple of 2). 
+
+- If the input number is even, the output should be `TRUE`. 
+
+- If the input number is odd, the output should be `FALSE`. 
+
+- If the input is not a number, the output should be `NA` 
+
+- Include documentation comments.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show answer"
+
+#' @title is even
+#' @description test if a given number is even
+#' @param x numeric value
+#' @return whether the input is even
+is_even <- function(x) {
+  if (is.numeric(x)) {
+    return(x %% 2 == 0)
+  } else {
+    return(NA)
+  }
+}
+```
+
+Test your function:
+
+```{r echo = TRUE}
+# even number
+is_even(10)
+
+# odd number
+is_even(33)
+
+# not a number
+is_even('a')
+```
+
+
+## Your Turn: `is_odd()` function
+
+Use your function `is_even()` to write a function `is_odd()` that determines 
+if a number is odd (i.e. not a multiple of 2). 
+
+- If a number is odd, the output should be `TRUE`; 
+
+- If a number is even the output should be `FALSE`; 
+
+- If the input is not a number the output should be `NA`
+
+- Include documentation comments.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show answer"
+
+#' @title is odd
+#' @description test if a given number is odd
+#' @param x numeric value
+#' @return whether the input is odd
+is_odd <- function(x) {
+  !is_even(x)
+}
+```
+
+Test `is_odd()` with the following cases:
+
+```{r echo = TRUE}
+# odd number
+is_odd(1)
+
+# even number
+is_odd(4)
+
+# not a number
+is_odd('a')
+```
+

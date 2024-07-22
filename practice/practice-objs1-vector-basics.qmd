@@ -1,0 +1,427 @@
+---
+title: "Practice: Vectors (part 1)"
+subtitle: "Stat 133"
+author: "Gaston Sanchez"
+format: 
+  html:
+    toc: true
+    number-sections: true
+    theme: simplex
+embed-resources: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, error = TRUE)
+```
+
+
+::: {.callout-note}
+## Learning Objectives
+
+- Work with vectors of different data types
+- Understand the concept of _coercion_
+- Understand the concept of _vectorization_
+- Understand _recycling_ rules in R
+:::
+
+
+
+# Terrestrial Planets
+
+In this module, we are going to use data from so-called __Terrestrial__
+planets. These planets include Mercury, Venus, Earth, and Mars. They are called
+like this because they are "Earth-like" planets in contrast to the __Jovian__
+planets that involve planets similar to Jupiter (i.e. Jupiter, Saturn, Uranus 
+and Neptune). The main characteristics of terrestrial planets is that they are 
+relatively small in size and in mass, with a solid rocky surface, and metals 
+deep in its interior.
+
+| planet  | gravity | daylength | temp  | moons | haswater |
+|:-------:|:-------:|:---------:|:-----:|:-----:|:--------:|
+| Mercury |  3.7    | 4222.6    | 167   |   0   |  FALSE   |
+| Venus   |  8.9    | 2802      | 464   |   0   |  FALSE   |
+| Earth   |  9.8    |   24      |  15   |   1   |   TRUE   |
+| Mars    |  3.7    |   24.7    | -65   |   2   |  FALSE   |
+
+
+
+# Creating Vectors
+
+The first step is to create vectors for each of the columns in the data table 
+displayed above. For illustration purposes, we are going to assume the following
+data types:
+
+- `planet`: character vector
+
+- `gravity`: real (i.e. double) vector ($m/s^2$)
+
+- `daylength`: real (i.e. double) vector (hours)
+
+- `temp`: integer vector (mean temperature in Celsius)
+
+- `moons`: integer vector (number of moons)
+
+- `haswater`: logical vector (whether has known bodies of liquid water on its surface)
+
+
+
+## Combine function `c()`
+
+The most common way to create an R vector is with the __combine__ function `c()`.
+Here's an example:
+
+```{r echo = TRUE}
+jovians = c("Jupiter", "Saturn", "Uranus", "Neptune")
+jovians
+```
+
+
+### Your Turn 
+
+a) Create a character vector `planets` with the names of the Terrestrial planets.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show answer"
+planets = c("Mercury", "Venus", "Earth", "Mars")
+```
+
+
+b) Use the combine function `c()` to make vectors `gravity` and `daylength` for
+the Terrestrial planets.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show answer"
+gravity = c(3.7, 8.9, 9.8, 3.7)
+
+daylength = c(4222.6, 2802, 24, 24.7)
+```
+
+
+### Integer vectors
+
+The creation of the temperature vector seems to be straightforward: 
+
+```{r echo = TRUE}
+temp <- c(167, 464, 15, -65)
+temp
+```
+
+But there is a catch. The issue is that the way `temp` was created is as a 
+vector of type `"double"` instead of type `"integer"` as required:
+
+```{r echo = TRUE}
+typeof(temp)
+```
+
+So how do you create integer vectors in R? You have to use a special notation
+for integer numbers. Here's an example:
+
+```{r echo = TRUE}
+ints = c(2L, 4L, 6L)
+ints
+```
+
+Notice how we append an upper case `L` at the end of every numeric value.
+This is how you tell R to store such numbers as integers.
+
+
+### Your Turn
+
+a) Use the combine function to create integer vectors `temp` and `moons` for the 
+Terrestrial planets. Inspect their data types, with `typeof()`, to confirm 
+that they are integer vectors.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show answer"
+temp = c(167L, 464L, 15L, -65L)
+
+moons = c(0L, 0L, 1L, 2L)
+```
+
+
+b) Use the combine function to create a logical vector (logical values are `TRUE`
+and `FALSE`) for the variable `haswater`.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show answer"
+haswater = c(FALSE, FALSE, TRUE, FALSE)
+```
+
+
+-----
+
+
+# Coercion
+
+Now that we have various vectors---of different data types---to play with,
+let's talk about __Coercion__ which is what R does when you try to combine 
+distinct data types into a single vector.
+
+We have an integer vector `ints`
+
+```{r echo = TRUE}
+ints
+```
+
+What happens if we combine `ints` with one or more double values?
+What is the data type of the new vector `values`?
+
+```{r echo = TRUE}
+values = c(ints, 8, 10)
+values
+
+typeof(values)
+```
+
+Can you guess why `values` is not of type `"integer"` anymore?
+
+
+## Your Turn
+
+Inspect the data type of the following combination of vectors:
+
+a) combine `planets` with `gravity`
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show answer"
+#| eval: FALSE
+typeof(c(planets, gravity))
+```
+
+
+b) combine `planets` with `temp`
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show answer"
+#| eval: FALSE
+typeof(c(planets, temp))
+```
+
+
+c) combine `planets` with `haswater`
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show answer"
+#| eval: FALSE
+typeof(c(planets, haswater))
+```
+
+
+d) `gravity` with `daylength`
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show answer"
+#| eval: FALSE
+typeof(c(gravity, daylength))
+```
+
+
+e) combine `gravity` with `temp`
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show answer"
+#| eval: FALSE
+typeof(c(gravity, temp))
+```
+
+
+f) combine `temp` with `moons`
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show answer"
+#| eval: FALSE
+typeof(c(temp, moons))
+```
+
+
+g) combine `temp` with `haswater`
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show answer"
+#| eval: FALSE
+typeof(c(temp, haswater))
+```
+
+__Can you see a pattern?__
+
+
+-----
+
+
+# Vectorization
+
+In addition to __coercion__, another fundamental concept to learn about R
+vectors is that of __vectorization__. This is basically what R does when you
+apply a function or an operation to all the elements of a vector in a 
+simultaneous way.
+
+
+## Vectorization Example
+
+Here's an example. Let's bring back the integer vector `ints`, and suppose 
+that we want to obtain the square root of all its elements. One option to do 
+this is by taking the square root of each element in `ints`, one by
+one---separately---using the `sqrt()` function:
+
+```{r echo = TRUE}
+sqrt(ints[1])
+sqrt(ints[2])
+sqrt(ints[3])
+```
+
+We haven't talked about this yet, but notice how you refer to the elements
+in a vector by indicating their position: using square brackets `[ ]` with a 
+numeric index for the position of the element you want to operate on.
+
+Now, instead of having to repeat the same command three times, we can use the 
+function `sqrt()` in a single call because it is a vectorized function. This 
+means that `sqrt()` can compute the square root of all the elements in a vector 
+simultaneously:
+
+```{r echo = TRUE}
+sqrt(ints)
+```
+
+Likewise, pretty much all arithmetic operators (addition, subtraction, 
+multiplication, division, power, etc) are vectorized. For instance, say we 
+want to add `c(1,2,3)` to `ints`, here's how to do it with vectorized code:
+
+```{r echo = TRUE}
+ints + c(1, 2, 3)
+```
+
+
+
+## Your Turn
+
+a) Refer to the vector `gravity` and create a new vector `gravity_log` by taking
+the logarithm, with `log()`, of the values in `gravity`
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show answer"
+gravity_log = log(gravity)
+```
+
+
+b) Refer to the vectors `moons` and `haswater`. Try adding them and see what
+happens. What is R doing in this case?
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show answer"
+#| eval: FALSE
+moons + haswater
+```
+
+
+c) Refer to the vectors `moons` and `haswater`. Try subtracting them, e.g. 
+`moons - haswater`, and see what happens. What is R doing in this case?
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show answer"
+#| eval: FALSE
+moons - haswater
+```
+
+
+-----
+
+
+# Recycling
+
+Related to vectorization, there is another important concept called 
+__recycling__ which has to do with what R does when you operate with two 
+(or more) vectors of different length.
+
+
+## Recycling Example
+
+Consider the vectors `ints` and `values` which, by the way, are of different
+length:
+
+```{r echo = TRUE}
+ints
+values
+```
+
+What if we try to add `ints` and `values`? Is this possible?
+
+```{r echo = TRUE}
+ints + values
+```
+
+Yes, you can add two numeric vectors of different lengths such as `ints` plus
+`values`. Notice though that R gives a __warning message__ along the lines of
+
+> longer object length is not a multiple of shorter object length
+
+This message tells you that the length of the longer vector, `values`, is not a 
+multiple of the length of the shorter vector `ints`.
+
+When computing `ints + values`, R is basically recycling or repeating some of 
+the numbers in `ints` to match the length of `values`. To be more precise, 
+here is what R is adding:
+
+```
+2L + 2 = 4
+4L + 4 = 6
+6L + 6 = 12
+2L + 8 = 10
+4L + 10 = 14
+```
+
+All the integer numbers come from `ints` whereas all the double numbers come
+from `values`.
+
+
+## Your Turn
+
+a) Refer to the vector `daylength` (measured in hours) and create a new vector 
+`dayminutes` in which the units are expressed in minutes instead of hours.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show answer"
+dayminutes = daylength * 60
+```
+
+
+b) Refer to the vector `temp` (measured in Celsius degrees) and create a new 
+vector `temp2` in which the units are expressed in Fahrenheit degrees. 
+The conversion factor from Celsius to Fahrenheit is:
+
+$$
+(1^{\circ}C × 9/5) + 32 = 33.8^{\circ}F
+$$
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show answer"
+temp2 = (temp * 9/5) + 32
+```
+
+
+c) Use the power operator `^` to raise `ints` to the values of `moons`:
+e.g. `ints^moons`. If you get a warning, why is so? What is R doing behind 
+this operation?
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show answer"
+# R gives a warning because the longer vector "moons" is not a
+# multiple of the shorter vector "ints"
+```
+

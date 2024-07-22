@@ -1,0 +1,442 @@
+---
+title: "Practice: Graphics with ggplot2 (part 2)"
+subtitle: "Stat 133"
+author: "Gaston Sanchez and Max Zhang"
+format: 
+  html:
+    toc: true
+    number-sections: true
+    theme: simplex
+embed-resources: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, error = TRUE)
+```
+
+
+::: {.callout-note}
+## Learning Objectives
+
+- Get started with `"ggplot2"`
+- Produce basic plots with `ggplot()`
+- Gain familiarity with the `aes()` function
+- Learn about the various _geoms_, or geometric objects, and recognize them
+- Understand why and how to facet
+- Try out different plot themes
+:::
+
+
+# First contact with `ggplot()`
+
+In this module you will learn how to create graphics with `"ggplot2"` which is
+part of the `"tidyverse"` ecosystem of packages.
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+library(tidyverse)
+```
+
+
+## Data `mpg`
+
+For illustration purposes we are going to use the `mpg` data which is
+one of the data sets in `"ggplot2"`:
+
+```{r echo = TRUE}
+mpg
+```
+
+
+-----
+
+
+# Example: Scatterplots
+
+Let's start with a scatter plot to visualize the relationship between engine 
+displacement `displ`, and highway miles per gallon `hwy`.
+
+```{r echo = TRUE}
+ggplot(data = mpg, aes(x = displ, y = hwy)) +
+  geom_point()
+```
+
+Recap:
+
+- `ggplot()` creates an object of class `"ggplot"`
+
+- the main input for `ggplot()` is `data` which must be a data frame
+
+- then we use the `"+"` operator to add a layer
+
+- the geometric object (geom) are points: `geom_point()`
+
+- `aes()` is used to specify the `x` and `y` coordinates, by taking columns
+`displ` and `hwy` from the data frame
+
+The same scatter plot can also be created with this alternative use of `ggplot()`
+
+```{r echo = TRUE, eval = FALSE}
+# scatterplot (option 2)
+ggplot(data = mpg) +
+  geom_point(aes(x = displ, y = hwy))
+```
+
+
+-----
+
+
+# Using `aes()`
+
+Does anything happen if you don't name the arguments to `aes()`, i.e. you type 
+in `aes(displ, hwy)`? What if you type in `aes(hwy, displ)`?
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show answer"
+#| eval: FALSE
+
+# Typing aes(hwy, displ) gives you another scatter plot
+# in which 'hwy' goes to the x-axis, and 'displ' to y-axis
+ggplot(data = mpg, aes(hwy, displ)) +
+  geom_point()
+```
+
+Let's restrict the data set to just cars manufactured by Audi.
+
+```{r}
+audi = filter(mpg, manufacturer == 'audi')
+
+ggplot(data = audi, aes(x = displ, y = hwy)) +
+  geom_point()
+```
+
+
+## Using `geom_text()`
+
+Let's label each point using `model` by adding a `geom_text()` layer, and 
+mapping this argument with `aes()`:
+
+```{r echo=TRUE}
+ggplot(data = audi, aes(hwy, displ)) +
+  geom_point() +
+  geom_text(aes(label = model))
+```
+
+a) The model names overlap with the points. Modify your code above by using the
+`nudge_y` argument in `geom_text()`. Does it go inside or outside of `aes()`? 
+Now, replace `geom_text()` with `geom_label()`. What difference do you notice? 
+Did you have to modify the arguments to `aes()` at all?
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show answer"
+#| eval: FALSE
+
+# argument nudge_y goes outside aes()
+ggplot(data = audi, aes(hwy, displ)) +
+  geom_point() +
+  geom_text(aes(label = model), nudge_y = 0.1)
+```
+
+
+b) Next, cut and paste the `aes(x = displ, y = hwy)` from the argument of 
+`ggplot()` to the argument of `geom_point()`. Do you run into an error? What 
+if you copy the `x` and `y` arguments over to the `aes()` function in 
+`geom_text()`?
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show answer"
+#| eval: FALSE
+
+# specifying a local mapping just for geom_point results in an error
+ggplot(data = audi) +
+  geom_point(aes(hwy, displ)) +
+  geom_text(aes(label = model), nudge_y = 0.1)
+```
+
+
+-----
+
+
+# Adding color
+
+Let's go back to the full data set.
+
+```{r eval = FALSE}
+ggplot(data = mpg, aes(x = displ, y = hwy)) +
+  geom_point()
+```
+
+a) First, make all the points blue. Should you use `aes()`?
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show answer"
+#| eval: FALSE
+
+# to make all points blue don't use aes()
+ggplot(data = mpg, aes(x = displ, y = hwy)) +
+  geom_point(color = "blue")
+```
+
+
+b) Next, color the points by `class`. Should you use `aes()` this time?
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show answer"
+#| eval: FALSE
+
+# to color points by 'class' you should use aes()
+ggplot(data = mpg, aes(x = displ, y = hwy)) +
+  geom_point(aes(color = class))
+```
+
+
+c) Try coloring the points off of other variables. Which variables display a 
+reasonable amount of colors? Which ones display far too many?
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show answer"
+#| eval: FALSE
+
+# you can color points by 'drv' (the type of drive train)
+ggplot(data = mpg, aes(x = displ, y = hwy)) +
+  geom_point(aes(color = drv))
+
+# coloring points by 'manufacturer' gives too many colors
+ggplot(data = mpg, aes(x = displ, y = hwy)) +
+  geom_point(aes(color = manufacturer))
+```
+
+
+d) Also try modifying the size of points, both inside and outside of `aes()`. 
+For which variables does it make sense to map them to size? For which ones
+does it not make sense?
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show answer"
+#| eval: FALSE
+
+# mapping 'cty' to size
+ggplot(data = mpg, aes(x = displ, y = hwy)) +
+  geom_point(aes(color = class, size = cty))
+
+# setting size to 3
+ggplot(data = mpg, aes(x = displ, y = hwy)) +
+  geom_point(aes(color = class), size = 3)
+```
+
+
+-----
+
+
+# Adding smoothers
+
+Let's fit a line to our scatter plot. To be more specific, let's fit a linear
+model (i.e. _least squares regression line_) of `hwy` onto `displ`: 
+
+```{r echo = TRUE}
+ggplot(data = mpg, aes(x = displ, y = hwy)) +
+  geom_point() +
+  geom_smooth(method = 'lm')
+```
+
+`geom_smooth()` with the argument `method = 'lm'` plots a least squares 
+regression line for highway mileage on engine displacement. The translucent 
+gray band is a confidence interval for the predictions of mileage.
+
+
+a) Modify the code above by adding a vertical line at $x=4$ using `geom_vline()`. 
+Does it require `aes()`?
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show answer"
+#| eval: FALSE
+
+# adding a vertical line does not require aes()
+ggplot(data = mpg, aes(x = displ, y = hwy)) +
+  geom_point() +
+  geom_smooth(method = 'lm') +
+  geom_vline(xintercept = 4)
+```
+
+
+b) Now try adding a vertical line at the mean of `displ`. Does it require `aes()` 
+this time?
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show answer"
+#| eval: FALSE
+
+# adding a vertical line at the mean of 'displ'
+# does require aes()
+ggplot(data = mpg, aes(x = displ, y = hwy)) +
+  geom_point() +
+  geom_smooth(method = 'lm') +
+  geom_vline(aes(xintercept = mean(displ)))
+```
+
+
+c) Do the same with a horizontal line at the mean of `hwy`. Play around with color 
+and size. Should those arguments go inside or outside of `aes()`?
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show answer"
+#| eval: FALSE
+
+# adding a horizontal line at the mean of 'hwy'
+# does require aes()
+ggplot(data = mpg, aes(x = displ, y = hwy)) +
+  geom_point() +
+  geom_smooth(method = 'lm') +
+  geom_hline(aes(yintercept = mean(hwy)))
+```
+
+
+-----
+
+
+# Using facets
+
+Let's return to the basic scatter plot again.
+
+```{r}
+ggplot(data = mpg, aes(x = displ, y = hwy)) +
+  geom_point()
+```
+
+There are only two unique values for `year`, 1999 and 2008. Let's compare the relationship between `hwy` and `displ`, distinguishing by years using `facet_wrap()`.
+
+```{r}
+ggplot(data = mpg, aes(x = displ, y = hwy)) +
+  geom_point() +
+  facet_wrap(~ year)
+```
+
+
+a) What happens when you facet (essentially, compare) using a different variable? Modify the code above and try.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show answer"
+#| eval: FALSE
+
+# your code here
+ggplot(data = mpg, aes(x = displ, y = hwy)) +
+  geom_point() +
+  facet_wrap(~ cyl)
+```
+
+
+b) `facet_grid()` works slightly differently from `facet_wrap`. The latter takes 
+in only one variable, which always goes behind the `~`, and it 'wraps' the 
+plots left to right, top to bottom. `facet_grid()` allows you to facet into 
+just rows or just columns.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show answer"
+#| eval: FALSE
+
+# facet into rows
+ggplot(data = mpg, aes(x = displ, y = hwy)) +
+  geom_point() +
+  facet_grid(. ~ year)
+```
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show answer"
+#| eval: FALSE
+
+# facet into columns
+ggplot(data = mpg, aes(x = displ, y = hwy)) +
+  geom_point() +
+  facet_grid(year ~ .)
+```
+
+The `.` is a placeholder for a variable. Modify either code chunk above by 
+replacing the `.` with another variable, such as `cyl`. How does the display change?
+
+
+
+## More facets
+
+Finally, let's study just the distribution of highway mileage.
+
+```{r echo = TRUE}
+ggplot(data = mpg) +
+  geom_histogram(aes(x = hwy)) +
+  facet_wrap(~ class)
+```
+
+Instead of using a histogram to study the distribution, let's try a boxplot instead.
+
+```{r echo=TRUE}
+ggplot(data = mpg) +
+  geom_boxplot(aes(x = hwy))
+```
+
+Notice that `geom_histogram()` and `geom_boxplot()` required only an `x` 
+aesthetic. What happens if you replace `x` with `y`?
+
+
+a) Facet again by modifying the code above, this time using any variable of your choice.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show answer"
+#| eval: FALSE
+
+# facets by 'drv' (the type of drive train)
+ggplot(data = mpg) +
+  geom_boxplot(aes(x = displ)) +
+  facet_wrap(~ drv)
+```
+
+
+-----
+
+
+# Using Themes
+
+Graphics produced with `ggplot()` use a default theme for things such as the
+color of the background, the grid lines (auxiliary horizontal and vertical lines),
+the tick marks, position of a legend, etc.
+
+Interestingly, you can change the appearance of a graphic by using other
+themes. Here's one example with `theme_bw()` that uses a Black-White theme 
+layer to the original scatter plot:
+
+```{r echo=TRUE}
+ggplot(data = mpg, aes(x = displ, y = hwy)) +
+  geom_point() +
+  theme_bw()
+```
+
+Look at more theme options in the `"ggplot2"` cheatsheet or check the `help()`
+documentation of theme functions `?theme_bw`, and try at least 2 more themes:
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show answer"
+#| eval: FALSE
+
+# minimal theme
+ggplot(data = mpg, aes(x = displ, y = hwy)) +
+  geom_point() +
+  theme_minimal()
+
+# classic theme
+ggplot(data = mpg, aes(x = displ, y = hwy)) +
+  geom_point() +
+  theme_classic()
+```
+

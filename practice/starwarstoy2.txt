@@ -1,0 +1,17 @@
+# Description: Toy data set of some Star Wars characters
+# Format: Tab separated values
+# height units in meters
+# weight units in kilograms
+
+# column names
+name
+gender
+height
+weight
+jedi
+
+# rows
+"Luke Skywalker"	male	1.72	77	TRUE
+"Leia Skywalker"	female	1.5	49	FALSE
+"Obi-Wan Kenobi"	male	1.82	77	TRUE
+"Han Solo"	male	1.8	80	FALSE
