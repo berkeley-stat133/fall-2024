@@ -49,7 +49,7 @@ Students with some prior experience in either computational statistics or comput
 
 ## 📚 Textbooks
 
-We'll be using a handful of textbooks (most of them based on the notes I've used in Stat 133 for the last 8 years):
+We'll be using a handful of textbooks (most of them based on the notes I've authored for Stat 133 in the last 8 years):
 
 - <a href="https://www.gastonsanchez.com/R-coding-basics/" target="_blank">https://www.gastonsanchez.com/R-coding-basics/</a>
 - <a href="https://www.gastonsanchez.com/R-tidy-hurricanes/" target="_blank">https://www.gastonsanchez.com/R-tidy-hurricanes/</a>
@@ -62,7 +62,7 @@ We'll be using a handful of textbooks (most of them based on the notes I've used
 
 ## 🔧 Computational Tools
 
-We will be mainly using the [computing and programming environment R](https://www.r-project.org) (via [RStudio](https://posit.co/download/rstudio-desktop/) to analyze data in this class. You will also use a [command line interface](https://en.wikipedia.org/wiki/Command-line_interface) to interact with your operating system. You do need your own computer to use R and do the assignments.
+We will be mainly using the [computing and programming environment R](https://www.r-project.org) (via [RStudio](https://posit.co/download/rstudio-desktop/)) to analyze data in this class. You will also use a [command line interface](https://en.wikipedia.org/wiki/Command-line_interface) to interact with your operating system. You do need your own computer to use R and do the assignments.
 
 We don't expect that students have already been exposed to R. For those who come from Data 8 or some previous coding experience in python, the first labs will help you transfer that knowledge over to R. Both languages are excellent platforms for analyzing data, are widely used in data science, and have their individual strengths. R has been developed within the statistics community specifically for data analysis, while python is a general-purpose programming language but has large data analysis capabilities.
 
@@ -83,18 +83,19 @@ Unfortunately, doing all the work is not a guarantee of enrollment. You will onl
 - Weekly labs are an essential part of the course and we will introduce concepts not necessarily covered in lecture.
 - Thursdays are the official days for lab section.
 - You must attend the lab section you are officially enrolled in.
-- Practice problems (and their solutions) will be released every week, typically on a Thursday.
+- Practice problems (and their solutions) will be released every Thursday (available in bCourses).
 - As its name indicates, they are there to give you the opportunity to practice the concepts covered every week.
-- Every week there will be a lab checkpoint; which may involve submitting a source file, and its generated HTML document; or it may involve answering a google form, or signing an attendance sheet, etc.
+- Every week there will be a lab checkpoint; which may involve submitting a source file, and its generated HTML document; or it may involve answering a google form.
+- The due date is always on a Friday (please check the <a href="https://bcourses.berkeley.edu/courses/1536526/assignments" target="_blank">assignments tab</a> in bCourses to keep track of deadlines).
 - Of all lab checkpoints, your lowest 2 scores will be dropped in the calculation of your overall grade.
 
 
 
 ## 📁 Problem Sets (35% of final grade)
 
-- There will be about 6 Problem-Set assignments.
+- There will be about 6 Problem-Set assignments (available in bCourses).
 - Starting on week-2 they will be assigned every week, until week-7.
-- The due date is always on a Friday (please check the <a href="https://bcourses.berkeley.edu/courses/1531596/assignments" target="_blank">assignments tab</a> to keep track of deadlines). 
+- The due date is always on a Friday (please check the <a href="https://bcourses.berkeley.edu/courses/1536526/assignments" target="_blank">assignments tab</a> in bCourses to keep track of deadlines). 
 - You must write your own answers (using your own words and/or code). Copy and plagiarism will not be tolerated (see Academic Honesty policy).
 - If you don't submit all required files, you will receive an automatic 10% deduction.
 - If you submit the incorrect files, you will receive no credit.
@@ -113,15 +114,15 @@ Unfortunately, doing all the work is not a guarantee of enrollment. You will onl
 
 
 
-## 🕚 Late Policy and Assignment Extensions
+## 🕚 Late Policy and HW Assignment Extensions
 
-If you cannot turn in an assignment on time, our default policy is:
+If you cannot turn in a HW assignment on time, our default policy is:
 
 - Submissions within 24 hours after the deadline will receive a 15% deduction.
 - Submissions within 48 hours after the deadline will receive a 30% deduction.
 - Submissions that are 48 hours or more after the deadline will receive no credit.
 
-__Requesting an extension__: If you need to request an extension, regardless of your DSP status, fill out this <a href="https://docs.google.com/forms/d/e/1FAIpQLSfByW9y4p_BkrKGsVOPOHANFRrr1l44ACn7DWRoB-eP3SBo2A/viewform?usp=sf_link" target="_blank">google form</a>. Submissions to this form will be visible only to the course staff members.
+__Requesting an extension__: If you need to request an extension, regardless of your DSP status, fill out this <a href="https://forms.gle/Qydn3KNecnhdz8Rb7" target="_blank">google form</a>. Submissions to this form will be visible only to the course staff members.
 
 - Any first-time request for a 1-day extension on a __problem set__ assignment, made before an assignment's deadline, will be guaranteed to be approved, so long as it is made in good faith. 
 - Any first-time request for a 1-day extension on a __shiny app__ assignment, made before an assignment's deadline, will be guaranteed to be approved, so long as it is made in good faith. 
@@ -221,7 +222,7 @@ We expect you to do your own work and to uphold the standards of intellectual in
 
 Beyond the templates or starting code provided by the teaching staff, any writing, code, media, or other submissions not explicitly identified as AI-generated will be assumed as original to the student. Submitting AI-generated work without identifying it as such will be considered a violation of the [Code of Student Conduct](https://conduct.berkeley.edu/wp-content/uploads/2023/07/Code_of_Conduct-July_2023.pdf).
 
-Cheating will not be tolerated. Any evidence of academic misconduct will result in a score of zero (0) on the entire assignment or examination, and a failing letter grade. We will always report incidences of cheating to the [Center for the Student Conduct](http://sa.berkeley.edu/conduct).
+Cheating will not be tolerated. Any evidence of academic misconduct will result in a score of zero (0) on the entire assignment or examination, and a failing letter grade. We will always report incidences of cheating to the [Center for Student Conduct](http://sa.berkeley.edu/conduct).
 
 If you are having trouble with an assignment or studying for an exam, or if you are uncertain about permissible and impermissible conduct or collaboration, please contact us.
 
@@ -251,7 +252,7 @@ Under emergency/special circumstances, students may petition me to receive an In
 
 It is your responsibility to develop good time management skills, good studying habits, know your limits, and learn to ask for professional help. Life happens. Social, family, cultural, scholar, and individual circumstances can affect your performance (both positive and negatively). If you find yourself in a situation that raises concerns about passing the course, please contact me as soon as possible.
 
-**Above all, please do not wait till the end of the semester to share your concerns about passing the course because it will be too late by then.**
+**Above all, please-please-please do not wait till the end of the semester to share your concerns about passing the course because it will be too late by then.**
 
 
 

@@ -1,0 +1,35 @@
+---
+title: "Practice"
+subtitle: "UC Berkeley, STAT 133, Fall 2024"
+---
+
+Additional practice problems.
+
+- <a href="practice/practice-objs1-vector-basics.html" target="_blank">Vector basics</a>
+
+- <a href="practice/practice-objs2-vector-subsetting.html" target="_blank">Vector subsetting</a>
+
+- <a href="practice/practice-objs3-lists.html" target="_blank">Lists</a>
+
+- <a href="practice/practice-objs4-matrices.html" target="_blank">Matrices</a>
+
+- <a href="practice/practice-prog1-functions.html" target="_blank">Functions</a>
+
+- <a href="practice/practice-prog2-functions-ifelse.html" target="_blank">Functions and Conditionals (if-else)</a>
+
+- <a href="practice/practice-prog3-iterations.html" target="_blank">Iterations</a>
+
+- <a href="practice/practice-prog4-loops.html" target="_blank">More Loops</a>
+
+- <a href="practice/practice-tidy1-ggplot-intro.html" target="_blank">Intro to ggplot2</a>
+
+- <a href="practice/practice-tidy2-more-ggplot.html" target="_blank">More ggplot2</a>
+
+- <a href="practice/practice-tidy3-dplyr-intro.html" target="_blank">Intro to dplyr</a>
+
+- <a href="practice/practice-tidy4-readr-intro.html" target="_blank">Importing files with readr</a>
+
+- <a href="practice/practice-regex1.html" target="_blank">Regular Expressions 1</a>
+
+- <a href="practice/practice-regex2.html" target="_blank">Regular Expressions 2</a>
+
