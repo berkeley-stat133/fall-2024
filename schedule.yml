@@ -206,7 +206,7 @@
         - type: "Labwork2"
           id: ""
           name: "Lab 5b: Shiny app Old Faithful w/ggplot2"
-          href: ""
+          href: "https://bcourses.berkeley.edu/courses/1536526/assignments/8767002"
     - date: "Sep 27"
       items:
         - type: "Shiny"
@@ -386,7 +386,7 @@
         - type: "Labwork2"
           id: ""
           name: "Lab 9b: Publishing a shiny app"
-          href: ""
+          href: "https://bcourses.berkeley.edu/courses/1536526/assignments/8767003"
     - date: "Oct 25"
       items:
         - type: "Lecture"
@@ -441,7 +441,7 @@
           href: "docs/tm-correspondence/text-mining-corresp-analysis2.html"
         - type: "Homework"
           id: ""
-          name: "Shiny App-2 (avail 11/02, due 11/14)"
+          name: "Shiny App-2 (avail 11/02, due 11/15)"
           href: "https://bcourses.berkeley.edu/courses/1536526/assignments/8766405"
 - week: 11
   days:
