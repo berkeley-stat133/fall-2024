@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.1.251">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Correspondence Analysis 2</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../images/favicon.ico" rel="icon">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-CES9J82GLL"></script>
+
+<script type="text/javascript">
+
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-CES9J82GLL', { 'anonymize_ip': true});
+</script>
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-sidebar docked">
+
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title">Correspondence Analysis 2</h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="../../" class="sidebar-logo-link">
+      <img src="../../stat_bear.png" alt="" class="sidebar-logo py-0 d-lg-inline d-none">
+      </a>
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../../">STAT 133</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/berkeley-stat133/fall-2024" title="" class="sidebar-tool px-1"><i class="bi bi-github"></i></a>
+</div>
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../index.html" class="sidebar-item-text sidebar-link">Home / Schedule</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../syllabus.html" class="sidebar-item-text sidebar-link">Syllabus</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../about.html" class="sidebar-item-text sidebar-link">About</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../staff.html" class="sidebar-item-text sidebar-link">Staff</a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">Units</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../units/unit1.html" class="sidebar-item-text sidebar-link">1) Intro</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../units/unit2.html" class="sidebar-item-text sidebar-link">2) R Vectors</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../units/unit3.html" class="sidebar-item-text sidebar-link">3) Lists and Matrices</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../units/unit4.html" class="sidebar-item-text sidebar-link">4) Functions and Conditionals</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../units/unit5.html" class="sidebar-item-text sidebar-link">5) Tables and Tidyverse-1</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../units/unit6.html" class="sidebar-item-text sidebar-link">6) Tables and Tidyverse-2</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../units/unit7.html" class="sidebar-item-text sidebar-link">7) Iterations</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../units/unit8.html" class="sidebar-item-text sidebar-link">8) Regular Expressions</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../units/unit9.html" class="sidebar-item-text sidebar-link">9) Text Mining 1</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../units/unit10.html" class="sidebar-item-text sidebar-link">10) Text Mining 2</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../units/unit11.html" class="sidebar-item-text sidebar-link">11) Maps 1</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../units/unit12.html" class="sidebar-item-text sidebar-link">12) Maps 2</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../units/unit13.html" class="sidebar-item-text sidebar-link">13) Web Tech 1</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../units/unit14.html" class="sidebar-item-text sidebar-link">14) Web Tech 2</a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../practice.html" class="sidebar-item-text sidebar-link">Practice Problems</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../cheatsheets.html" class="sidebar-item-text sidebar-link">Cheatsheets</a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#jane-austens-novels" id="toc-jane-austens-novels" class="nav-link active" data-scroll-target="#jane-austens-novels"><span class="toc-section-number">1</span>  Jane Austen’s Novels</a></li>
+  <li><a href="#detecting-associations-with-correspondence-analysis-ca" id="toc-detecting-associations-with-correspondence-analysis-ca" class="nav-link" data-scroll-target="#detecting-associations-with-correspondence-analysis-ca"><span class="toc-section-number">2</span>  Detecting Associations with Correspondence Analysis (CA)</a></li>
+  <li><a href="#correspondence-analysis-map" id="toc-correspondence-analysis-map" class="nav-link" data-scroll-target="#correspondence-analysis-map"><span class="toc-section-number">3</span>  Correspondence Analysis Map</a>
+  <ul class="collapse">
+  <li><a href="#simultaneous-representation-of-rows-and-columns" id="toc-simultaneous-representation-of-rows-and-columns" class="nav-link" data-scroll-target="#simultaneous-representation-of-rows-and-columns"><span class="toc-section-number">3.1</span>  Simultaneous Representation of Rows and Columns</a></li>
+  </ul></li>
+  <li><a href="#another-example-of-ca" id="toc-another-example-of-ca" class="nav-link" data-scroll-target="#another-example-of-ca"><span class="toc-section-number">4</span>  Another example of CA</a>
+  <ul class="collapse">
+  <li><a href="#words-with-positive-sentiments" id="toc-words-with-positive-sentiments" class="nav-link" data-scroll-target="#words-with-positive-sentiments"><span class="toc-section-number">4.1</span>  Words with Positive Sentiments</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block">Correspondence Analysis 2</h1>
+<p class="subtitle lead">UC Berkeley, STAT 133, Fall 2024</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+    
+  </div>
+  
+
+</header>
+
+<p>This is a companion file to the Stat 133 lectures on “Text Mining”. You’ll need the following packages:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># used packages</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)    <span class="co"># base tidy data tools</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidytext)     <span class="co"># text mining; gets along with tidyverse</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(janeaustenr)  <span class="co"># Jane Austen's novels</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(FactoMineR)   <span class="co"># Multivariate Statistics methods</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<hr>
+<section id="jane-austens-novels" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="jane-austens-novels"><span class="header-section-number">1</span> Jane Austen’s Novels</h2>
+<p>As you know, the package <code>"janeaustenr"</code> contains the six novels by Jane Austen:</p>
+<ul>
+<li>Emma<br>
+</li>
+<li>Mansfield Park<br>
+</li>
+<li>Northanger Abbey<br>
+</li>
+<li>Persuasion<br>
+</li>
+<li>Pride and Prejudice<br>
+</li>
+<li>Sense and Sensibility</li>
+</ul>
+<p>The text of each novel is available in vector format: e.g.&nbsp;<code>prideprejudice</code>, <code>emma</code>, <code>persuasion</code>. But you can also find the text of all six novels in a single data frame (tibble) by using the function <code>austen_books()</code></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">austen_books</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<hr>
+</section>
+<section id="detecting-associations-with-correspondence-analysis-ca" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="detecting-associations-with-correspondence-analysis-ca"><span class="header-section-number">2</span> Detecting Associations with Correspondence Analysis (CA)</h2>
+<p>Say we are interested in studying the use of punctuation symbols across all Austen’s novels:</p>
+<ul>
+<li>commas: <code>","</code></li>
+<li>semicolons: <code>";"</code></li>
+<li>colons: <code>":"</code></li>
+<li>quotations: <code>'\\"'</code></li>
+<li>apostrophes: <code>"'"</code></li>
+<li>question marks: <code>"?"</code></li>
+<li>exclamation symbols: <code>"!"</code></li>
+<li>dashes (pairs): <code>"--"</code></li>
+</ul>
+<p>We can use <code>str_count()</code> to count the frequencies of these types of symbols, and then get the their total sum for each book:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>crosstable <span class="ot">=</span> <span class="fu">austen_books</span>() <span class="sc">|&gt;</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">commas =</span> <span class="fu">str_count</span>(text, <span class="st">","</span>),</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">colons =</span> <span class="fu">str_count</span>(text, <span class="st">":"</span>),</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">semicolons =</span> <span class="fu">str_count</span>(text, <span class="st">";"</span>),</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">quotes =</span> <span class="fu">str_count</span>(text, <span class="st">'</span><span class="sc">\\</span><span class="st">"'</span>),</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">apostrophes =</span> <span class="fu">str_count</span>(text, <span class="st">"'"</span>),</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">questions =</span> <span class="fu">str_count</span>(text, <span class="st">"</span><span class="sc">\\</span><span class="st">?"</span>),</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">exclamations =</span> <span class="fu">str_count</span>(text, <span class="st">"</span><span class="sc">\\</span><span class="st">!"</span>),</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">dashes =</span> <span class="fu">str_count</span>(text, <span class="st">"--"</span>)</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(book) <span class="sc">|&gt;</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">commas =</span> <span class="fu">sum</span>(commas),</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">colons =</span> <span class="fu">sum</span>(colons),</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">semis =</span> <span class="fu">sum</span>(semicolons),</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">quotes =</span> <span class="fu">sum</span>(quotes),</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">aposts =</span> <span class="fu">sum</span>(apostrophes),</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">quests =</span> <span class="fu">sum</span>(questions),</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">bangs =</span> <span class="fu">sum</span>(exclamations),</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">dashes =</span> <span class="fu">sum</span>(dashes)</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>crosstable</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 9
+  book                commas colons semis quotes aposts quests bangs dashes
+  &lt;fct&gt;                &lt;int&gt;  &lt;int&gt; &lt;int&gt;  &lt;int&gt;  &lt;int&gt;  &lt;int&gt; &lt;int&gt;  &lt;int&gt;
+1 Sense &amp; Sensibility   9900     66  1572   3084    914    451   561   1178
+2 Pride &amp; Prejudice     9132    132  1538   3531    741    462   499    395
+3 Mansfield Park       12439    339  2260   3292   1135    471   496    413
+4 Emma                 12020    174  2353   4189   1226    621  1063   3100
+5 Northanger Abbey      6085     83  1172   2151    545    392   433    419
+6 Persuasion            7025    130  1320   1565    582    217   318    142</code></pre>
+</div>
+</div>
+<p>The above table, technically speaking, is an example of a <strong>cross-table</strong>, also referred to as a <em>2-way table</em> or a <em>contingency</em> table. The important thing about this table is that it contains counts, which in turn are non-negative numbers.</p>
+<p>From a statistical point of view, this table is the result of <strong>crossing</strong> the categories of 2 qualitative (i.e.&nbsp;categorical) variables:</p>
+<ul>
+<li><p>Variable <span class="math inline">\(V_1\)</span>: name of book or novel</p></li>
+<li><p>Variable <span class="math inline">\(V_2\)</span>: type of punctuation symbol</p></li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="ca-fig1.png" class="img-fluid figure-img" style="width:70.0%"></p>
+<p></p><figcaption class="figure-caption">Cross-table from 2 categorical variables</figcaption><p></p>
+</figure>
+</div>
+<p>With this kind of table, we could ask questions like:</p>
+<ul>
+<li><p>Is there an association between books and punctuation symbols?</p></li>
+<li><p>Do some books tend to have more (or less) of a certain punctuation symbol?</p></li>
+</ul>
+<p>To answer this kind of questions, we can use a statistical multivariate method known as <strong>Correspondence Analysis</strong> (CA).</p>
+<p>Originally, CA was developed to analyze contingency tables in which a sample of observations is described by two nominal variables, but it was rapidly extended to the analysis of any data table with non-negative entries.</p>
+<p>On a side note, we should mention that CA was often discovered (and rediscovered), and so variations of CA can be found under several different names such as “dual scaling,” “optimal scaling,” “homogeneity analysis,” or “reciprocal averaging.” The multiple identities of correspondence analysis are a consequence of its large number of properties, that answer a lot of apparently different problems.</p>
+<hr>
+</section>
+<section id="correspondence-analysis-map" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="correspondence-analysis-map"><span class="header-section-number">3</span> Correspondence Analysis Map</h2>
+<p>In order to explain Correspondence Analysis, and also to simplify some of the computations on the data in <code>crosstable</code>, it’s better if we reformat this object as a matrix:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># cross-table in matrix format</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co"># (matrix of counts or frequencies)</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>X <span class="ot">=</span> <span class="fu">as.matrix</span>(crosstable[,<span class="sc">-</span><span class="dv">1</span>])</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(X) <span class="ot">=</span> <span class="fu">str_extract</span>(crosstable<span class="sc">$</span>book, <span class="st">"</span><span class="sc">\\</span><span class="st">w+"</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>X</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>           commas colons semis quotes aposts quests bangs dashes
+Sense        9900     66  1572   3084    914    451   561   1178
+Pride        9132    132  1538   3531    741    462   499    395
+Mansfield   12439    339  2260   3292   1135    471   496    413
+Emma        12020    174  2353   4189   1226    621  1063   3100
+Northanger   6085     83  1172   2151    545    392   433    419
+Persuasion   7025    130  1320   1565    582    217   318    142</code></pre>
+</div>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="ca-fig2.png" class="img-fluid figure-img" style="width:40.0%"></p>
+<p></p><figcaption class="figure-caption">Cross-table from 2 categorical variables</figcaption><p></p>
+</figure>
+</div>
+<p><br></p>
+<p>The previous row-analysis and column-analysis let us get an idea of how categories in variable <span class="math inline">\(V_1\)</span> seem to be associated with categories in variable <span class="math inline">\(V_2\)</span>. While these two analyses provide useful information, we have to carry out them separately. Interestingly, we can use correspondence analysis to perform a similar exploration in a simultaneous way, without having to derive all the different kinds of probabilities and their associated tables.</p>
+<p>To perform a correspondence analysis we are going to use the <code>CA()</code> function from the package <code>"FactoMineR"</code>. This function takes a data table or a matrix with non-negative numbers, such our initial matrix <code>X</code>.</p>
+<section id="simultaneous-representation-of-rows-and-columns" class="level3" data-number="3.1">
+<h3 data-number="3.1" class="anchored" data-anchor-id="simultaneous-representation-of-rows-and-columns"><span class="header-section-number">3.1</span> Simultaneous Representation of Rows and Columns</h3>
+<p>From an exploratory data analysis standpoint, we can use Correspondence Analysis to obtain a “map” (or scatterplot) to visually represent the categories behind the crosstable of frequencies, like in the following graphic:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>austen_ca1 <span class="ot">=</span> <span class="fu">CA</span>(X)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="text-mining-corresp-analysis2_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>By default, <code>CA()</code> produces its own plot (see figure above). You can turn off this behavior with the argument <code>graph = FALSE</code></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># no default plot</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>austen_ca1 <span class="ot">=</span> <span class="fu">CA</span>(X, <span class="at">graph =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>If we want to use <code>ggplot()</code>, we need to do a bit of data manipulation:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># table with row and column coordinates (i.e. factor scores)</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>ca_dat <span class="ot">=</span> <span class="fu">data.frame</span>(</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rbind</span>(austen_ca1<span class="sc">$</span>row<span class="sc">$</span>coord[ ,<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>], </span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>        austen_ca1<span class="sc">$</span>col<span class="sc">$</span>coord[ ,<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>]))</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="co"># type of book or symbol</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>ca_dat<span class="sc">$</span>type <span class="ot">=</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="st">"book"</span>, <span class="fu">nrow</span>(austen_ca1<span class="sc">$</span>row<span class="sc">$</span>coord)), </span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>                <span class="fu">rep</span>(<span class="st">"symbol"</span>, <span class="fu">nrow</span>(austen_ca1<span class="sc">$</span>col<span class="sc">$</span>coord)))</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="co"># correspondence analysis scatterplot</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(ca_dat, <span class="fu">aes</span>(<span class="at">x =</span> Dim<span class="fl">.1</span>, <span class="at">y =</span> Dim<span class="fl">.2</span>, <span class="at">color =</span> type)) <span class="sc">+</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">col =</span> <span class="st">"gray60"</span>) <span class="sc">+</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">0</span>, <span class="at">col =</span> <span class="st">"gray60"</span>) <span class="sc">+</span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">label =</span> <span class="fu">rownames</span>(ca_dat), <span class="at">alpha =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">0.4</span>, <span class="fl">0.8</span>)) <span class="sc">+</span></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Correspondence Analysis map"</span>,</span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="fu">sprintf</span>(<span class="st">"Dim-1 (%0.2f%s)"</span>, austen_ca1<span class="sc">$</span>eig[<span class="dv">1</span>,<span class="dv">2</span>], <span class="st">"%"</span>),</span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="fu">sprintf</span>(<span class="st">"Dim-2 (%0.2f%s)"</span>, austen_ca1<span class="sc">$</span>eig[<span class="dv">2</span>,<span class="dv">2</span>], <span class="st">"%"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="text-mining-corresp-analysis2_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p><strong>What does CA do?</strong>: Without going down the technical rabbit hole behind CA, it can be said that CA transforms a data table into two sets of new variables called <strong>factor scores</strong>: one set for the rows, and one set for the columns. These factor scores give the best representation of the similarity structure of, respectively, the rows and the columns of the table.</p>
+<p>In the above map, rows and columns are represented as points whose coordinates are the factor scores and where the dimensions are also called factors, or simply dimensions. Interestingly, the factor scores of the rows and the columns have the same variance and, therefore, the rows and columns can be conveniently represented in one single map.</p>
+<p><strong>How to Interpret Point Proximity</strong>: Because of the way in which the coordinates are obtained to produce the above CA map, we get a nice interpretation of the displayed data. When two row points (or two column points, respectively) are close to each other, this means that these points have similar profiles, and therefore they will be located exactly at the same place.</p>
+<p><strong>What about the proximity between row and column points?</strong> It turns out that we can comment on the position of a row with respect to the positions of all of the columns but keeping in mind that it is impossible to draw conclusions about the distance between a specific row and a specific column.</p>
+<p>The first dimension opposes the categories <em>dashes</em> and <em>colons</em>. This opposition on the graph is associated to the book <em>Emma</em> which has the largest proportion of <em>dashes</em> compared to the rest of the books. The table below shows the relative frequencies between a given book and a given symbol. Notice the cell of <code>Emma</code> and <code>dashes</code>, which has the largest proportion. In contrast, <em>colons</em> are more present in <em>Mansfield</em> than in any other book.</p>
+<p>The book category <em>Sense</em> is extremely close to the origin of the graphic, thus indicating a profile near to the average book profile. Likewise the symbol category <em>commas</em> is the closest to the origin, signaling that this symbol is also close to the use of the average symbol profile.</p>
+<hr>
+</section>
+</section>
+<section id="another-example-of-ca" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="another-example-of-ca"><span class="header-section-number">4</span> Another example of CA</h2>
+<p>Let’s consider another example performing a sentiment analysis and visualizing the results with a correspondence analysis map.</p>
+<p>We’ll keep using all the books by Jane Austen. As usual, we begin by tokenizing the texts, then we remove stop-words, and after that we merge—via <code>inner_join()</code>—sentiments from Bing’s lexicon:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>word_sentims <span class="ot">=</span> <span class="fu">austen_books</span>() <span class="sc">|&gt;</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest_tokens</span>(<span class="at">output =</span> word, <span class="at">input =</span> text) <span class="sc">|&gt;</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">anti_join</span>(stop_words, <span class="at">by =</span> <span class="st">"word"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(sentiments, </span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>             <span class="at">by =</span> <span class="st">"word"</span>, </span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>             <span class="at">relationship =</span> <span class="st">"many-to-many"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(book, word, <span class="at">name =</span> <span class="st">"count"</span>, <span class="at">sort =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(word_sentims, <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 3
+   book                word  count
+   &lt;fct&gt;               &lt;chr&gt; &lt;int&gt;
+ 1 Emma                miss    599
+ 2 Mansfield Park      miss    432
+ 3 Pride &amp; Prejudice   miss    283
+ 4 Sense &amp; Sensibility miss    210
+ 5 Northanger Abbey    miss    206
+ 6 Emma                poor    136
+ 7 Emma                happy   125
+ 8 Persuasion          miss    125
+ 9 Mansfield Park      love    124
+10 Mansfield Park      happy   117</code></pre>
+</div>
+</div>
+<p>Notice that the most frequent word is <strong>miss</strong> which we know is more likely to refer to a lady or woman instead of the verb “to miss”. Therefore, we are going to remove it from <code>word_sentims</code></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>word_sentims <span class="ot">=</span> word_sentims <span class="sc">|&gt;</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(word <span class="sc">!=</span> <span class="st">"miss"</span>)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(word_sentims, <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 3
+   book                word     count
+   &lt;fct&gt;               &lt;chr&gt;    &lt;int&gt;
+ 1 Emma                poor       136
+ 2 Emma                happy      125
+ 3 Mansfield Park      love       124
+ 4 Mansfield Park      happy      117
+ 5 Emma                love       117
+ 6 Emma                pleasure   115
+ 7 Mansfield Park      pleasure   101
+ 8 Sense &amp; Sensibility happy      100
+ 9 Emma                doubt       98
+10 Mansfield Park      poor        96</code></pre>
+</div>
+</div>
+<p>The next step involves identifying, in a somewhat arbitrary way, words that have a “large” count, for example a count greater than or equal to 68:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>selected_words <span class="ot">=</span> word_sentims <span class="sc">|&gt;</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(count <span class="sc">&gt;=</span> <span class="dv">68</span>) <span class="sc">|&gt;</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>(word) <span class="sc">|&gt;</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>()</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>selected_words</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "poor"      "happy"     "love"      "pleasure"  "doubt"     "happiness"
+[7] "comfort"   "affection" "pretty"   </code></pre>
+</div>
+</div>
+<p>With these <code>selected_words</code>, we filter them in from <code>word_sentims</code> to get a subset <code>word_sentims2</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>word_sentims2 <span class="ot">=</span> word_sentims <span class="sc">|&gt;</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(word <span class="sc">%in%</span> selected_words)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(word_sentims2, <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 3
+   book                word     count
+   &lt;fct&gt;               &lt;chr&gt;    &lt;int&gt;
+ 1 Emma                poor       136
+ 2 Emma                happy      125
+ 3 Mansfield Park      love       124
+ 4 Mansfield Park      happy      117
+ 5 Emma                love       117
+ 6 Emma                pleasure   115
+ 7 Mansfield Park      pleasure   101
+ 8 Sense &amp; Sensibility happy      100
+ 9 Emma                doubt       98
+10 Mansfield Park      poor        96</code></pre>
+</div>
+</div>
+<p>Having obtained the table <code>word_sentims2</code>, we then proceed to obtain the cross-table between books and the selected words</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>crosstable2 <span class="ot">=</span> word_sentims2 <span class="sc">|&gt;</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(book, word, count) <span class="sc">|&gt;</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_from =</span> word,</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">values_from =</span> count)</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>crosstable2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 10
+  book        poor happy  love pleasure doubt happiness comfort affection pretty
+  &lt;fct&gt;      &lt;int&gt; &lt;int&gt; &lt;int&gt;    &lt;int&gt; &lt;int&gt;     &lt;int&gt;   &lt;int&gt;     &lt;int&gt;  &lt;int&gt;
+1 Emma         136   125   117      115    98        76      65        50     68
+2 Mansfield…    96   117   124      101    46        86      83        52     56
+3 Sense &amp; S…    71   100    77       67    46        66      63        79     36
+4 Pride &amp; P…    38    83    92       92    37        72      31        58     24
+5 Persuasion    55    64    42       39    26        32      21         9     28
+6 Northange…    28    45    43       48    28        37      29        24     30</code></pre>
+</div>
+</div>
+<p>To apply correspondence analysis, we convert <code>crosstable</code> into a matrix <code>Y</code>. In case we had entries with missing values, we play safe and artificially replace <code>NA</code> with 0.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>Y <span class="ot">=</span> <span class="fu">as.matrix</span>(crosstable2[,<span class="sc">-</span><span class="dv">1</span>])</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>Y[<span class="fu">is.na</span>(Y)] <span class="ot">=</span> <span class="dv">0</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(Y) <span class="ot">=</span> <span class="fu">str_extract</span>(crosstable2<span class="sc">$</span>book, <span class="st">"</span><span class="sc">\\</span><span class="st">w+"</span>)</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>Y</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>           poor happy love pleasure doubt happiness comfort affection pretty
+Emma        136   125  117      115    98        76      65        50     68
+Mansfield    96   117  124      101    46        86      83        52     56
+Sense        71   100   77       67    46        66      63        79     36
+Pride        38    83   92       92    37        72      31        58     24
+Persuasion   55    64   42       39    26        32      21         9     28
+Northanger   28    45   43       48    28        37      29        24     30</code></pre>
+</div>
+</div>
+<p>The last step involves passing <code>Y</code> to <code>CA()</code> to obtain the necessary outputs and produce the correspondence analysis map with <code>ggplot()</code> and friends:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Correspondence Analysis</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>austen_ca2 <span class="ot">=</span> <span class="fu">CA</span>(Y, <span class="at">graph =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="co"># table with row and column coordinates (i.e. factor scores)</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>ca_dat <span class="ot">=</span> <span class="fu">data.frame</span>(</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rbind</span>(austen_ca2<span class="sc">$</span>row<span class="sc">$</span>coord[ ,<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>], </span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>        austen_ca2<span class="sc">$</span>col<span class="sc">$</span>coord[ ,<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>]))</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a><span class="co"># type of book or word</span></span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>ca_dat<span class="sc">$</span>type <span class="ot">=</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="st">"book"</span>, <span class="fu">nrow</span>(austen_ca2<span class="sc">$</span>row<span class="sc">$</span>coord)), </span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>                <span class="fu">rep</span>(<span class="st">"word"</span>, <span class="fu">nrow</span>(austen_ca2<span class="sc">$</span>col<span class="sc">$</span>coord)))</span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a><span class="co"># correspondence analysis scatterplot</span></span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(ca_dat, <span class="fu">aes</span>(<span class="at">x =</span> Dim<span class="fl">.1</span>, <span class="at">y =</span> Dim<span class="fl">.2</span>, <span class="at">color =</span> type)) <span class="sc">+</span></span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">col =</span> <span class="st">"gray60"</span>) <span class="sc">+</span></span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">0</span>, <span class="at">col =</span> <span class="st">"gray60"</span>) <span class="sc">+</span></span>
+<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">label =</span> <span class="fu">rownames</span>(ca_dat), <span class="at">alpha =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
+<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">0.3</span>, <span class="fl">0.4</span>)) <span class="sc">+</span></span>
+<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Correspondence Analysis map"</span>,</span>
+<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="fu">sprintf</span>(<span class="st">"Dim-1 (%0.2f%s)"</span>, austen_ca2<span class="sc">$</span>eig[<span class="dv">1</span>,<span class="dv">2</span>], <span class="st">"%"</span>),</span>
+<span id="cb22-22"><a href="#cb22-22" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="fu">sprintf</span>(<span class="st">"Dim-2 (%0.2f%s)"</span>, austen_ca2<span class="sc">$</span>eig[<span class="dv">2</span>,<span class="dv">2</span>], <span class="st">"%"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="text-mining-corresp-analysis2_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<section id="words-with-positive-sentiments" class="level3" data-number="4.1">
+<h3 data-number="4.1" class="anchored" data-anchor-id="words-with-positive-sentiments"><span class="header-section-number">4.1</span> Words with Positive Sentiments</h3>
+<p>Out of curiosity, we can perform a similar analysis but this time using only positive words (the same could be done with only negative words).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>positive_words <span class="ot">=</span> <span class="fu">austen_books</span>() <span class="sc">|&gt;</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest_tokens</span>(<span class="at">output =</span> word, <span class="at">input =</span> text) <span class="sc">|&gt;</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">anti_join</span>(stop_words, <span class="at">by =</span> <span class="st">"word"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(book, word, <span class="at">name =</span> <span class="st">"count"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(sentiments, </span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>             <span class="at">by =</span> <span class="st">"word"</span>, </span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>             <span class="at">relationship =</span> <span class="st">"many-to-many"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(sentiment <span class="sc">==</span> <span class="st">"positive"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(count))</span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(positive_words, <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 4
+   book                word      count sentiment
+   &lt;fct&gt;               &lt;chr&gt;     &lt;int&gt; &lt;chr&gt;    
+ 1 Emma                happy       125 positive 
+ 2 Mansfield Park      love        124 positive 
+ 3 Mansfield Park      happy       117 positive 
+ 4 Emma                love        117 positive 
+ 5 Emma                pleasure    115 positive 
+ 6 Mansfield Park      pleasure    101 positive 
+ 7 Sense &amp; Sensibility happy       100 positive 
+ 8 Pride &amp; Prejudice   love         92 positive 
+ 9 Pride &amp; Prejudice   pleasure     92 positive 
+10 Mansfield Park      happiness    86 positive </code></pre>
+</div>
+</div>
+<p>Like in preceding example, here the idea is to identify common positive words. For instance, we can identify words that have a count greater than 50 (you can choose another threshold):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>selected_positive <span class="ot">=</span> positive_words <span class="sc">|&gt;</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(count <span class="sc">&gt;=</span> <span class="dv">50</span>) <span class="sc">|&gt;</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>(word) <span class="sc">|&gt;</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>()</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>selected_positive</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "happy"     "love"      "pleasure"  "happiness" "comfort"   "affection"
+ [7] "pretty"    "glad"      "perfectly" "ready"     "kindness"  "assure"   
+[13] "superior"  "fine"      "agreeable" "satisfied" "regard"   </code></pre>
+</div>
+</div>
+<p>With these subset of positive words, we filter them in from <code>positive_words</code> and then obtain the cross-table between book categories and positive words:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>crosstable3 <span class="ot">=</span> positive_words <span class="sc">|&gt;</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(word <span class="sc">%in%</span> selected_positive) <span class="sc">|&gt;</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(book, word, count) <span class="sc">|&gt;</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_from =</span> word,</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">values_from =</span> count)</span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>crosstable3</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 18
+  book   happy  love pleasure happiness comfort affection pretty  glad perfectly
+  &lt;fct&gt;  &lt;int&gt; &lt;int&gt;    &lt;int&gt;     &lt;int&gt;   &lt;int&gt;     &lt;int&gt;  &lt;int&gt; &lt;int&gt;     &lt;int&gt;
+1 Emma     125   117      115        76      65        50     68    50        67
+2 Mansf…   117   124      101        86      83        52     56    67        48
+3 Sense…   100    77       67        66      63        79     36    44        43
+4 Pride…    83    92       92        72      31        58     24    37        47
+5 Persu…    64    42       39        32      21         9     28    33        43
+6 North…    45    43       48        37      29        24     30    32        23
+# ℹ 8 more variables: ready &lt;int&gt;, kindness &lt;int&gt;, assure &lt;int&gt;,
+#   superior &lt;int&gt;, fine &lt;int&gt;, agreeable &lt;int&gt;, satisfied &lt;int&gt;, regard &lt;int&gt;</code></pre>
+</div>
+</div>
+<p>To pass the cross-table to <code>CA()</code>, we convert <code>crosstable3</code> into a matrix <code>Xpos</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>Xpos <span class="ot">=</span> <span class="fu">as.matrix</span>(crosstable3[,<span class="sc">-</span><span class="dv">1</span>])</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>Xpos[<span class="fu">is.na</span>(Xpos)] <span class="ot">=</span> <span class="dv">0</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(Xpos) <span class="ot">=</span> <span class="fu">str_extract</span>(crosstable3<span class="sc">$</span>book, <span class="st">"</span><span class="sc">\\</span><span class="st">w+"</span>)</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>Xpos</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>           happy love pleasure happiness comfort affection pretty glad
+Emma         125  117      115        76      65        50     68   50
+Mansfield    117  124      101        86      83        52     56   67
+Sense        100   77       67        66      63        79     36   44
+Pride         83   92       92        72      31        58     24   37
+Persuasion    64   42       39        32      21         9     28   33
+Northanger    45   43       48        37      29        24     30   32
+           perfectly ready kindness assure superior fine agreeable satisfied
+Emma              67    66       40     59       59   42        50        52
+Mansfield         48    60       60     19       11   57        52        44
+Sense             43    35       42     32       12   25        25        26
+Pride             47    20       29     39       18   31        45        34
+Persuasion        43    22       15     25        9   33        38        23
+Northanger        23    23       14     18        5   28        32        17
+           regard
+Emma           43
+Mansfield      37
+Sense          50
+Pride          49
+Persuasion     25
+Northanger     10</code></pre>
+</div>
+</div>
+<p>And finally we apply <code>CA()</code> to <code>Xpos</code> to get the CA map:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>ca_pos <span class="ot">=</span> <span class="fu">CA</span>(Xpos, <span class="at">graph =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="co"># table with row and column coordinates (i.e. factor scores)</span></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>ca_dat <span class="ot">=</span> <span class="fu">data.frame</span>(</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rbind</span>(ca_pos<span class="sc">$</span>row<span class="sc">$</span>coord[ ,<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>], </span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>        ca_pos<span class="sc">$</span>col<span class="sc">$</span>coord[ ,<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>]))</span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a><span class="co"># type of book or word</span></span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>ca_dat<span class="sc">$</span>type <span class="ot">=</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="st">"book"</span>, <span class="fu">nrow</span>(ca_pos<span class="sc">$</span>row<span class="sc">$</span>coord)), </span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a>                <span class="fu">rep</span>(<span class="st">"word"</span>, <span class="fu">nrow</span>(ca_pos<span class="sc">$</span>col<span class="sc">$</span>coord)))</span>
+<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a><span class="co"># correspondence analysis scatterplot</span></span>
+<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(ca_dat, <span class="fu">aes</span>(<span class="at">x =</span> Dim<span class="fl">.1</span>, <span class="at">y =</span> Dim<span class="fl">.2</span>, <span class="at">color =</span> type)) <span class="sc">+</span></span>
+<span id="cb31-14"><a href="#cb31-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">col =</span> <span class="st">"gray60"</span>) <span class="sc">+</span></span>
+<span id="cb31-15"><a href="#cb31-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">0</span>, <span class="at">col =</span> <span class="st">"gray60"</span>) <span class="sc">+</span></span>
+<span id="cb31-16"><a href="#cb31-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb31-17"><a href="#cb31-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">label =</span> <span class="fu">rownames</span>(ca_dat), <span class="at">alpha =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
+<span id="cb31-18"><a href="#cb31-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">0.4</span>, <span class="fl">0.5</span>)) <span class="sc">+</span></span>
+<span id="cb31-19"><a href="#cb31-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Correspondence Analysis map"</span>,</span>
+<span id="cb31-20"><a href="#cb31-20" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Words with positive sentiments"</span>,</span>
+<span id="cb31-21"><a href="#cb31-21" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="fu">sprintf</span>(<span class="st">"Dim-1 (%0.2f%s)"</span>, ca_pos<span class="sc">$</span>eig[<span class="dv">1</span>,<span class="dv">2</span>], <span class="st">"%"</span>),</span>
+<span id="cb31-22"><a href="#cb31-22" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="fu">sprintf</span>(<span class="st">"Dim-2 (%0.2f%s)"</span>, ca_pos<span class="sc">$</span>eig[<span class="dv">2</span>,<span class="dv">2</span>], <span class="st">"%"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="text-mining-corresp-analysis2_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+      <div class="nav-footer-center">
+        <ul class="footer-items list-unstyled">
+    <li class="nav-item">
+    <a class="nav-link active" href="../../about.html" aria-current="page">About</a>
+  </li>  
+    <li class="nav-item">
+    <a class="nav-link" href="../../license.html">License</a>
+  </li>  
+    <li class="nav-item">
+    <a class="nav-link" href="https://github.com/berkeley-stat133">GitHub</a>
+  </li>  
+</ul>
+      </div>
+  </div>
+</footer>
+
+
+
+</body></html>

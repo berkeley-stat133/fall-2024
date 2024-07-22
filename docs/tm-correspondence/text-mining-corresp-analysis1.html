@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.1.251">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Correspondence Analysis 1</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../images/favicon.ico" rel="icon">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-CES9J82GLL"></script>
+
+<script type="text/javascript">
+
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-CES9J82GLL', { 'anonymize_ip': true});
+</script>
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-sidebar docked">
+
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title">Correspondence Analysis 1</h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="../../" class="sidebar-logo-link">
+      <img src="../../stat_bear.png" alt="" class="sidebar-logo py-0 d-lg-inline d-none">
+      </a>
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../../">STAT 133</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/berkeley-stat133/fall-2024" title="" class="sidebar-tool px-1"><i class="bi bi-github"></i></a>
+</div>
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../index.html" class="sidebar-item-text sidebar-link">Home / Schedule</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../syllabus.html" class="sidebar-item-text sidebar-link">Syllabus</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../about.html" class="sidebar-item-text sidebar-link">About</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../staff.html" class="sidebar-item-text sidebar-link">Staff</a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">Units</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../units/unit1.html" class="sidebar-item-text sidebar-link">1) Intro</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../units/unit2.html" class="sidebar-item-text sidebar-link">2) R Vectors</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../units/unit3.html" class="sidebar-item-text sidebar-link">3) Lists and Matrices</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../units/unit4.html" class="sidebar-item-text sidebar-link">4) Functions and Conditionals</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../units/unit5.html" class="sidebar-item-text sidebar-link">5) Tables and Tidyverse-1</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../units/unit6.html" class="sidebar-item-text sidebar-link">6) Tables and Tidyverse-2</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../units/unit7.html" class="sidebar-item-text sidebar-link">7) Iterations</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../units/unit8.html" class="sidebar-item-text sidebar-link">8) Regular Expressions</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../units/unit9.html" class="sidebar-item-text sidebar-link">9) Text Mining 1</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../units/unit10.html" class="sidebar-item-text sidebar-link">10) Text Mining 2</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../units/unit11.html" class="sidebar-item-text sidebar-link">11) Maps 1</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../units/unit12.html" class="sidebar-item-text sidebar-link">12) Maps 2</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../units/unit13.html" class="sidebar-item-text sidebar-link">13) Web Tech 1</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../units/unit14.html" class="sidebar-item-text sidebar-link">14) Web Tech 2</a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../practice.html" class="sidebar-item-text sidebar-link">Practice Problems</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../cheatsheets.html" class="sidebar-item-text sidebar-link">Cheatsheets</a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#jane-austens-novels" id="toc-jane-austens-novels" class="nav-link active" data-scroll-target="#jane-austens-novels"><span class="toc-section-number">1</span>  Jane Austen’s Novels</a></li>
+  <li><a href="#detecting-associations-with-correspondence-analysis-ca" id="toc-detecting-associations-with-correspondence-analysis-ca" class="nav-link" data-scroll-target="#detecting-associations-with-correspondence-analysis-ca"><span class="toc-section-number">2</span>  Detecting Associations with Correspondence Analysis (CA)</a></li>
+  <li><a href="#table-of-relative-frequencies" id="toc-table-of-relative-frequencies" class="nav-link" data-scroll-target="#table-of-relative-frequencies"><span class="toc-section-number">3</span>  Table of relative frequencies</a>
+  <ul class="collapse">
+  <li><a href="#relative-frequencies-or-probabilities" id="toc-relative-frequencies-or-probabilities" class="nav-link" data-scroll-target="#relative-frequencies-or-probabilities"><span class="toc-section-number">3.1</span>  Relative Frequencies or Probabilities</a></li>
+  <li><a href="#marginal-probabilities" id="toc-marginal-probabilities" class="nav-link" data-scroll-target="#marginal-probabilities"><span class="toc-section-number">3.2</span>  Marginal Probabilities</a></li>
+  </ul></li>
+  <li><a href="#independence-model" id="toc-independence-model" class="nav-link" data-scroll-target="#independence-model"><span class="toc-section-number">4</span>  Independence Model</a>
+  <ul class="collapse">
+  <li><a href="#relative-frequencies-under-independence" id="toc-relative-frequencies-under-independence" class="nav-link" data-scroll-target="#relative-frequencies-under-independence"><span class="toc-section-number">4.1</span>  Relative Frequencies under Independence</a></li>
+  </ul></li>
+  <li><a href="#row-analysis" id="toc-row-analysis" class="nav-link" data-scroll-target="#row-analysis"><span class="toc-section-number">5</span>  Row Analysis</a></li>
+  <li><a href="#column-analysis" id="toc-column-analysis" class="nav-link" data-scroll-target="#column-analysis"><span class="toc-section-number">6</span>  Column Analysis</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block">Correspondence Analysis 1</h1>
+<p class="subtitle lead">UC Berkeley, STAT 133, Fall 2024</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+    
+  </div>
+  
+
+</header>
+
+<p>This is a companion file to the Stat 133 lectures on “Text Mining”. You’ll need the following packages:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># used packages</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)    <span class="co"># base tidy data tools</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidytext)     <span class="co"># text mining; gets along with tidyverse</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(janeaustenr)  <span class="co"># Jane Austen's novels</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(FactoMineR)   <span class="co"># Multivariate Statistics methods</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<hr>
+<section id="jane-austens-novels" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="jane-austens-novels"><span class="header-section-number">1</span> Jane Austen’s Novels</h2>
+<p>As you know, the package <code>"janeaustenr"</code> contains the six novels by Jane Austen:</p>
+<ul>
+<li>Emma<br>
+</li>
+<li>Mansfield Park<br>
+</li>
+<li>Northanger Abbey<br>
+</li>
+<li>Persuasion<br>
+</li>
+<li>Pride and Prejudice<br>
+</li>
+<li>Sense and Sensibility</li>
+</ul>
+<p>The text of each novel is available in vector format: e.g.&nbsp;<code>prideprejudice</code>, <code>emma</code>, <code>persuasion</code>. But you can also find the text of all six novels in a single data frame (tibble) by using the function <code>austen_books()</code></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">austen_books</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<hr>
+</section>
+<section id="detecting-associations-with-correspondence-analysis-ca" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="detecting-associations-with-correspondence-analysis-ca"><span class="header-section-number">2</span> Detecting Associations with Correspondence Analysis (CA)</h2>
+<p>Say we are interested in studying the use of punctuation symbols across all Austen’s novels:</p>
+<ul>
+<li>commas: <code>","</code></li>
+<li>semicolons: <code>";"</code></li>
+<li>colons: <code>":"</code></li>
+<li>quotations: <code>'\\"'</code></li>
+<li>apostrophes: <code>"'"</code></li>
+<li>question marks: <code>"?"</code></li>
+<li>exclamation symbols: <code>"!"</code></li>
+<li>dashes (pairs): <code>"--"</code></li>
+</ul>
+<p>We can use <code>str_count()</code> to count the frequencies of these types of symbols, and then get the their total sum for each book:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>crosstable <span class="ot">=</span> <span class="fu">austen_books</span>() <span class="sc">|&gt;</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">commas =</span> <span class="fu">str_count</span>(text, <span class="st">","</span>),</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">colons =</span> <span class="fu">str_count</span>(text, <span class="st">":"</span>),</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">semicolons =</span> <span class="fu">str_count</span>(text, <span class="st">";"</span>),</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">quotes =</span> <span class="fu">str_count</span>(text, <span class="st">'</span><span class="sc">\\</span><span class="st">"'</span>),</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">apostrophes =</span> <span class="fu">str_count</span>(text, <span class="st">"'"</span>),</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">questions =</span> <span class="fu">str_count</span>(text, <span class="st">"</span><span class="sc">\\</span><span class="st">?"</span>),</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">exclamations =</span> <span class="fu">str_count</span>(text, <span class="st">"</span><span class="sc">\\</span><span class="st">!"</span>),</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">dashes =</span> <span class="fu">str_count</span>(text, <span class="st">"--"</span>)</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(book) <span class="sc">|&gt;</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">commas =</span> <span class="fu">sum</span>(commas),</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">colons =</span> <span class="fu">sum</span>(colons),</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">semis =</span> <span class="fu">sum</span>(semicolons),</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">quotes =</span> <span class="fu">sum</span>(quotes),</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">aposts =</span> <span class="fu">sum</span>(apostrophes),</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">quests =</span> <span class="fu">sum</span>(questions),</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">bangs =</span> <span class="fu">sum</span>(exclamations),</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">dashes =</span> <span class="fu">sum</span>(dashes)</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>crosstable</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 9
+  book                commas colons semis quotes aposts quests bangs dashes
+  &lt;fct&gt;                &lt;int&gt;  &lt;int&gt; &lt;int&gt;  &lt;int&gt;  &lt;int&gt;  &lt;int&gt; &lt;int&gt;  &lt;int&gt;
+1 Sense &amp; Sensibility   9900     66  1572   3084    914    451   561   1178
+2 Pride &amp; Prejudice     9132    132  1538   3531    741    462   499    395
+3 Mansfield Park       12439    339  2260   3292   1135    471   496    413
+4 Emma                 12020    174  2353   4189   1226    621  1063   3100
+5 Northanger Abbey      6085     83  1172   2151    545    392   433    419
+6 Persuasion            7025    130  1320   1565    582    217   318    142</code></pre>
+</div>
+</div>
+<p>The above table, technically speaking, is an example of a <strong>cross-table</strong>, also referred to as a <em>2-way table</em> or a <em>contingency</em> table. The important thing about this table is that it contains counts, which in turn are non-negative numbers.</p>
+<p>From a statistical point of view, this table is the result of <strong>crossing</strong> the categories of 2 qualitative (i.e.&nbsp;categorical) variables:</p>
+<ul>
+<li><p>Variable <span class="math inline">\(V_1\)</span>: name of book or novel</p></li>
+<li><p>Variable <span class="math inline">\(V_2\)</span>: type of punctuation symbol</p></li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="ca-fig1.png" class="img-fluid figure-img" style="width:70.0%"></p>
+<p></p><figcaption class="figure-caption">Cross-table from 2 categorical variables</figcaption><p></p>
+</figure>
+</div>
+<p>With this kind of table, we could ask questions like:</p>
+<ul>
+<li><p>Is there an association between books and punctuation symbols?</p></li>
+<li><p>Do some books tend to have more (or less) of a certain punctuation symbol?</p></li>
+</ul>
+<p>To answer this kind of questions, we can use a statistical multivariate method known as <strong>Correspondence Analysis</strong> (CA).</p>
+<p>Originally, CA was developed to analyze contingency tables in which a sample of observations is described by two nominal variables, but it was rapidly extended to the analysis of any data table with non-negative entries.</p>
+<p>On a side note, we should mention that CA was often discovered (and rediscovered), and so variations of CA can be found under several different names such as “dual scaling,” “optimal scaling,” “homogeneity analysis,” or “reciprocal averaging.” The multiple identities of correspondence analysis are a consequence of its large number of properties, that answer a lot of apparently different problems.</p>
+<hr>
+</section>
+<section id="table-of-relative-frequencies" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="table-of-relative-frequencies"><span class="header-section-number">3</span> Table of relative frequencies</h2>
+<p>In order to explain Correspondence Analysis, and also to simplify some of the computations on the data in <code>crosstable</code>, it’s better if we reformat this object as a matrix:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># cross-table in matrix format</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>X <span class="ot">=</span> <span class="fu">as.matrix</span>(crosstable[,<span class="sc">-</span><span class="dv">1</span>])</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(X) <span class="ot">=</span> <span class="fu">str_extract</span>(crosstable<span class="sc">$</span>book, <span class="st">"</span><span class="sc">\\</span><span class="st">w+"</span>)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>X</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>           commas colons semis quotes aposts quests bangs dashes
+Sense        9900     66  1572   3084    914    451   561   1178
+Pride        9132    132  1538   3531    741    462   499    395
+Mansfield   12439    339  2260   3292   1135    471   496    413
+Emma        12020    174  2353   4189   1226    621  1063   3100
+Northanger   6085     83  1172   2151    545    392   433    419
+Persuasion   7025    130  1320   1565    582    217   318    142</code></pre>
+</div>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="ca-fig2.png" class="img-fluid figure-img" style="width:40.0%"></p>
+<p></p><figcaption class="figure-caption">Cross-table from 2 categorical variables</figcaption><p></p>
+</figure>
+</div>
+<section id="relative-frequencies-or-probabilities" class="level3" data-number="3.1">
+<h3 data-number="3.1" class="anchored" data-anchor-id="relative-frequencies-or-probabilities"><span class="header-section-number">3.1</span> Relative Frequencies or Probabilities</h3>
+<p>The first step involves converting the frequencies or counts in <code>X</code> into <em>relative frequencies</em> (i.e.&nbsp;proportions) by dividing the cells in <code>X</code> over the total count of punctuation symbols:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>Xprobs <span class="ot">=</span> X <span class="sc">/</span> <span class="fu">sum</span>(X)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(Xprobs, <span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>           commas colons  semis quotes aposts quests  bangs dashes
+Sense      0.0967 0.0006 0.0154 0.0301 0.0089 0.0044 0.0055 0.0115
+Pride      0.0892 0.0013 0.0150 0.0345 0.0072 0.0045 0.0049 0.0039
+Mansfield  0.1216 0.0033 0.0221 0.0322 0.0111 0.0046 0.0048 0.0040
+Emma       0.1175 0.0017 0.0230 0.0409 0.0120 0.0061 0.0104 0.0303
+Northanger 0.0595 0.0008 0.0115 0.0210 0.0053 0.0038 0.0042 0.0041
+Persuasion 0.0687 0.0013 0.0129 0.0153 0.0057 0.0021 0.0031 0.0014</code></pre>
+</div>
+</div>
+<p>You can think of the proportions in <code>Xprobs</code> as <strong>joint probabilities</strong>. For instance, the probability of Sense and Sensibility AND commas is about 0.0967</p>
+<p><span class="math display">\[
+Prob(V_1 = \text{Sense} \ \text{ AND } \ V_2 = \text{commas}) \approx 0.0967
+\]</span></p>
+<p>The following diagram illustrates a table of probabilities derived from the cross-table between two variables <span class="math inline">\(V_1\)</span> and <span class="math inline">\(V_2\)</span>. The relative frequency between the <span class="math inline">\(i\)</span>-th category of <span class="math inline">\(V_1\)</span> and the <span class="math inline">\(j\)</span>-th category of <span class="math inline">\(V_2\)</span> is denoted as <span class="math inline">\(f_{ij}\)</span></p>
+<p><span class="math display">\[
+f_{ij} = \frac{x_{ij}}{n}
+\]</span></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="ca-fig3.png" class="img-fluid figure-img" style="width:40.0%"></p>
+</figure>
+</div>
+</section>
+<section id="marginal-probabilities" class="level3" data-number="3.2">
+<h3 data-number="3.2" class="anchored" data-anchor-id="marginal-probabilities"><span class="header-section-number">3.2</span> Marginal Probabilities</h3>
+<p>From the table of probabilities <span class="math inline">\(f_{ij}\)</span>, we can calculate marginal probabilities.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="ca-fig4.png" class="img-fluid figure-img" style="width:70.0%"></p>
+</figure>
+</div>
+<p><strong>Column Margin</strong>. The column margin, depicted in blue in the preceding figure, with its <span class="math inline">\(j\)</span>-th term denoted as <span class="math inline">\(f_{.j}\)</span> is given by the sum of all the entries in each column, column by column:</p>
+<p><span class="math display">\[
+f_{.j} = \sum_{i=1}^{I} f_{ij}
+\]</span></p>
+<p>These marginal probabilities can be easily obtained with <code>colSums()</code></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># column margin</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>col_margin <span class="ot">=</span> <span class="fu">colSums</span>(Xprobs)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(col_margin, <span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>commas colons  semis quotes aposts quests  bangs dashes 
+0.5531 0.0090 0.0998 0.1741 0.0503 0.0255 0.0329 0.0552 </code></pre>
+</div>
+</div>
+<p>Think of this proportions as marginal probabilities:</p>
+<p><span class="math display">\[
+Prob(V_2 = \text{commas}) \approx 0.5531
+\]</span></p>
+<p><br></p>
+<p><strong>Row Margin</strong>. The row margin, depicted in red in the preceding figure, with its <span class="math inline">\(i\)</span>-th term denoted as <span class="math inline">\(f_{i.}\)</span> is given by the sum of all the entries in each row, row by row:</p>
+<p><span class="math display">\[
+f_{i.} = \sum_{j=1}^{J} f_{ij}
+\]</span></p>
+<p>These marginal probabilities can be easily obtained with <code>rowSums()</code></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># row margin</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>row_margin <span class="ot">=</span> <span class="fu">rowSums</span>(Xprobs)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(row_margin, <span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     Sense      Pride  Mansfield       Emma Northanger Persuasion 
+    0.1732     0.1606     0.2037     0.2418     0.1102     0.1104 </code></pre>
+</div>
+</div>
+<p>Think of this proportions as <strong>marginal probabilities</strong>:</p>
+<p><span class="math display">\[
+Prob(V_1 = \text{Sense}) \approx 0.1732
+\]</span></p>
+<hr>
+</section>
+</section>
+<section id="independence-model" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="independence-model"><span class="header-section-number">4</span> Independence Model</h2>
+<p>Let’s review the kind of probabilities that we have so far:</p>
+<ul>
+<li><p><strong>joint probabilities</strong>: <span class="math inline">\(f_{ij}\)</span></p></li>
+<li><p><strong>marginal probability</strong> of rows: <span class="math inline">\(f_{i.}\)</span></p></li>
+<li><p><strong>marginal probability</strong> of columns: <span class="math inline">\(f_{.j}\)</span></p></li>
+</ul>
+<p>From basic probability rules, we know that if two events <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span> are <strong>independent</strong>, their joint probability <span class="math inline">\(P(A \text{ and } B)\)</span> is given by the product of the marginal probabilities, that is:</p>
+<p><span class="math display">\[
+P(A \text{ and } B) = P(A) \times P(B)
+\]</span></p>
+<p>In other words, if the <span class="math inline">\(i\)</span>-th row is independent from the <span class="math inline">\(j\)</span>-th column, the joint probability <span class="math inline">\(f_{ij}\)</span> is given by</p>
+<p><span class="math display">\[
+f_{ij} = f_{i.} \times f_{.j}
+\]</span></p>
+<section id="relative-frequencies-under-independence" class="level3" data-number="4.1">
+<h3 data-number="4.1" class="anchored" data-anchor-id="relative-frequencies-under-independence"><span class="header-section-number">4.1</span> Relative Frequencies under Independence</h3>
+<p>What if the categories of <span class="math inline">\(V_1\)</span> are independent from the categories in <span class="math inline">\(V_2\)</span>? In other words, what would the joint probabilities should like if there was no association between the books and the punctuation symbols? Well, if this was the case then the table of joint probabilities should be approximately:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># under independence</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>Xindep <span class="ot">=</span> row_margin <span class="sc">%o%</span> col_margin</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(Xindep, <span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>           commas colons  semis quotes aposts quests  bangs dashes
+Sense      0.0958 0.0016 0.0173 0.0302 0.0087 0.0044 0.0057 0.0096
+Pride      0.0888 0.0014 0.0160 0.0279 0.0081 0.0041 0.0053 0.0089
+Mansfield  0.1127 0.0018 0.0203 0.0355 0.0102 0.0052 0.0067 0.0112
+Emma       0.1338 0.0022 0.0241 0.0421 0.0122 0.0062 0.0080 0.0133
+Northanger 0.0610 0.0010 0.0110 0.0192 0.0055 0.0028 0.0036 0.0061
+Persuasion 0.0611 0.0010 0.0110 0.0192 0.0055 0.0028 0.0036 0.0061</code></pre>
+</div>
+</div>
+<p>To visualize the joint probability distributions under the assumption of independence, we can make a mosaicplot like the following one.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mosaicplot</span>(<span class="fu">t</span>(Xindep), <span class="at">las =</span> <span class="dv">1</span>, <span class="at">border =</span> <span class="cn">NA</span>, <span class="at">main =</span> <span class="st">"Independence Model"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="text-mining-corresp-analysis1_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>The independence model stipulates that the joint probability <span class="math inline">\(f_{ij}\)</span> is dependent on the marginal probabilities <span class="math inline">\(f_{i.}\)</span> and <span class="math inline">\(f_{.j}\)</span> alone.</p>
+<p>Studying the association between two categorical variables requires us to position the data in terms of a given starting point: in this case the absence of a relationship given by the independence model. The more a given joint probability <span class="math inline">\(f_{ij}\)</span> departures from the expected probability <span class="math inline">\(f_{i.} \times f_{.j}\)</span> under independence, the stronger the association will between the “events” <span class="math inline">\(i\)</span>-th and <span class="math inline">\(j\)</span>-th. This is one of the core ideas behind Correspondence Analysis.</p>
+<hr>
+</section>
+</section>
+<section id="row-analysis" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="row-analysis"><span class="header-section-number">5</span> Row Analysis</h2>
+<p>Using the table of probabilities (<code>Xprobs</code>), we can divide its entries <span class="math inline">\(f_{ij}\)</span> by the row margin <span class="math inline">\(f_{i.}\)</span> (i.e.&nbsp;marginal probabilities of books)</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="ca-fig5.png" class="img-fluid figure-img" style="width:80.0%"></p>
+</figure>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># row profiles (i.e. conditional probabilities on books)</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>row_profiles <span class="ot">=</span> <span class="fu">sweep</span>(Xprobs, <span class="at">MARGIN =</span> <span class="dv">1</span>, <span class="at">STATS =</span> row_margin, <span class="at">FUN =</span> <span class="st">"/"</span>)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(row_profiles, <span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>           commas colons  semis quotes aposts quests  bangs dashes
+Sense      0.5585 0.0037 0.0887 0.1740 0.0516 0.0254 0.0316 0.0665
+Pride      0.5558 0.0080 0.0936 0.2149 0.0451 0.0281 0.0304 0.0240
+Mansfield  0.5967 0.0163 0.1084 0.1579 0.0544 0.0226 0.0238 0.0198
+Emma       0.4857 0.0070 0.0951 0.1693 0.0495 0.0251 0.0430 0.1253
+Northanger 0.5395 0.0074 0.1039 0.1907 0.0483 0.0348 0.0384 0.0371
+Persuasion 0.6217 0.0115 0.1168 0.1385 0.0515 0.0192 0.0281 0.0126</code></pre>
+</div>
+</div>
+<p>The entries in this table are basically <strong>conditional probabilities</strong>:</p>
+<p><span class="math display">\[
+Prob(V_2 = \text{commas} \ | \ V_1 = \text{Sense}) = 0.5585
+\]</span></p>
+<p>A property of this table is that its row-sums are equal to 1:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rowSums</span>(row_profiles)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     Sense      Pride  Mansfield       Emma Northanger Persuasion 
+         1          1          1          1          1          1 </code></pre>
+</div>
+</div>
+<p><br></p>
+<p><strong>Average Book profile</strong>: We can take into account the average book profile given by the marginal probabilities in <code>col_margin</code></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>Rows <span class="ot">=</span> <span class="fu">rbind</span>(row_profiles, <span class="at">average =</span> col_margin)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(Rows, <span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>           commas colons  semis quotes aposts quests  bangs dashes
+Sense      0.5585 0.0037 0.0887 0.1740 0.0516 0.0254 0.0316 0.0665
+Pride      0.5558 0.0080 0.0936 0.2149 0.0451 0.0281 0.0304 0.0240
+Mansfield  0.5967 0.0163 0.1084 0.1579 0.0544 0.0226 0.0238 0.0198
+Emma       0.4857 0.0070 0.0951 0.1693 0.0495 0.0251 0.0430 0.1253
+Northanger 0.5395 0.0074 0.1039 0.1907 0.0483 0.0348 0.0384 0.0371
+Persuasion 0.6217 0.0115 0.1168 0.1385 0.0515 0.0192 0.0281 0.0126
+average    0.5531 0.0090 0.0998 0.1741 0.0503 0.0255 0.0329 0.0552</code></pre>
+</div>
+</div>
+<p>Under the assumption of independence (i.e.&nbsp;no association between <span class="math inline">\(i\)</span>-th category and <span class="math inline">\(j\)</span>-th category), the conditional probabilities <span class="math inline">\(f_{ij}/f_{i.}\)</span> should be close to the marginal probabilities <span class="math inline">\(f_{.j}\)</span>:</p>
+<p><span class="math display">\[
+\frac{f_{ij}}{f_{i.}} = f_{.j}
+\]</span></p>
+<p>The more associated <span class="math inline">\(i\)</span>-th and <span class="math inline">\(j\)</span>-th are, the bigger the discrepancy between <span class="math inline">\(f_{ij}/f_{i.}\)</span> and <span class="math inline">\(f_{.j}\)</span>.</p>
+<p>One way to visualize departure from independence is with a mosaicplot of the above table of conditional probabilities or <em>row profiles</em> (see below). Notice that we are also including the marginal probabilities of <code>col_margin</code> which is the average book profile.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mosaicplot</span>(</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">t</span>(Rows),</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">las =</span> <span class="dv">1</span>, </span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">border =</span> <span class="cn">NA</span>, </span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="fu">rainbow</span>(<span class="fu">ncol</span>(Rows)), </span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">main =</span> <span class="st">"Row Profiles"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="text-mining-corresp-analysis1_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>From this picture, we can immediately tell that:</p>
+<ul>
+<li><p>Commas <code>","</code> are the most used punctuation symbol; also the use of commas seems to be evenly distributed across all books.</p></li>
+<li><p>In contrast, colons <code>":"</code> are the least used symbol; notice that Mansfield has the largest proportion of colons.</p></li>
+<li><p>Semicolons <code>";"</code> also seem to be evenly distributed across all books, although not as much as commas.</p></li>
+<li><p>Dashes <code>"--"</code> exhibit the largest amount of variability across different books; Persuasion being the book with the least amount of dashes, whereas Emma is the novel with most dashes (compared to other books).</p></li>
+</ul>
+<hr>
+</section>
+<section id="column-analysis" class="level2" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="column-analysis"><span class="header-section-number">6</span> Column Analysis</h2>
+<p>We can repeat the same analysis of the preceding section but this time applied on the columns of the probability table. This time we divide the entries <span class="math inline">\(f_{ij}\)</span> by the column margin <span class="math inline">\(f_{.j}\)</span> (i.e.&nbsp;marginal probabilities of symbols)</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="ca-fig6.png" class="img-fluid figure-img" style="width:80.0%"></p>
+</figure>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># column profiles (i.e. conditional probabilities on symbols)</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>col_profiles <span class="ot">=</span> <span class="fu">sweep</span>(Xprobs, <span class="at">MARGIN =</span> <span class="dv">2</span>, <span class="at">STATS =</span> col_margin, <span class="at">FUN =</span> <span class="st">"/"</span>)</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(col_profiles, <span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>           commas colons  semis quotes aposts quests  bangs dashes
+Sense      0.1749 0.0714 0.1539 0.1731 0.1777 0.1725 0.1665 0.2086
+Pride      0.1613 0.1429 0.1506 0.1982 0.1441 0.1767 0.1481 0.0699
+Mansfield  0.2198 0.3669 0.2212 0.1848 0.2207 0.1802 0.1472 0.0731
+Emma       0.2124 0.1883 0.2303 0.2352 0.2384 0.2376 0.3154 0.5490
+Northanger 0.1075 0.0898 0.1147 0.1208 0.1060 0.1500 0.1285 0.0742
+Persuasion 0.1241 0.1407 0.1292 0.0879 0.1132 0.0830 0.0944 0.0251</code></pre>
+</div>
+</div>
+<p><br></p>
+<p><strong>Average Symbol profile</strong>: We can take into account the average symbol profile given by the marginal probabilities in <code>row_margin</code></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># adding average column profile</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>Cols <span class="ot">=</span> <span class="fu">cbind</span>(col_profiles, <span class="at">average =</span> row_margin)</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(Cols, <span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>           commas colons  semis quotes aposts quests  bangs dashes average
+Sense      0.1749 0.0714 0.1539 0.1731 0.1777 0.1725 0.1665 0.2086  0.1732
+Pride      0.1613 0.1429 0.1506 0.1982 0.1441 0.1767 0.1481 0.0699  0.1606
+Mansfield  0.2198 0.3669 0.2212 0.1848 0.2207 0.1802 0.1472 0.0731  0.2037
+Emma       0.2124 0.1883 0.2303 0.2352 0.2384 0.2376 0.3154 0.5490  0.2418
+Northanger 0.1075 0.0898 0.1147 0.1208 0.1060 0.1500 0.1285 0.0742  0.1102
+Persuasion 0.1241 0.1407 0.1292 0.0879 0.1132 0.0830 0.0944 0.0251  0.1104</code></pre>
+</div>
+</div>
+<p>Similarly, we can get a mosaicplot to visualize the distribution of these conditional probabilities. Notice that we are also including the marginal probabilities of <code>row_margin</code> which is the average symbol profile.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mosaicplot</span>(</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">t</span>(Cols),</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">las =</span> <span class="dv">1</span>, </span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">border =</span> <span class="cn">NA</span>, </span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="fu">rainbow</span>(<span class="fu">nrow</span>(Cols)), </span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">main =</span> <span class="st">"Column Profiles"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="text-mining-corresp-analysis1_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>From this mosaicplot we can see that:</p>
+<ul>
+<li><p>Commas and semicolons have similar distributions.</p></li>
+<li><p>Similarly, quotes and question marks also have similar distributions.</p></li>
+<li><p>Commas have the closest distribution to the average profile.</p></li>
+<li><p>Compared to average profile, colons and dashes are the symbols that deviate the most from the average profile.</p></li>
+<li><p>As we have previously detected, Emma is the book that has the largest proportion of dashes; in contrast Persuasion has the least proportion of dashes.</p></li>
+<li><p>Also, Mansfield has the largest proportion of colons.</p></li>
+</ul>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+      <div class="nav-footer-center">
+        <ul class="footer-items list-unstyled">
+    <li class="nav-item">
+    <a class="nav-link active" href="../../about.html" aria-current="page">About</a>
+  </li>  
+    <li class="nav-item">
+    <a class="nav-link" href="../../license.html">License</a>
+  </li>  
+    <li class="nav-item">
+    <a class="nav-link" href="https://github.com/berkeley-stat133">GitHub</a>
+  </li>  
+</ul>
+      </div>
+  </div>
+</footer>
+
+
+
+</body></html>
