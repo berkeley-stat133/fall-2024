@@ -29,8 +29,6 @@ website:
         text: About
       - href: staff.qmd
         text: Staff
-      - href: cheatsheets.qmd
-        text: Cheatsheets
       - section: "Units"
         contents:
           - units/unit1.qmd
@@ -47,6 +45,10 @@ website:
           - units/unit12.qmd
           - units/unit13.qmd
           - units/unit14.qmd
+      - href: practice.qmd
+        text: Practice Problems
+      - href: cheatsheets.qmd
+        text: Cheatsheets
           
 format:
   html:
