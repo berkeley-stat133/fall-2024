@@ -2,7 +2,7 @@
     margin-right: 5px;
     border-radius: 6px;
     padding: 4px 6px 4px 7px;
-    width: 93px;
+    width: 101px;
     color: white;
     font-size: 0.9em;
     display: inline-block; // a bit of separation from text outside button
@@ -21,7 +21,7 @@
 
 
 th {
-    width: 8%;
+    width: 9%;
 }
 
 td:first-of-type {
