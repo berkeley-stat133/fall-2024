@@ -52,7 +52,7 @@ website:
           
 format:
   html:
-    theme: cosmo
+    theme: [cosmo, cosmo-plus.scss]
     css: styles.css
     toc: true
 
