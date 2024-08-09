@@ -64,9 +64,10 @@ increasing the level of complexity, but also making it more interactive and rich
 Our first shiny app involves the app that comes by default in RStudio called __Old Faithful__. This app is based on the famous geyser <a href="https://www.yellowstonepark.com/things-to-do/geysers-hot-springs/about-old-faithful/" target="_blank">Old Faithful</a> located in Yellowstone National Park. In particular, the app uses R's built-in data set `"faithful"` which contains two variables:
 
 1) `eruptions`: is the time (in min) of an eruption
+
 2) `waiting`: is the waiting time (in min) to next eruption 
 
-The app is a very basic app that displays a histogram of the "waiting times".
+The app is a very basic app that displays a histogram of the `waiting` times.
 
 <a href="https://github.com/data133/shiny/tree/main/old-faithful1-default" target="_blank">https://github.com/data133/shiny/tree/main/old-faithful1-default</a>
 
