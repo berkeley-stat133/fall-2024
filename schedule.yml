@@ -45,7 +45,7 @@
       items:
         - type: "Lecture"
           id: ""
-          name: "No class (labor day)"
+          name: "No class (Labor day)"
           href: ""
     - date: "Sep 4"
       items:
@@ -645,7 +645,7 @@
           name: "RRR Week"
     - date: "Dec ??"
       items:
-        - type: "Lecture"
+        - type: "Review"
           id: ""
           name: "Final Review TBA"
           href: ""
