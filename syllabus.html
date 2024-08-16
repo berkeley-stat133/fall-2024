@@ -219,6 +219,11 @@ gtag('config', 'G-CES9J82GLL', { 'anonymize_ip': true});
   <a href="./cheatsheets.html" class="sidebar-item-text sidebar-link">Cheatsheets</a>
   </div>
 </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./faqs.html" class="sidebar-item-text sidebar-link">FAQs</a>
+  </div>
+</li>
     </ul>
     </div>
 </nav>
@@ -230,10 +235,13 @@ gtag('config', 'G-CES9J82GLL', { 'anonymize_ip': true});
   <ul>
   <li><a href="#about-stat-133" id="toc-about-stat-133" class="nav-link active" data-scroll-target="#about-stat-133">About Stat 133</a></li>
   <li><a href="#goals" id="toc-goals" class="nav-link" data-scroll-target="#goals">🎯 Goals</a></li>
+  <li><a href="#course-culture" id="toc-course-culture" class="nav-link" data-scroll-target="#course-culture">🏫 Course Culture</a></li>
   <li><a href="#ℹ-prerequisites" id="toc-ℹ-prerequisites" class="nav-link" data-scroll-target="#ℹ-prerequisites">ℹ️ Prerequisites</a></li>
   <li><a href="#textbooks" id="toc-textbooks" class="nav-link" data-scroll-target="#textbooks">📚 Textbooks</a></li>
   <li><a href="#computational-tools" id="toc-computational-tools" class="nav-link" data-scroll-target="#computational-tools">🔧 Computational Tools</a></li>
   <li><a href="#waitlisted-students-and-late-joining" id="toc-waitlisted-students-and-late-joining" class="nav-link" data-scroll-target="#waitlisted-students-and-late-joining">⏳ Waitlisted Students and Late Joining</a></li>
+  <li><a href="#office-hours" id="toc-office-hours" class="nav-link" data-scroll-target="#office-hours">🚪 Office hours</a></li>
+  <li><a href="#group-tutoring" id="toc-group-tutoring" class="nav-link" data-scroll-target="#group-tutoring">🎒 Group Tutoring</a></li>
   <li><a href="#labs-10-of-final-grade" id="toc-labs-10-of-final-grade" class="nav-link" data-scroll-target="#labs-10-of-final-grade">🔬 Labs (10% of final grade)</a></li>
   <li><a href="#problem-sets-35-of-final-grade" id="toc-problem-sets-35-of-final-grade" class="nav-link" data-scroll-target="#problem-sets-35-of-final-grade">📁 Problem Sets (35% of final grade)</a></li>
   <li><a href="#app-projects-27-of-final-grade" id="toc-app-projects-27-of-final-grade" class="nav-link" data-scroll-target="#app-projects-27-of-final-grade">📂 App Projects (27% of final grade)</a></li>
@@ -297,6 +305,12 @@ gtag('config', 'G-CES9J82GLL', { 'anonymize_ip': true});
 </ul>
 <p>We don’t expect that you become a jedi data scientist, an R ninja, or a super coder. That takes YEARS of practice, training, learning, and collaboration. Instead, we want to give you a good foundation around tools for computational data analysis.</p>
 </section>
+<section id="course-culture" class="level2">
+<h2 class="anchored" data-anchor-id="course-culture">🏫 Course Culture</h2>
+<p>Students taking Stat 133 come from a wide range of backgrounds. We hope to foster an inclusive and supportive learning environment based on curiosity rather than competition. All members of the course community—the instructor, GSIs, students, tutors, and readers—are expected to treat each other with courtesy and respect.</p>
+<p>You will be interacting with course staff and fellow students in several different environments: in class, in lab, over the discussion forum, and in office hours. Some of these will be in person, some of them will be online, but the same expectations hold: be kind, be respectful, be professional.</p>
+<p>If you are concerned about classroom environment issues created by other students or course staff, please come talk to us about it.</p>
+</section>
 <section id="ℹ-prerequisites" class="level2">
 <h2 class="anchored" data-anchor-id="ℹ-prerequisites">ℹ️ Prerequisites</h2>
 <p>This course <strong>does not have any prerequisites</strong>, although it would be nice if you have taken an introductory course in statistics (e.g.&nbsp;Stat 2, 20, 21, 131A).</p>
@@ -317,7 +331,7 @@ gtag('config', 'G-CES9J82GLL', { 'anonymize_ip': true});
 </section>
 <section id="computational-tools" class="level2">
 <h2 class="anchored" data-anchor-id="computational-tools">🔧 Computational Tools</h2>
-<p>We will be mainly using the <a href="https://www.r-project.org">computing and programming environment R</a> (via <a href="https://posit.co/download/rstudio-desktop/">RStudio</a>) to analyze data in this class. You will also use a <a href="https://en.wikipedia.org/wiki/Command-line_interface">command line interface</a> to interact with your operating system. You do need your own computer to use R and do the assignments.</p>
+<p>We will be mainly using the <a href="https://www.r-project.org">computing and programming environment R</a> (via <a href="https://posit.co/download/rstudio-desktop/">RStudio</a>) to analyze data in this class. We may also ask you to use a <a href="https://en.wikipedia.org/wiki/Command-line_interface">command line interface</a> to interact with your operating system. You do need your own computer to use R and do the assignments.</p>
 <p>We don’t expect that students have already been exposed to R. For those who come from Data 8 or some previous coding experience in python, the first labs will help you transfer that knowledge over to R. Both languages are excellent platforms for analyzing data, are widely used in data science, and have their individual strengths. R has been developed within the statistics community specifically for data analysis, while python is a general-purpose programming language but has large data analysis capabilities.</p>
 <p>The lectures tend to be focused on the data analysis concepts, while learning how to apply/use them in R tend to be the focus of the labs and assignments. Do not be surprised or worried about not following the details of R code during class—that is not the point (furthermore, there will sometimes be code that is really specific to the instructional purposes of the lecture, e.g.&nbsp;to make a specific plot, and is beyond the scope of what you would be expected to understand or know how to do it by yourself).</p>
 </section>
@@ -326,23 +340,39 @@ gtag('config', 'G-CES9J82GLL', { 'anonymize_ip': true});
 <p>If you are on the waiting list or have a pending application or added the course late, you must still do all coursework and complete labs and homework by the deadlines. <strong>We will not be offering extensions if you are admitted/enrolled into the course later.</strong> So it is your responsibility to stay up to date on the assignments.</p>
 <p>Unfortunately, doing all the work is not a guarantee of enrollment. You will only be enrolled if there is space in your lab. Enrollment will proceed by CalCentral.</p>
 </section>
+<section id="office-hours" class="level2">
+<h2 class="anchored" data-anchor-id="office-hours">🚪 Office hours</h2>
+<p>Me (the instructor) and the GSIs will offer office hours each week across a range of times. You are welcome to visit the office hours of any instructor, not just the ones of your GSI. We may adjust the office hour schedule throughout the semester as we understand student needs and preferences. Please check the office hours tab on the <a href="staff.html">staff</a> page to see the times of the various OH sessions.</p>
+<p>I should also say that OH are an opportunity to chat one-on-one with me. If you can, please come to my office hours! Coming to OH does not necessarily send a signal that you are behind or need extra help. On the contrary, coming to office hours early and often tends to co-occur with success in the course. I am happy to chat about the course material, statistics in general, careers in statistics, and whatever other statistics or data science topics are on your mind!</p>
+</section>
+<section id="group-tutoring" class="level2">
+<h2 class="anchored" data-anchor-id="group-tutoring">🎒 Group Tutoring</h2>
+<p>Tutors will offer group tutoring sessions several times each week. This is an opportunity to finish up any assignments that you’ve started in class or review any topics that are confusing for you. You’re welcome to attend any session that works well for your schedule.</p>
+<p>Group tutoring is a great place to go to meet other students and collaborate on assignments with tutors on hand to help you get unstuck.</p>
+</section>
 <section id="labs-10-of-final-grade" class="level2">
 <h2 class="anchored" data-anchor-id="labs-10-of-final-grade">🔬 Labs (10% of final grade)</h2>
 <ul>
-<li>Weekly labs are an essential part of the course and we will introduce concepts not necessarily covered in lecture.</li>
+<li>Weekly lab discussions are an essential part of the course and we will introduce concepts not necessarily covered in class.</li>
 <li>Thursdays are the official days for lab section.</li>
 <li>You must attend the lab section you are officially enrolled in.</li>
-<li>Practice problems (and their solutions) will be released every Thursday (available in bCourses).</li>
-<li>As its name indicates, they are there to give you the opportunity to practice the concepts covered every week.</li>
-<li>Every week there will be a lab checkpoint; which may involve submitting a source file, and its generated HTML document; or it may involve answering a google form.</li>
+<li>During lab, you will work on short-form assignments designed to apply the concepts on real and simulated data sets.</li>
+<li>Lab assignments will be released every Thursday (available in bCourses),</li>
 <li>The due date is always on a Friday (please check the <a href="https://bcourses.berkeley.edu/courses/1536526/assignments" target="_blank">assignments tab</a> in bCourses to keep track of deadlines).</li>
-<li>Of all lab checkpoints, your lowest 2 scores will be dropped in the calculation of your overall grade.</li>
+<li>Solutions to lab assignments will be available a few days after their due date.</li>
+<li>We will be giving credit on lab assignments based on completion.</li>
+<li>The first lab assignment (lab-1) does not count toward your grade.</li>
+<li>Of all lab assignments (lab-2 to lab-14), your lowest 2 scores will be dropped in the calculation of your overall grade.</li>
+<li>In addition to lab assignments, you will also find <a href="practice.html"><em>Practice problems</em></a> (and their solutions) in the course website.</li>
+<li>As its name indicates, they are there to give you the opportunity to practice the concepts covered every week.</li>
+<li>You don’t need to submit practice problems. Also, these are no for extra credit.</li>
 </ul>
 </section>
 <section id="problem-sets-35-of-final-grade" class="level2">
 <h2 class="anchored" data-anchor-id="problem-sets-35-of-final-grade">📁 Problem Sets (35% of final grade)</h2>
 <ul>
-<li>There will be about 6 Problem-Set assignments (available in bCourses).</li>
+<li>There will be about 6 Problem-Set (PS) assignments (available in bCourses).</li>
+<li>PS are long-form assignments designed to apply the concepts you’ve learned in class and lab.</li>
 <li>Starting on week-2 they will be assigned every week, until week-7.</li>
 <li>The due date is always on a Friday (please check the <a href="https://bcourses.berkeley.edu/courses/1536526/assignments" target="_blank">assignments tab</a> in bCourses to keep track of deadlines).</li>
 <li>You must write your own answers (using your own words and/or code). Copy and plagiarism will not be tolerated (see Academic Honesty policy).</li>
