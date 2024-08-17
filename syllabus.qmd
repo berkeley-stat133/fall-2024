@@ -37,6 +37,16 @@ We don't expect that you become a jedi data scientist, an R ninja, or a super co
 
 
 
+## 🏫 Course Culture
+
+Students taking Stat 133 come from a wide range of backgrounds. We hope to foster an inclusive and supportive learning environment based on curiosity rather than competition. All members of the course community—the instructor, GSIs, students, tutors, and readers—are expected to treat each other with courtesy and respect.
+
+You will be interacting with course staff and fellow students in several different environments: in class, in lab, over the discussion forum, and in office hours. Some of these will be in person, some of them will be online, but the same expectations hold: be kind, be respectful, be professional.
+
+If you are concerned about classroom environment issues created by other students or course staff, please come talk to us about it.
+
+
+
 ## ℹ️ Prerequisites
 
 This course __does not have any prerequisites__, although it would be nice if you have taken an introductory course in statistics (e.g. Stat 2, 20, 21, 131A).
@@ -62,7 +72,7 @@ We'll be using a handful of textbooks (most of them based on the notes I've auth
 
 ## 🔧 Computational Tools
 
-We will be mainly using the [computing and programming environment R](https://www.r-project.org) (via [RStudio](https://posit.co/download/rstudio-desktop/)) to analyze data in this class. You will also use a [command line interface](https://en.wikipedia.org/wiki/Command-line_interface) to interact with your operating system. You do need your own computer to use R and do the assignments.
+We will be mainly using the [computing and programming environment R](https://www.r-project.org) (via [RStudio](https://posit.co/download/rstudio-desktop/)) to analyze data in this class. We may also ask you to use a [command line interface](https://en.wikipedia.org/wiki/Command-line_interface) to interact with your operating system. You do need your own computer to use R and do the assignments.
 
 We don't expect that students have already been exposed to R. For those who come from Data 8 or some previous coding experience in python, the first labs will help you transfer that knowledge over to R. Both languages are excellent platforms for analyzing data, are widely used in data science, and have their individual strengths. R has been developed within the statistics community specifically for data analysis, while python is a general-purpose programming language but has large data analysis capabilities.
 
@@ -78,22 +88,45 @@ Unfortunately, doing all the work is not a guarantee of enrollment. You will onl
 
 
 
+## 🚪 Office hours
+
+Me (the instructor) and the GSIs will offer office hours each week across a range of times. You are welcome to visit the office hours of any instructor, not just the ones of your GSI. 
+We may adjust the office hour schedule throughout the semester as we understand student needs and preferences. Please check the office hours tab on the [staff](staff.html) page to see the times of the various OH sessions.
+
+I should also say that OH are an opportunity to chat one-on-one with me. If you can, please come to my office hours! Coming to OH does not necessarily send a signal that you are behind or need extra help. On the contrary, coming to office hours early and often tends to co-occur with success in the course. I am happy to chat about the course material, statistics in general, careers in statistics, and whatever other statistics or data science topics are on your mind!
+
+
+
+## 🎒 Group Tutoring
+
+Tutors will offer group tutoring sessions several times each week. This is an opportunity to finish up any assignments that you’ve started in class or review any topics that are confusing for you. You're welcome to attend any session that works well for your schedule.
+
+Group tutoring is a great place to go to meet other students and collaborate on assignments with tutors on hand to help you get unstuck.
+
+
+
 ## 🔬 Labs (10% of final grade)
 
-- Weekly labs are an essential part of the course and we will introduce concepts not necessarily covered in lecture.
+- Weekly lab discussions are an essential part of the course and we will introduce concepts not necessarily covered in class.
 - Thursdays are the official days for lab section.
 - You must attend the lab section you are officially enrolled in.
-- Practice problems (and their solutions) will be released every Thursday (available in bCourses).
-- As its name indicates, they are there to give you the opportunity to practice the concepts covered every week.
-- Every week there will be a lab checkpoint; which may involve submitting a source file, and its generated HTML document; or it may involve answering a google form.
+- During lab, you will work on short-form assignments designed to apply the concepts on real and simulated data sets.
+- Lab assignments will be released every Thursday (available in bCourses), 
 - The due date is always on a Friday (please check the <a href="https://bcourses.berkeley.edu/courses/1536526/assignments" target="_blank">assignments tab</a> in bCourses to keep track of deadlines).
-- Of all lab checkpoints, your lowest 2 scores will be dropped in the calculation of your overall grade.
+- Solutions to lab assignments will be available a few days after their due date.
+- We will be giving credit on lab assignments based on completion.
+- The first lab assignment (lab-1) does not count toward your grade.
+- Of all lab assignments (lab-2 to lab-14), your lowest 2 scores will be dropped in the calculation of your overall grade.
+- In addition to lab assignments, you will also find [_Practice problems_](practice.html) (and their solutions) in the course website.
+- As its name indicates, they are there to give you the opportunity to practice the concepts covered every week.
+- You don't need to submit practice problems. Also, these are no for extra credit.
 
 
 
 ## 📁 Problem Sets (35% of final grade)
 
-- There will be about 6 Problem-Set assignments (available in bCourses).
+- There will be about 6 Problem-Set (PS) assignments (available in bCourses).
+- PS are long-form assignments designed to apply the concepts you've learned in class and lab.
 - Starting on week-2 they will be assigned every week, until week-7.
 - The due date is always on a Friday (please check the <a href="https://bcourses.berkeley.edu/courses/1536526/assignments" target="_blank">assignments tab</a> in bCourses to keep track of deadlines). 
 - You must write your own answers (using your own words and/or code). Copy and plagiarism will not be tolerated (see Academic Honesty policy).
