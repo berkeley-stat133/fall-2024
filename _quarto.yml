@@ -49,6 +49,8 @@ website:
         text: Practice Problems
       - href: cheatsheets.qmd
         text: Cheatsheets
+      - href: faqs.qmd
+        text: FAQs
           
 format:
   html:
