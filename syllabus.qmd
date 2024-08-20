@@ -226,7 +226,7 @@ There are two principles we use to guide our class policy on AI use:
 - **Cognitive dimension**: Working with AI should not reduce your ability to think clearly. The use of AI should facilitate—rather than hinder—learning. 
 - **Ethical dimension**: Students using AI should be transparent about their use and make sure it aligns with academic integrity. 
 
-In this course, we'll be developing skills that are important to practice on your own. Because use of generative A.I. may inhibit the development of those skills, the use of this tools __is permitted__ in this course for the following activities:
+In this course, we'll be developing skills that are important to practice on your own. Because use of generative A.I. may inhibit the development of those skills, the use of these tools __is permitted__ in this course for the following activities:
 
 - Brainstorming and refining your ideas;
 - Fine tuning your exploratory/research questions;
