@@ -32,7 +32,7 @@ Office hours:<br>
 
 
 ::: {.g-col-6}
-**GSI**: <a href="https://statistics.berkeley.edu/people/huong-bui-thien-vu" target="_blank">Huong Bui Thien Vu</a><br>
+**GSI**: <a href="https://statistics.berkeley.edu/people/huong-bui-thien-vu" target="_blank">Huong Vu</a><br>
 `huong_vu`<br>
 Office hours: <br>
 - Day time, room TBA<br>
