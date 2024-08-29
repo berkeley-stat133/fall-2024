@@ -18,7 +18,7 @@ listing:
 ::: {.callout-note title="Announcement"}
 ## Announcement
 
-Ed Discussion is not available yet.
+We'll see you on Wed Aug-28th for our first lecture, and on Th Aug-29th for Lab (according to section)
 :::
 
 
