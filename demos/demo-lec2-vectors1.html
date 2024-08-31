@@ -6,9 +6,9 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Gaston Sanchez">
+<meta name="dcterms.date" content="2024-08-30">
 
-<title>Practice: Importing tables with readr</title>
+<title>Lec-2: Vectors (part 1)</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -5588,21 +5588,25 @@ font-weight: bold;
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#importing-data-tables-with-readr" id="toc-importing-data-tables-with-readr" class="nav-link active" data-scroll-target="#importing-data-tables-with-readr"><span class="header-section-number">1</span> Importing Data Tables with <code>&quot;readr&quot;</code></a>
+  <li><a href="#data" id="toc-data" class="nav-link active" data-scroll-target="#data"><span class="header-section-number">1</span> Data</a>
   <ul class="collapse">
-  <li><a href="#data-files" id="toc-data-files" class="nav-link" data-scroll-target="#data-files"><span class="header-section-number">1.1</span> Data Files</a></li>
+  <li><a href="#example" id="toc-example" class="nav-link" data-scroll-target="#example"><span class="header-section-number">1.1</span> Example</a></li>
   </ul></li>
-  <li><a href="#example-csv-file-starwars.csv" id="toc-example-csv-file-starwars.csv" class="nav-link" data-scroll-target="#example-csv-file-starwars.csv"><span class="header-section-number">2</span> Example: CSV file <code>starwars.csv</code></a>
+  <li><a href="#vectors-r" id="toc-vectors-r" class="nav-link" data-scroll-target="#vectors-r"><span class="header-section-number">2</span> Vectors (R)</a>
   <ul class="collapse">
-  <li><a href="#how-do-you-import-this-data-in-r" id="toc-how-do-you-import-this-data-in-r" class="nav-link" data-scroll-target="#how-do-you-import-this-data-in-r"><span class="header-section-number">2.1</span> How do you import this data in R?</a>
+  <li><a href="#data-types" id="toc-data-types" class="nav-link" data-scroll-target="#data-types"><span class="header-section-number">2.1</span> Data Types</a></li>
+  <li><a href="#properties-of-vectors" id="toc-properties-of-vectors" class="nav-link" data-scroll-target="#properties-of-vectors"><span class="header-section-number">2.2</span> Properties of Vectors</a>
   <ul class="collapse">
-  <li><a href="#quick-dirty-import" id="toc-quick-dirty-import" class="nav-link" data-scroll-target="#quick-dirty-import"><span class="header-section-number">2.1.1</span> Quick &amp; Dirty Import</a></li>
-  <li><a href="#a-more-formal-import" id="toc-a-more-formal-import" class="nav-link" data-scroll-target="#a-more-formal-import"><span class="header-section-number">2.1.2</span> A More Formal Import</a></li>
-  <li><a href="#yet-another-import" id="toc-yet-another-import" class="nav-link" data-scroll-target="#yet-another-import"><span class="header-section-number">2.1.3</span> Yet Another Import</a></li>
+  <li><a href="#type" id="toc-type" class="nav-link" data-scroll-target="#type"><span class="header-section-number">2.2.1</span> Type</a></li>
+  <li><a href="#length-and-indices" id="toc-length-and-indices" class="nav-link" data-scroll-target="#length-and-indices"><span class="header-section-number">2.2.2</span> Length and Indices</a></li>
+  <li><a href="#names-of-elements" id="toc-names-of-elements" class="nav-link" data-scroll-target="#names-of-elements"><span class="header-section-number">2.2.3</span> Names of elements</a></li>
   </ul></li>
-  <li><a href="#your-turn-importing-starwarstoy2.csv" id="toc-your-turn-importing-starwarstoy2.csv" class="nav-link" data-scroll-target="#your-turn-importing-starwarstoy2.csv"><span class="header-section-number">2.2</span> Your Turn: importing <code>starwarstoy2.csv</code></a></li>
-  <li><a href="#your-turn-fixed-width-format" id="toc-your-turn-fixed-width-format" class="nav-link" data-scroll-target="#your-turn-fixed-width-format"><span class="header-section-number">2.3</span> Your Turn: Fixed Width Format</a></li>
-  <li><a href="#your-turn-file-with-metadata" id="toc-your-turn-file-with-metadata" class="nav-link" data-scroll-target="#your-turn-file-with-metadata"><span class="header-section-number">2.4</span> Your Turn: File with metadata</a></li>
+  <li><a href="#special-values" id="toc-special-values" class="nav-link" data-scroll-target="#special-values"><span class="header-section-number">2.3</span> Special Values</a></li>
+  <li><a href="#more-operators-and-functions-to-create-vectors" id="toc-more-operators-and-functions-to-create-vectors" class="nav-link" data-scroll-target="#more-operators-and-functions-to-create-vectors"><span class="header-section-number">2.4</span> More operators and functions to create vectors</a>
+  <ul class="collapse">
+  <li><a href="#colon-operator" id="toc-colon-operator" class="nav-link" data-scroll-target="#colon-operator"><span class="header-section-number">2.4.1</span> Colon Operator <code>:</code></a></li>
+  <li><a href="#function-seq" id="toc-function-seq" class="nav-link" data-scroll-target="#function-seq"><span class="header-section-number">2.4.2</span> Function <code>seq()</code></a></li>
+  </ul></li>
   </ul></li>
   </ul>
 </nav>
@@ -5612,21 +5616,20 @@ font-weight: bold;
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Practice: Importing tables with <code>readr</code></h1>
-<p class="subtitle lead">Stat 133</p>
+<h1 class="title">Lec-2: Vectors (part 1)</h1>
 </div>
 
 
 
 <div class="quarto-title-meta">
 
-    <div>
-    <div class="quarto-title-meta-heading">Author</div>
-    <div class="quarto-title-meta-contents">
-             <p>Gaston Sanchez </p>
-          </div>
-  </div>
     
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">August 30, 2024</p>
+    </div>
+  </div>
   
     
   </div>
@@ -5636,257 +5639,305 @@ font-weight: bold;
 </header>
 
 
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Learning Objectives
-</div>
-</div>
-<div class="callout-body-container callout-body">
+<section id="data" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Data</h1>
+<p>I don’t have a good definition of <em>data</em>, but I would like to give you my framework about <em>data</em>:</p>
 <ul>
-<li>Get to know various options to import data tables in R</li>
-<li>Practice using reading tables functions from package <code>&quot;utils&quot;</code></li>
-<li>Practice using reading tables functions from package <code>&quot;readr&quot;</code></li>
+<li>How do statisticians / analysts think of data?</li>
+<li>How do computers treat data?</li>
+<li>How do data sets get stored?</li>
+<li>How do programs handle data?</li>
 </ul>
-</div>
-</div>
-<section id="importing-data-tables-with-readr" class="level1" data-number="1">
-<h1 data-number="1"><span class="header-section-number">1</span> Importing Data Tables with <code>&quot;readr&quot;</code></h1>
-<p>In this module, you will start learning how to import tables in R using functions from the <em>tidyverse</em> package <code>&quot;readr&quot;</code> .</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<section id="data-files" class="level2" data-number="1.1">
-<h2 data-number="1.1" class="anchored" data-anchor-id="data-files"><span class="header-section-number">1.1</span> Data Files</h2>
-<p>This module has a companion folder that contains the text files listed below (see bCourses, <code>Files/</code> tab, folder <code>data/</code>, subfolder <code>importing-tables/</code>):</p>
-<ul>
-<li><p><code>starwarstoy.csv</code>: this is a typical CSV file</p></li>
-<li><p><code>starwarstoy2.csv</code>: this is a typical CSV file</p></li>
-<li><p><code>starwarsfwf.txt</code>: this is a <em>fixed width format</em> (fwf) file</p></li>
-<li><p><code>starwarstoy2.txt</code>: this is a text file with both metadata and data</p></li>
-</ul>
-<p>The following exercises will allow you to practice importing data into a tabular object (e.g. <code>data.frame</code>, <code>tibble</code>) using base <code>&quot;utils&quot;</code> functions <code>read.table()</code> and friends, as well as functions from package <code>&quot;readr&quot;</code>.</p>
-<hr>
-</section>
-</section>
-<section id="example-csv-file-starwars.csv" class="level1" data-number="2">
-<h1 data-number="2"><span class="header-section-number">2</span> Example: CSV file <code>starwars.csv</code></h1>
-<p>Consider the CSV file <code>starwarstoy.csv</code>. This is a comma separated value file, with the following contents:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb2-1"><a href="#cb2-1"></a>name,gender,height,weight</span>
-<span id="cb2-2"><a href="#cb2-2"></a>Luke Skywalker,male,1.72,77</span>
-<span id="cb2-3"><a href="#cb2-3"></a>Leia Skywalker,female,1.5,49</span>
-<span id="cb2-4"><a href="#cb2-4"></a>Han Solo,male,1.8,80</span>
-<span id="cb2-5"><a href="#cb2-5"></a>Obi-Wan Kenobi,male,1.82,77</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>As you can tell, the content of the file consists of five lines of text.</p>
-<p>The first line corresponds to the names of the variables or fields:</p>
-<ul>
-<li><code>name</code></li>
-<li><code>gender</code></li>
-<li><code>height</code></li>
-<li><code>weight</code></li>
-</ul>
-<p>Lines 2 to 5 correspond to the values of four Star Wars characters (Luke, Leia, Han, and Obi-Wan)</p>
-<section id="how-do-you-import-this-data-in-r" class="level2" data-number="2.1">
-<h2 data-number="2.1" class="anchored" data-anchor-id="how-do-you-import-this-data-in-r"><span class="header-section-number">2.1</span> How do you import this data in R?</h2>
-<p>R has a set of built-in functions for importing a great variety of data files. For sake of convenience, we are going to describe importing tools from the <code>&quot;tidyverse&quot;</code> package <code>&quot;readr&quot;</code>.</p>
-<section id="quick-dirty-import" class="level3" data-number="2.1.1">
-<h3 data-number="2.1.1" class="anchored" data-anchor-id="quick-dirty-import"><span class="header-section-number">2.1.1</span> Quick &amp; Dirty Import</h3>
-<p>Assuming the file <code>starwarstoy.csv</code> is in your working directory, one quick-and-dirty way to import it in R is with the function <code>read_csv()</code>, as shown below:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># quick-and-dirty import</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">=</span> <span class="fu">read_csv</span>(<span class="at">file =</span> <span class="st">&quot;starwarstoy.csv&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Rows: 4 Columns: 4
-── Column specification ────────────────────────────────────────────────────────
-Delimiter: &quot;,&quot;
-chr (2): name, gender
-dbl (2): height, weight
-
-ℹ Use `spec()` to retrieve the full column specification for this data.
-ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
-</div>
-</div>
+<p>There is not just one way to talk about <em>data</em>, but multiple perspectives that in one way or another involve different aspects of <em>data</em>.</p>
+<section id="example" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="example"><span class="header-section-number">1.1</span> Example</h2>
+<p>As a first example, let’s start with the following tiny data set about three individuals from a galaxy far, far away:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>name</th>
+<th>height (cm)</th>
+<th>force</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Leia</td>
+<td>150</td>
+<td>True</td>
+</tr>
+<tr class="even">
+<td>Luke</td>
+<td>175</td>
+<td>True</td>
+</tr>
+<tr class="odd">
+<td>Han</td>
+<td>185</td>
+<td>False</td>
+</tr>
+</tbody>
+</table>
 <p><br></p>
-<p>Notice the message provided by <code>read_csv()</code>. It detected that the input file uses <code>&quot;,&quot;</code> as the field delimiter. Likewise, it has made an educated guess for the data-types of the columns: <code>name</code> and <code>gender</code> have been encoded as <code>character</code>, whereas <code>height</code> and <code>weight</code> have been encoded as <code>double</code>.</p>
-<p>Once the data has been imported, you can use <code>dat</code> like any other object. It is important to notice that the output of <code>&quot;readr&quot;</code> functions is a <code>tibble</code></p>
+<p>Since we are going to use R (and RStudio), the question is:</p>
+<blockquote class="blockquote">
+<p>How can R handle this kind of data?</p>
+</blockquote>
+</section>
+</section>
+<section id="vectors-r" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Vectors (R)</h1>
+<p>One way to implement the above data set in R is by using <strong>vectors</strong>, which are the most fundamental data object in R. This is why, to a large extent, I like to say that R is a “vector-based language”. In fact, all other data objects are derived or depend—directly or indirectly—from vectors.</p>
+<p>Here’s one idea: let’s create an R vector for each of the columns in our tiny table.</p>
+<p>One common way to create vectors is with the <strong>combine</strong> function <code>c()</code> as follows:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>dat</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># character (string) vector</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>name <span class="ot">=</span> <span class="fu">c</span>(<span class="st">&quot;Leia&quot;</span>, <span class="st">&quot;Luke&quot;</span>, <span class="st">&quot;Han&quot;</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># double or real (float)</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>height <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">150</span>, <span class="dv">175</span>, <span class="dv">185</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co"># logical (boolean)</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>force <span class="ot">=</span> <span class="fu">c</span>(<span class="cn">TRUE</span>, <span class="cn">TRUE</span>, <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>To store the <em>height</em> values as integers, we need the “L” notation:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># integer</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>height_int <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">150</span>L, <span class="dv">175</span>L, <span class="dv">185</span>L)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="data-types" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="data-types"><span class="header-section-number">2.1</span> Data Types</h2>
+<p>Like most programming languages, R gives you 4 common data types:</p>
+<ul>
+<li>logical (boolean)</li>
+<li>integer</li>
+<li>double (real or float)</li>
+<li>character (string)</li>
+</ul>
+<p>There are 2 more special data types (complex, and raw) bu we won’t do anything with them.</p>
+</section>
+<section id="properties-of-vectors" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="properties-of-vectors"><span class="header-section-number">2.2</span> Properties of Vectors</h2>
+<ul>
+<li>type (of data)</li>
+<li>length</li>
+<li>indices or positions</li>
+<li>names (optional)</li>
+</ul>
+<section id="type" class="level3" data-number="2.2.1">
+<h3 data-number="2.2.1" class="anchored" data-anchor-id="type"><span class="header-section-number">2.2.1</span> Type</h3>
+<p>An R vector has single data type. To find the data type of a vector I like to use the <code>typeof()</code> function</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">typeof</span>(height_int)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 4 × 4
-  name           gender height weight
-  &lt;chr&gt;          &lt;chr&gt;   &lt;dbl&gt;  &lt;dbl&gt;
-1 Luke Skywalker male     1.72     77
-2 Leia Skywalker female   1.5      49
-3 Han Solo       male     1.8      80
-4 Obi-Wan Kenobi male     1.82     77</code></pre>
+<pre><code>[1] &quot;integer&quot;</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">typeof</span>(height)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] &quot;double&quot;</code></pre>
+</div>
+</div>
+<p>For historical reasons that we won’t discuss, among useRs it is common to talk about the <em>mode</em> of a vector using the homonym function <code>mode()</code></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mode</span>(height_int)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] &quot;numeric&quot;</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mode</span>(height)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] &quot;numeric&quot;</code></pre>
+</div>
+</div>
+<p>From the <em>mode</em> perspective, it turns out that R considers both integers and doubles as <strong>numeric</strong> types.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mode</span>(name)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] &quot;character&quot;</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">typeof</span>(name)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] &quot;character&quot;</code></pre>
 </div>
 </div>
 </section>
-<section id="a-more-formal-import" class="level3" data-number="2.1.2">
-<h3 data-number="2.1.2" class="anchored" data-anchor-id="a-more-formal-import"><span class="header-section-number">2.1.2</span> A More Formal Import</h3>
-<p>A more formal way to import the file with <code>read_csv()</code> is to specify not just the name of the input file, but also the data-type of each column. The latter specification can be given with the argument <code>col_types</code> and the auxiliary function <code>cols()</code>.</p>
-<p>The arguments passed to <code>cols()</code> involve pairs of column names and their types. In turn, data types are specified with parsing functions such as <code>col_logical()</code>, <code>col_character()</code>, <code>col_integer()</code>, <code>col_double()</code>, etc.</p>
+<section id="length-and-indices" class="level3" data-number="2.2.2">
+<h3 data-number="2.2.2" class="anchored" data-anchor-id="length-and-indices"><span class="header-section-number">2.2.2</span> Length and Indices</h3>
+<p>Vectors can contain one or more elements. We refer to the size of a vector as its <strong>length</strong>, and we use the <code>length()</code> function:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># more formal import</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">=</span> <span class="fu">read_csv</span>(</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">file =</span> <span class="st">&quot;starwarstoy.csv&quot;</span>, </span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">col_types =</span> <span class="fu">cols</span>(</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">name =</span> <span class="fu">col_character</span>(),</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">gender =</span> <span class="fu">col_character</span>(),</span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">height =</span> <span class="fu">col_double</span>(),</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">weight =</span> <span class="fu">col_double</span>()</span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  ))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(name)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(<span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">6</span>,<span class="dv">8</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 4</code></pre>
+</div>
+</div>
+<p>The starting index or position in a vector is always <strong>1</strong>. Other languages may start indexing positions at 0, but not R.</p>
+</section>
+<section id="names-of-elements" class="level3" data-number="2.2.3">
+<h3 data-number="2.2.3" class="anchored" data-anchor-id="names-of-elements"><span class="header-section-number">2.2.3</span> Names of elements</h3>
+<p>Optionally, elements in a vector can have associated names. For example, we have an unnamed vector <code>height</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>height</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 150 175 185</code></pre>
+</div>
+</div>
+<p>But what if we want to give names to the elements in <code>height</code>. I’ll show you 2 options:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># method 1: use a vector to give names</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(height) <span class="ot">=</span> name</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>height</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Leia Luke  Han 
+ 150  175  185 </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># method 2: assign names while creating a vector</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>height2 <span class="ot">=</span> <span class="fu">c</span>(<span class="st">&quot;leia&quot;</span> <span class="ot">=</span> <span class="dv">150</span>, <span class="st">&quot;luke&quot;</span> <span class="ot">=</span> <span class="dv">170</span>, <span class="st">&quot;han&quot;</span> <span class="ot">=</span> <span class="dv">180</span>)</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>height2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>leia luke  han 
+ 150  170  180 </code></pre>
+</div>
 </div>
 </section>
-<section id="yet-another-import" class="level3" data-number="2.1.3">
-<h3 data-number="2.1.3" class="anchored" data-anchor-id="yet-another-import"><span class="header-section-number">2.1.3</span> Yet Another Import</h3>
-<p>An alternative way to specify the data-types of the columns is to use one-letter abbreviations instead of the parsing functions, for example (but not limited to):</p>
-<ul>
-<li><p><code>&quot;l&quot;</code>: logical</p></li>
-<li><p><code>&quot;i&quot;</code>: integer</p></li>
-<li><p><code>&quot;d&quot;</code>: double</p></li>
-<li><p><code>&quot;c&quot;</code>: character</p></li>
-</ul>
-<p>Here’s how to use abbreviations for the data-types:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># abbreviations for column data-types</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">=</span> <span class="fu">read_csv</span>(</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">file =</span> <span class="st">&quot;starwarstoy.csv&quot;</span>, </span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">col_types =</span> <span class="fu">cols</span>(</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">name =</span> <span class="st">&quot;c&quot;</span>,</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">gender =</span> <span class="st">&quot;c&quot;</span>,</span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">height =</span> <span class="st">&quot;d&quot;</span>,</span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">weight =</span> <span class="st">&quot;d&quot;</span></span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  ))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>But wait, there’s more! You can write a more compact command without the use of the auxiliary <code>cols()</code> function. All you have to do is pass a string with the abbreviations to the argument <code>col_types</code>. For example, the command below passes the string <code>&quot;ccdd&quot;</code> to <code>col_types</code>:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># more compact command</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">=</span> <span class="fu">read_csv</span>(</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">file =</span> <span class="st">&quot;starwarstoy.csv&quot;</span>, </span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">col_types =</span> <span class="st">&quot;ccdd&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>The way the string <code>&quot;ccdd&quot;</code> works is fairly simple: the first <code>c</code> is for the first column, the next <code>c</code> is for the second column, and so on and so forth.</p>
 </section>
-</section>
-<section id="your-turn-importing-starwarstoy2.csv" class="level2" data-number="2.2">
-<h2 data-number="2.2" class="anchored" data-anchor-id="your-turn-importing-starwarstoy2.csv"><span class="header-section-number">2.2</span> Your Turn: importing <code>starwarstoy2.csv</code></h2>
-<p>The file <code>starwarstoy2.csv</code> has the following content:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb10-1"><a href="#cb10-1"></a>name,gender,height,weight,jedi,species,weapon</span>
-<span id="cb10-2"><a href="#cb10-2"></a>&quot;Luke Skywalker&quot;,male,1.72,77,jedi,human,lightsaber</span>
-<span id="cb10-3"><a href="#cb10-3"></a>&quot;Leia Skywalker&quot;,female,1.5,49,no_jedi,human,blaster</span>
-<span id="cb10-4"><a href="#cb10-4"></a>&quot;Obi-Wan Kenobi&quot;,male,1.82,77,jedi,human,lightsaber</span>
-<span id="cb10-5"><a href="#cb10-5"></a>&quot;Han Solo&quot;,male,1.8,80,no_jedi,human,blaster</span>
-<span id="cb10-6"><a href="#cb10-6"></a>&quot;R2-D2&quot;,male,0.96,32,no_jedi,droid,unarmed</span>
-<span id="cb10-7"><a href="#cb10-7"></a>&quot;C-3PO&quot;,male,1.67,75,no_jedi,droid,unarmed</span>
-<span id="cb10-8"><a href="#cb10-8"></a>&quot;Yoda&quot;,male,0.66,17,jedi,yoda,lightsaber</span>
-<span id="cb10-9"><a href="#cb10-9"></a>&quot;Chewbacca&quot;,male,2.28,112,no_jedi,wookiee,bowcaster</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Use <code>read_csv()</code> to import this CSV file. Make sure to specify reasonable data types for each of the columns. Try to do this using at least 2 different options for the <code>col_types</code> argument.</p>
+<section id="special-values" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="special-values"><span class="header-section-number">2.3</span> Special Values</h2>
+<p>There are some special values. The following is not an exhaustive list:</p>
 <div class="cell">
-<details class="code-fold">
-<summary>Show answer</summary>
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># somewhat abbreviated</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>dat2 <span class="ot">=</span> <span class="fu">read_csv</span>(</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">file =</span> <span class="st">&quot;starwarstoy.csv&quot;</span>, </span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">col_types =</span> <span class="fu">cols</span>(</span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">name =</span> <span class="st">&quot;c&quot;</span>,</span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">gender =</span> <span class="st">&quot;c&quot;</span>,</span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">height =</span> <span class="st">&quot;d&quot;</span>,</span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">weight =</span> <span class="st">&quot;i&quot;</span>,</span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">jedi =</span> <span class="st">&quot;c&quot;</span>,</span>
-<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">species =</span> <span class="st">&quot;c&quot;</span>,</span>
-<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">weapon =</span> <span class="st">&quot;c&quot;</span></span>
-<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>  ))</span>
-<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a><span class="co"># super abbreviated</span></span>
-<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>dat2 <span class="ot">=</span> <span class="fu">read_csv</span>(</span>
-<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">file =</span> <span class="st">&quot;starwarstoy.csv&quot;</span>, </span>
-<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">col_types =</span> <span class="st">&quot;ccdiccc&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># null value (i.e. nothing)</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="cn">NULL</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>NULL</code></pre>
 </div>
-</section>
-<section id="your-turn-fixed-width-format" class="level2" data-number="2.3">
-<h2 data-number="2.3" class="anchored" data-anchor-id="your-turn-fixed-width-format"><span class="header-section-number">2.3</span> Your Turn: Fixed Width Format</h2>
-<p>The file <code>starwarsfwf.txt</code> has the following content:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb12-1"><a href="#cb12-1"></a>            name gender height weight</span>
-<span id="cb12-2"><a href="#cb12-2"></a>&quot;Luke Skywalker&quot;   male   1.72     77</span>
-<span id="cb12-3"><a href="#cb12-3"></a>&quot;Leia Skywalker&quot; female    1.5     49</span>
-<span id="cb12-4"><a href="#cb12-4"></a>&quot;Han Solo&quot;         male    1.8     80</span>
-<span id="cb12-5"><a href="#cb12-5"></a>&quot;Obi-Wan Kenobi&quot;   male   1.82     77</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>See the documentation of the <code>&quot;readr&quot;</code> function <code>read_fwf()</code>, and use this function to import the data in <code>starwarsfwf.txt</code>.</p>
-<p>One suggestion to complete this operation is to specify arguments:</p>
-<ul>
-<li><p>name of the <code>file</code></p></li>
-<li><p>column positions and names—argument <code>col_positions</code>—via the function <code>fwf_widths()</code></p></li>
-<li><p>skip the first line—because column names are being already specified via <code>fwf_widths()</code></p></li>
-</ul>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># missing value(s)</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="cn">NA</span> <span class="co"># Not Available</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] NA</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">typeof</span>(<span class="cn">NA</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] &quot;logical&quot;</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># there specific types of NAs</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="cn">NA_integer_</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] NA</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="cn">NA_real_</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] NA</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="cn">NA_character_</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] NA</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="dv">1</span>L, <span class="dv">3</span>L, <span class="cn">NA</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1]  1  3 NA</code></pre>
+</div>
+</div>
+<p>We also have <em>Not a Number</em> as well as infinite values:</p>
 <div class="cell">
-<details class="code-fold">
-<summary>Show answer</summary>
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>fwf <span class="ot">=</span> <span class="fu">read_fwf</span>(</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">file =</span> <span class="st">&quot;starwarsfwf.txt&quot;</span>,</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">col_positions =</span> <span class="fu">fwf_widths</span>(</span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">widths =</span> <span class="fu">c</span>(<span class="dv">16</span>, <span class="dv">7</span>, <span class="dv">7</span>, <span class="dv">7</span>), </span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">col_names =</span> <span class="fu">c</span>(<span class="st">&#39;name&#39;</span>, <span class="st">&#39;gender&#39;</span>, <span class="st">&#39;height&#39;</span>, <span class="st">&#39;weight&#39;</span>)),</span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">skip =</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co"># positive and negative infinite</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="cn">Inf</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] Inf</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span><span class="cn">Inf</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] -Inf</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="dv">10</span><span class="sc">/</span><span class="dv">0</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] Inf</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span><span class="dv">10</span><span class="sc">/</span><span class="dv">0</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] -Inf</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Not a Number</span></span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a><span class="cn">NaN</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] NaN</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sqrt</span>(<span class="sc">-</span><span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in sqrt(-4): NaNs produced</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] NaN</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="fu">log</span>(<span class="sc">-</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in log(-2): NaNs produced</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] NaN</code></pre>
+</div>
 </div>
 </section>
-<section id="your-turn-file-with-metadata" class="level2" data-number="2.4">
-<h2 data-number="2.4" class="anchored" data-anchor-id="your-turn-file-with-metadata"><span class="header-section-number">2.4</span> Your Turn: File with metadata</h2>
-<p>Take a look at the file <code>starwarstoy2.txt</code>.</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb14-1"><a href="#cb14-1"></a># Description: Toy data set of some Star Wars characters</span>
-<span id="cb14-2"><a href="#cb14-2"></a># Format: Tab separated values</span>
-<span id="cb14-3"><a href="#cb14-3"></a># height units in meters</span>
-<span id="cb14-4"><a href="#cb14-4"></a># weight units in kilograms</span>
-<span id="cb14-5"><a href="#cb14-5"></a></span>
-<span id="cb14-6"><a href="#cb14-6"></a># column names</span>
-<span id="cb14-7"><a href="#cb14-7"></a>name</span>
-<span id="cb14-8"><a href="#cb14-8"></a>gender</span>
-<span id="cb14-9"><a href="#cb14-9"></a>height</span>
-<span id="cb14-10"><a href="#cb14-10"></a>weight</span>
-<span id="cb14-11"><a href="#cb14-11"></a>jedi</span>
-<span id="cb14-12"><a href="#cb14-12"></a></span>
-<span id="cb14-13"><a href="#cb14-13"></a># rows</span>
-<span id="cb14-14"><a href="#cb14-14"></a>&quot;Luke Skywalker&quot;    male    1.72    77  TRUE</span>
-<span id="cb14-15"><a href="#cb14-15"></a>&quot;Leia Skywalker&quot;    female  1.5 49  FALSE</span>
-<span id="cb14-16"><a href="#cb14-16"></a>&quot;Obi-Wan Kenobi&quot;    male    1.82    77  TRUE</span>
-<span id="cb14-17"><a href="#cb14-17"></a>&quot;Han Solo&quot;  male    1.8 80  FALSE</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>As you can tell, this file has three sections:</p>
-<ul>
-<li><p>The first four lines of text have some general information with the description of the file, its format, and units of measurement for <code>height</code> and <code>weight</code></p></li>
-<li><p>The next section, from line 7 to 11, indicates the names of the columns</p></li>
-<li><p>The last section, from line 14 to 17, have the actual data table</p></li>
-</ul>
-<p>Your goal is to write commands, without hardcoding any values, in order to import the data table (with their corresponding column names). We recommend the following strategy:</p>
-<ol type="1">
-<li><p>use <code>read_lines()</code> to import the first 11 lines in a character vector,</p></li>
-<li><p>from the character vector of step (1), extract those elements that correspond to the column names; this will give you a character vector with just the column names,</p></li>
-<li><p>use <code>read_tsv()</code> to import the data values starting at line 14 (i.e. by skipping the first 13 lines), specifying the column names previously extracted in the character vector of step (2); as well as providing sensible values for the <code>col_types</code> argument.</p></li>
-</ol>
+<section id="more-operators-and-functions-to-create-vectors" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="more-operators-and-functions-to-create-vectors"><span class="header-section-number">2.4</span> More operators and functions to create vectors</h2>
+<p>Often, you’ll find yourself creating various kinds of numeric sequences. R has a couple of functions to create vectors of numeric sequences.</p>
+<section id="colon-operator" class="level3" data-number="2.4.1">
+<h3 data-number="2.4.1" class="anchored" data-anchor-id="colon-operator"><span class="header-section-number">2.4.1</span> Colon Operator <code>:</code></h3>
+<p>Say I want the sequence 1, 2, 3, 4, 5</p>
 <div class="cell">
-<details class="code-fold">
-<summary>Show answer</summary>
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># step 1</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>first_lines <span class="ot">=</span> <span class="fu">read_lines</span>(<span class="st">&quot;starwarstoy2.txt&quot;</span>, <span class="at">n_max =</span> <span class="dv">11</span>)</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="co"># step 2</span></span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>column_names <span class="ot">=</span> <span class="fu">tail</span>(first_lines, <span class="dv">5</span>)</span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="co"># step 3</span></span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>sw2 <span class="ot">=</span> <span class="fu">read_tsv</span>(</span>
-<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">file =</span> <span class="st">&quot;starwarstoy2.txt&quot;</span>, </span>
-<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">skip =</span> <span class="dv">13</span>, </span>
-<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">col_names =</span> column_names,</span>
-<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">col_types =</span> <span class="st">&quot;ccddl&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span><span class="sc">:</span><span class="dv">5</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1 2 3 4 5</code></pre>
+</div>
+</div>
+<p>The <code>:</code> operator lets you create numeric sequences of 1-unit steps</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="co"># examples</span></span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a><span class="dv">5</span><span class="sc">:</span><span class="dv">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 5 4 3 2 1</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span><span class="dv">5</span><span class="sc">:-</span><span class="dv">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] -5 -4 -3 -2 -1</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="fl">2.5</span><span class="sc">:</span><span class="fl">8.5</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2.5 3.5 4.5 5.5 6.5 7.5 8.5</code></pre>
+</div>
+</div>
+</section>
+<section id="function-seq" class="level3" data-number="2.4.2">
+<h3 data-number="2.4.2" class="anchored" data-anchor-id="function-seq"><span class="header-section-number">2.4.2</span> Function <code>seq()</code></h3>
+<p>To create more complex sequences we can use <code>seq()</code></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="co"># basic usage</span></span>
+<span id="cb63-2"><a href="#cb63-2" aria-hidden="true" tabindex="-1"></a><span class="fu">seq</span>(from, to, by)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The same sequence 1, 2, 3, 4, 5 can be created with <code>seq()</code> like so:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="fu">seq</span>(<span class="at">from =</span> <span class="dv">1</span>, <span class="at">to =</span> <span class="dv">5</span>, <span class="at">by =</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1 2 3 4 5</code></pre>
+</div>
+</div>
+<p>The sequence 2, 4, 6, 8, 10 can be obtained with:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="fu">seq</span>(<span class="at">from =</span> <span class="dv">2</span>, <span class="at">to =</span> <span class="dv">10</span>, <span class="at">by =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1]  2  4  6  8 10</code></pre>
+</div>
 </div>
 
 
+</section>
 </section>
 </section>
 
