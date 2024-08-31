@@ -1,0 +1,255 @@
+---
+title: "Lec-2: Vectors (part 1)"
+date: "Fri Aug-30, 2024"
+format: 
+  html:
+    toc: true
+    number-sections: true
+    theme: simplex
+embed-resources: true
+---
+
+# Data
+
+I don't have a good definition of _data_, but I would like to give you my
+framework about _data_:
+
+-   How do statisticians / analysts think of data?
+-   How do computers treat data?
+-   How do data sets get stored?
+-   How do programs handle data?
+
+There is not just one way to talk about _data_, but multiple perspectives
+that in one way or another involve different aspects of _data_.
+
+
+## Example
+
+As a first example, let's start with the following tiny data set about
+three individuals from a galaxy far, far away:
+
+| name | height (cm) | force |
+|------|-------------|-------|
+| Leia | 150         | True  |
+| Luke | 175         | True  |
+| Han  | 185         | False |
+
+<br>
+
+Since we are going to use R (and RStudio), the question is: 
+
+> How can R handle this kind of data?
+
+
+# Vectors (R)
+
+One way to implement the above data set in R is by using __vectors__, which
+are the most fundamental data object in R. This is why, to a large extent,
+I like to say that R is a "vector-based language". In fact, all other data
+objects are derived or depend---directly or indirectly---from vectors.
+
+Here's one idea: let's create an R vector for each of the columns in our 
+tiny table.
+
+One common way to create vectors is with the __combine__ function `c()`
+as follows:
+
+```{r}
+# character (string) vector
+name = c("Leia", "Luke", "Han")
+
+# double or real (float)
+height = c(150, 175, 185)
+
+# logical (boolean)
+force = c(TRUE, TRUE, FALSE)
+```
+
+To store the _height_ values as integers, we need the "L" notation:
+
+```{r}
+# integer
+height_int = c(150L, 175L, 185L)
+```
+
+
+## Data Types
+
+Like most programming languages, R gives you 4 common data types:
+
+- logical (boolean)
+- integer
+- double (real or float)
+- character (string)
+
+There are 2 more special data types (complex, and raw) bu we won't do 
+anything with them.
+
+
+## Properties of Vectors
+
+- type (of data)
+- length
+- indices or positions
+- names (optional)
+
+
+### Type
+
+An R vector has single data type. To find the data type of a vector I like 
+to use the `typeof()` function
+
+```{r}
+typeof(height_int)
+```
+
+```{r}
+typeof(height)
+```
+
+For historical reasons that we won't discuss, among useRs it is common to 
+talk about the _mode_ of a vector using the homonym function `mode()`
+
+```{r}
+mode(height_int)
+```
+
+```{r}
+mode(height)
+```
+
+From the _mode_ perspective, it turns out that R considers both integers
+and doubles as __numeric__ types.
+
+```{r}
+mode(name)
+typeof(name)
+```
+
+
+### Length and Indices
+
+Vectors can contain one or more elements. We refer to the size of a vector
+as its __length__, and we use the `length()` function:
+
+```{r}
+length(name)
+
+length(c(2,4,6,8))
+```
+
+The starting index or position in a vector is always __1__. Other languages
+may start indexing positions at 0, but not R.
+
+
+### Names of elements
+
+Optionally, elements in a vector can have associated names.
+For example, we have an unnamed vector `height`:
+
+```{r}
+height
+```
+
+But what if we want to give names to the elements in `height`. I'll show 
+you 2 options:
+
+```{r}
+# method 1: use a vector to give names
+names(height) = name
+height
+```
+
+```{r}
+# method 2: assign names while creating a vector
+height2 = c("leia" = 150, "luke" = 170, "han" = 180)
+height2
+```
+
+
+## Special Values
+
+There are some special values. The following is not an exhaustive list:
+
+```{r}
+# null value (i.e. nothing)
+NULL
+
+# missing value(s)
+NA # Not Available
+typeof(NA)
+
+# there specific types of NAs
+NA_integer_
+NA_real_
+NA_character_
+
+c(1L, 3L, NA)
+```
+
+
+We also have _Not a Number_ as well as infinite values:
+
+```{r}
+# positive and negative infinite
+Inf
+-Inf
+
+10/0
+-10/0
+
+# Not a Number
+NaN
+
+sqrt(-4)
+log(-2)
+```
+
+
+## More operators and functions to create vectors
+
+Often, you'll find yourself creating various kinds of numeric sequences.
+R has a couple of functions to create vectors of numeric sequences.
+
+
+### Colon Operator `:`
+
+Say I want the sequence 1, 2, 3, 4, 5
+
+```{r}
+1:5
+```
+
+The `:` operator lets you create numeric sequences of 1-unit steps
+
+```{r}
+# examples
+5:1
+
+-5:-1
+
+2.5:8.5
+```
+
+
+### Function `seq()`
+
+To create more complex sequences we can use `seq()`
+
+```{r eval = FALSE}
+# basic usage
+seq(from, to, by)
+```
+
+The same sequence 1, 2, 3, 4, 5 can be created with `seq()` like so:
+
+```{r}
+seq(from = 1, to = 5, by = 1)
+```
+
+The sequence 2, 4, 6, 8, 10 can be obtained with:
+
+```{r}
+seq(from = 2, to = 10, by = 2)
+```
+
