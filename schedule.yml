@@ -28,7 +28,7 @@
             href: "slides/stat133-01-objs1-vectors-part1.pdf"
           auxil2:
             id: "Demo (TBD)"
-            href: "."
+            href: "demos/demo-lec2-vectors1.html"
         - type: "Lectur2"
           id: ""
           name: "Vectors, part 2 (notes)"
