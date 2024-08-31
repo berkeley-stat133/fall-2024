@@ -42,8 +42,8 @@ Office hours: <br>
 **GSI:** <a href="https://statistics.berkeley.edu/people/dylan-webb" target="_blank">Dylan Webb</a><br>
 `dylancw`<br>
 Office hours: <br>
-- Day time, room TBA<br>
-- Day time, room TBA
+- Mon 2pm-4pm, Evans 426<br>
+- Fri 9am-11am on <a href="https://berkeley.zoom.us/j/98645047519" target="_blank">Zoom</a>
 :::
 
 
@@ -59,8 +59,9 @@ Office hours: <br>
 **Tutor**: Ari Hadjiyianni<br>
 `hadjiyianni`<br>
 Office hours: <br>
-- Day time, room TBA<br>
-- Day time, room TBA
+- Mon 2pm-4pm, Evans 434<br>
+- Wed 2pm-4pm, Evans 332<br>
+- Fri 2pm-4pm, Evans 434<br>
 :::
 
 :::
