@@ -1,0 +1,8 @@
+---
+title: "Contributions"
+subtitle: "UC Berkeley, STAT 133, Fall 2024"
+---
+
+Lecture notes taken, and kindly shared, by students:
+
+- <a href="lecnotes/lec2-vectors1-by-ajay-sharma.pdf" target="_blank">Lec-2, Fri Aug-30, Vectors 1</a> (by Ajay Sharma).
