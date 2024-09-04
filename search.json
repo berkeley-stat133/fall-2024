@@ -1672,7 +1672,7 @@
     "href": "docs/maps-storms/storms-slides1.html#data-storms",
     "title": "North Atlantic Storms",
     "section": "Data storms",
-    "text": "Data storms\n\n\n# A tibble: 19,066 × 13\n   name   year month   day  hour   lat  long status      category  wind pressure\n   &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;fct&gt;          &lt;dbl&gt; &lt;int&gt;    &lt;int&gt;\n 1 Amy    1975     6    27     0  27.5 -79   tropical d…       NA    25     1013\n 2 Amy    1975     6    27     6  28.5 -79   tropical d…       NA    25     1013\n 3 Amy    1975     6    27    12  29.5 -79   tropical d…       NA    25     1013\n 4 Amy    1975     6    27    18  30.5 -79   tropical d…       NA    25     1013\n 5 Amy    1975     6    28     0  31.5 -78.8 tropical d…       NA    25     1012\n 6 Amy    1975     6    28     6  32.4 -78.7 tropical d…       NA    25     1012\n 7 Amy    1975     6    28    12  33.3 -78   tropical d…       NA    25     1011\n 8 Amy    1975     6    28    18  34   -77   tropical d…       NA    30     1006\n 9 Amy    1975     6    29     0  34.4 -75.8 tropical s…       NA    35     1004\n10 Amy    1975     6    29     6  34   -74.8 tropical s…       NA    40     1002\n# ℹ 19,056 more rows\n# ℹ 2 more variables: tropicalstorm_force_diameter &lt;int&gt;,\n#   hurricane_force_diameter &lt;int&gt;"
+    "text": "Data storms\n\n\n# A tibble: 19,537 × 13\n   name   year month   day  hour   lat  long status      category  wind pressure\n   &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;fct&gt;          &lt;dbl&gt; &lt;int&gt;    &lt;int&gt;\n 1 Amy    1975     6    27     0  27.5 -79   tropical d…       NA    25     1013\n 2 Amy    1975     6    27     6  28.5 -79   tropical d…       NA    25     1013\n 3 Amy    1975     6    27    12  29.5 -79   tropical d…       NA    25     1013\n 4 Amy    1975     6    27    18  30.5 -79   tropical d…       NA    25     1013\n 5 Amy    1975     6    28     0  31.5 -78.8 tropical d…       NA    25     1012\n 6 Amy    1975     6    28     6  32.4 -78.7 tropical d…       NA    25     1012\n 7 Amy    1975     6    28    12  33.3 -78   tropical d…       NA    25     1011\n 8 Amy    1975     6    28    18  34   -77   tropical d…       NA    30     1006\n 9 Amy    1975     6    29     0  34.4 -75.8 tropical s…       NA    35     1004\n10 Amy    1975     6    29     6  34   -74.8 tropical s…       NA    40     1002\n# ℹ 19,527 more rows\n# ℹ 2 more variables: tropicalstorm_force_diameter &lt;int&gt;,\n#   hurricane_force_diameter &lt;int&gt;"
   },
   {
     "objectID": "docs/maps-storms/storms-slides1.html#plot-storms-paths",
@@ -1840,14 +1840,14 @@
     "href": "docs/maps-storms/storms-slides3.html#exploration-number-of-storms-per-year",
     "title": "North Atlantic Storms",
     "section": "Exploration: Number of Storms per Year",
-    "text": "Exploration: Number of Storms per Year\n\n# not exactly the counts we're looking for\nstorm_counts = storms |&gt;\n  count(year, name)\n\nstorm_counts\n\n# A tibble: 639 × 3\n    year name         n\n   &lt;dbl&gt; &lt;chr&gt;    &lt;int&gt;\n 1  1975 Amy         31\n 2  1975 Blanche     20\n 3  1975 Caroline    33\n 4  1975 Doris       29\n 5  1975 Eloise      46\n 6  1975 Faye        19\n 7  1975 Gladys      46\n 8  1975 Hallie      14\n 9  1976 Belle       18\n10  1976 Candice     11\n# ℹ 629 more rows"
+    "text": "Exploration: Number of Storms per Year\n\n# not exactly the counts we're looking for\nstorm_counts = storms |&gt;\n  count(year, name)\n\nstorm_counts\n\n# A tibble: 655 × 3\n    year name         n\n   &lt;dbl&gt; &lt;chr&gt;    &lt;int&gt;\n 1  1975 Amy         31\n 2  1975 Blanche     20\n 3  1975 Caroline    33\n 4  1975 Doris       29\n 5  1975 Eloise      46\n 6  1975 Faye        19\n 7  1975 Gladys      46\n 8  1975 Hallie      14\n 9  1976 Belle       18\n10  1976 Candice     11\n# ℹ 645 more rows"
   },
   {
     "objectID": "docs/maps-storms/storms-slides3.html#exploration-number-of-storms-per-year-1",
     "href": "docs/maps-storms/storms-slides3.html#exploration-number-of-storms-per-year-1",
     "title": "North Atlantic Storms",
     "section": "Exploration: Number of Storms per Year",
-    "text": "Exploration: Number of Storms per Year\n\n# these are the counts we want\nstorm_count_per_year = storms |&gt;\n  count(year, name) |&gt; \n  count(year, name = \"count\")\n\nstorm_count_per_year\n\n# A tibble: 47 × 2\n    year count\n   &lt;dbl&gt; &lt;int&gt;\n 1  1975     8\n 2  1976     7\n 3  1977     6\n 4  1978    11\n 5  1979     8\n 6  1980    11\n 7  1981    11\n 8  1982     5\n 9  1983     4\n10  1984    12\n# ℹ 37 more rows"
+    "text": "Exploration: Number of Storms per Year\n\n# these are the counts we want\nstorm_count_per_year = storms |&gt;\n  count(year, name) |&gt; \n  count(year, name = \"count\")\n\nstorm_count_per_year\n\n# A tibble: 48 × 2\n    year count\n   &lt;dbl&gt; &lt;int&gt;\n 1  1975     8\n 2  1976     7\n 3  1977     6\n 4  1978    11\n 5  1979     8\n 6  1980    11\n 7  1981    11\n 8  1982     5\n 9  1983     4\n10  1984    12\n# ℹ 38 more rows"
   },
   {
     "objectID": "docs/maps-storms/storms-slides3.html#exploration-number-of-storms-per-year-2",
@@ -2702,7 +2702,7 @@
     "href": "staff.html",
     "title": "Staff",
     "section": "",
-    "text": "Append @berkeley.edu to all email addresses.\nOffice hours are subject to change.\nYou can attend OH of any staff member.\n\n\n\nInstructor: Gaston Sanchez gastonsanchez Office hours:  - Fri 2:30pm-4:30pm, Evans 309\n\n\nGSI: Calvin Carter calv2n Office hours: - Tue 11am-1pm, Evans 426 - Fri 3pm-5pm, Evans 426\n\n\nGSI: Huong Vu huong_vu Office hours:  - Tue 2pm-4pm, Evans 426 - Wed 2pm-4pm, Evans 426\n\n\nGSI: Dylan Webb dylancw Office hours:  - Mon 2pm-4pm, Evans 426 - Fri 9am-11am on Zoom\n\n\nTutor: David Sun davidzhongyisun Office hours:  - Wed 3:15pm-6:45pm, Evans 340 - Thr 12:15pm-1:45pm, Evans 426\n\n\nTutor: Ari Hadjiyianni hadjiyianni Office hours:  - Mon 2pm-4pm, Evans 434 - Wed 2pm-4pm, Evans 332 - Fri 2pm-4pm, Evans 434",
+    "text": "Append @berkeley.edu to all email addresses.\nOffice hours are subject to change.\nYou can attend OH of any staff member.\n\n\n\nInstructor: Gaston Sanchez gastonsanchez Office hours:  - Fri 4:20pm-5:20pm, Evans 309\n\n\nGSI: Calvin Carter calv2n Office hours: - Tue 11am-1pm, Evans 426 - Fri 3pm-5pm, Evans 426\n\n\nGSI: Huong Vu huong_vu Office hours:  - Tue 2pm-4pm, Evans 426 - Wed 2pm-4pm, Evans 426\n\n\nGSI: Dylan Webb dylancw Office hours:  - Mon 2pm-4pm, Evans 426 - Fri 9am-11am on Zoom\n\n\nTutor: David Sun davidzhongyisun Office hours:  - Wed 3:15pm-6:45pm, Evans 340 - Thr 12:15pm-1:45pm, Evans 426\n\n\nTutor: Ari Hadjiyianni hadjiyianni Office hours:  - Mon 2pm-4pm, Evans 434 - Wed 2pm-4pm, Evans 332 - Thr 2pm-3pm, Evans 426 - Fri 2pm-4pm, Evans 434",
     "crumbs": [
       "Staff"
     ]
@@ -2761,7 +2761,7 @@
     "href": "practice/practice-objs4-matrices.html#row-and-column-binding",
     "title": "Practice: Matrices",
     "section": "1.5 Row and Column binding",
-    "text": "1.5 Row and Column binding\nAnother way to form matrices is by joining or binding either vectors or matrices by rows—with rbind()—or by columns—with cbind(). For example:\n\na &lt;- c(2, 4, 6)\nb &lt;- c(1, 3, 5)\n\n\n# column bind\ncbind(a, b)\n\n     a b\n[1,] 2 1\n[2,] 4 3\n[3,] 6 5\n\n\n\ncbind(m3, b)\n\nWarning in cbind(m3, b): number of rows of result is not a multiple of vector\nlength (arg 2)\n\n\n           b\n[1,] 1 2 3 1\n[2,] 4 5 6 3\n\n\n\n# row bind\nrbind(b, a)\n\n  [,1] [,2] [,3]\nb    1    3    5\na    2    4    6\n\n\n\nrbind(m2, a)\n\nWarning in rbind(m2, a): number of columns of result is not a multiple of vector\nlength (arg 2)\n\n\n  [,1] [,2]\n     1    4\n     2    5\n     3    6\na    2    4"
+    "text": "1.5 Row and Column binding\nAnother way to form matrices is by joining or binding either vectors or matrices by rows—with rbind()—or by columns—with cbind(). For example:\n\na &lt;- c(2, 4, 6)\nb &lt;- c(1, 3, 5)\n\n\n# column bind\ncbind(a, b)\n\n     a b\n[1,] 2 1\n[2,] 4 3\n[3,] 6 5\n\n\n\ncbind(m3, b)\n\nWarning in cbind(m3, b): number of rows of result is not a multiple of vector\nlength (arg 2)\n\n\n           b\n[1,] 1 2 3 1\n[2,] 4 5 6 3\n\n\n\n# row bind\nrbind(b, a)\n\n  [,1] [,2] [,3]\nb    1    3    5\na    2    4    6\n\n\n\nrbind(m2, a)\n\nWarning in rbind(m2, a): number of columns of result is not a multiple of\nvector length (arg 2)\n\n\n  [,1] [,2]\n     1    4\n     2    5\n     3    6\na    2    4"
   },
   {
     "objectID": "practice/practice-prog4-loops.html",
