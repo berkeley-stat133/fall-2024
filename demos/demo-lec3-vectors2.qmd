@@ -1,0 +1,227 @@
+---
+title: "Lec-3: Vectors (part 2)"
+date: "Wed Sep-4, 2024"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, error = TRUE)
+```
+
+
+# Vectors (last time)
+
+Vectors and their data types (data primitives)
+
+-   logical (boolean)
+-   integer
+-   double or real (float)
+-   character (string)
+
+Herer are some simple examples:
+
+```{r}
+# logical
+a = c(TRUE, FALSE, NA)
+
+# integer
+b = c(2L, 4L, 6L)
+
+# double (real)
+c = c(1, 2, 3, 4)
+d = c(1.1, 2.2, 3.3, 4.0)
+
+# character
+e = c("a", "b", "c", "d")
+```
+
+
+## Question from last time
+
+As you know, we can use `names()` to assign names to the elements of a vector
+
+```{r eval = FALSE}
+# hypothetical example
+names(c) = e
+```
+
+Question: Do the input vector `c` and the vector of names `e` must be of 
+the same length? Answer: Yes, and No. It depends. Let's see three scenarios:
+
+```{r}
+# this works
+x = c(2, 4, 6)
+abc = c("a", "b", "c")
+
+names(x) = abc
+x
+```
+
+
+```{r}
+# this fails
+y = c(2, 4, 6)
+abcd = c("a", "b", "c", "d")
+
+names(y) = abcd
+```
+
+```{r}
+# this works (but you get a missing named element)
+z = c(2, 4, 6, 8)
+
+names(z) = abc
+z
+```
+
+
+------------------------------------------------------------------------
+
+# Today
+
+-   More functions to create vectors:
+    -   ":"
+    -   seq()
+    -   rep()
+    -   vector()
+    -   logical(), integer(), etc
+-   Coercion
+    -   implicit coercion rules
+    -   explicit coercion functions
+    -   testing functions
+-   Vectorization (vectorized operations)
+-   Recycling (principle, rules)
+-   Subsetting\* (to de discussed in lab)
+
+
+## Repetition
+
+```{r}
+rep(x, times = 2)
+
+rep(x, each = 3)
+
+rep(x, each = 2, times = 2)
+```
+
+
+## Function vector() and siblings
+
+```{r}
+# good for initialization purposes
+vector(mode = "logical", length = 3)
+
+vector(mode = "integer", length = 3)
+
+vector(mode = "double", length = 3)
+
+# creates a char vector of empty strings
+vector(mode = "character", length = 3)
+```
+
+-   `logical()`
+-   `integer()`
+-   `double()`
+-   `character()`
+
+```{r}
+logical(3)
+```
+
+
+## Coercion
+
+What R does when it encounters an operation/computation that deals with different data types.
+
+### Implicit Coercion
+
+```{r}
+# implicit coercion rules
+int = c(2L, 4L, 6L)
+logi = c(TRUE, FALSE)
+
+vec = c(FALSE, 1L)
+vec
+```
+
+Remember the hierarchy of data types:
+
+logical \< integer \< double \< character
+
+
+__Vectors are Atomic objects.__
+
+Every element of a vector has to be of the same data type
+
+
+### Explicit Coercion Functions
+
+```{r}
+as.logical(c(0, 1, 2, 133))
+as.integer(c(1, 2.2, 3.33, 4.444))
+as.double(c("a", "b", TRUE, 133))
+```
+
+###  Functions to test data types
+
+-   `is.logical()`
+
+-   `is.integer()`
+
+-   `is.double()`
+
+-   `is.character()`
+
+-   `is.numeric()`
+
+```{r}
+is.logical(x)
+is.logical(logi)
+```
+
+
+-----
+
+
+## Vectorization (vectorized code)
+
+When R applies the same operation/computation to each element of a vector.
+
+```{r}
+sqrt(x)
+```
+
+```{r}
+# this in NOT vectorization
+mean(x)
+```
+
+
+## Recycling
+
+When you operate with 2 vectors of different length, the elements of the shorter vector are **recycled** as many as times as necessary to match the length of the longer vector.
+
+```{r}
+x = c(2, 4, 6, 8)
+x
+
+y = c(2, 1)
+y
+```
+
+```{r}
+x + y
+```
+
+```{r}
+c(2, 4, 6, 8) + c(2, 1, 2, 1)
+```
+
+```{r}
+u = c(2, 4, 6, 8, 10)
+u
+
+v = c(2, 1)
+v
+
+u + v
+```
