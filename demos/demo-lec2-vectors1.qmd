@@ -1,12 +1,6 @@
 ---
 title: "Lec-2: Vectors (part 1)"
 date: "Fri Aug-30, 2024"
-format: 
-  html:
-    toc: true
-    number-sections: true
-    theme: simplex
-embed-resources: true
 ---
 
 # Data
