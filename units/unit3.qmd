@@ -6,12 +6,22 @@ subtitle: "UC Berkeley, STAT 133, Fall 2024"
 
 ## 📖 Lecture
 
-This week in class we discuss R lists, which are the most generic kind of data container in R. You will learn:
+This week in class we discuss more data objects in R, specifically __matrices__ and __lists__. 
 
-- in what sense a list is a non-atomic atomic
-- in what sense a list is a one-dimensional object
-- how to create lists
-- practice manipulating lists
+Although we won't work with matrices that much in Stat 133, it's worth learning the following:
+
+- Why matrices, like vectors, are atomic objects,
+- In what sense a matrix is a 2-dimensional array,
+- How R stores matrices,
+- Functions to create matrices, and inspect their structure
+- How to manipulate matrices using _bracket notation_
+
+As for __lists__, they are the most generic kind of data container in R, and you'll learn:
+
+- In what sense a list is a non-atomic atomic
+- In what sense a list is a one-dimensional object
+- How to create lists
+- Different ways to manipulate lists
  
 
 
@@ -27,7 +37,7 @@ Read chapters 6, 7 and 8 of "R Coding Basics":
 
 ## 🔬 Lab
 
-In addition to lists, in lab you will also learn about matrices in R. You will work creating and manipulating more atomic objects such as matrices, and also non-atomic lists.
+In lab you will practice creating and manipulating matrices and lists.
 
  
 
