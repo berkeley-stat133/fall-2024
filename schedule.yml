@@ -27,7 +27,7 @@
             id: "Slides"
             href: "slides/stat133-01-objs1-vectors-part1.pdf"
           auxil2:
-            id: "Demo (TBD)"
+            id: "Demo"
             href: "demos/demo-lec2-vectors1.html"
         - type: "Lectur2"
           id: ""
@@ -57,8 +57,8 @@
             id: "Slides"
             href: "slides/stat133-01-objs1-vectors-part2.pdf"
           auxil2:
-            id: "Demo (TBD)"
-            href: "."
+            id: "Demo"
+            href: "demos/demo-lec3-vectors2.html"
         - type: "Lectur2"
           id: ""
           name: "Vectors, part 4 (notes)"
@@ -75,6 +75,9 @@
           id: ""
           name: "Shiny Friday: Old Faithful (default app)"
           href: "https://github.com/data133/shiny/tree/main/old-faithful1-default"
+          auxil:
+            id: "Slides"
+            href: "slides/shiny-tutorial-part1-by-Garret-Grolemund.pdf"
         - type: "Homework"
           id: ""
           name: "HW 1: Vectors (avail 9/07, due 9/13)"
