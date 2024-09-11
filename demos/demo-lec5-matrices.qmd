@@ -1,0 +1,258 @@
+---
+title: "Lec-5: Matrices"
+date: "Mon Sep-9, 2024"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, error = TRUE)
+```
+
+# Example
+
+Data set example from a few lectures ago:
+
+| name | height (cm) | force |
+|------|-------------|-------|
+| Leia | 150         | True  |
+| Luke | 175         | True  |
+| Han  | 185         | False |
+
+As you know, we can store this data in R, using vectors, one vector per column:
+
+```{r}
+# character (string) vector
+name = c("Leia", "Luke", "Han")
+
+# double or real (float)
+height = c(150, 175, 185)
+
+# logical (boolean)
+force = c(TRUE, TRUE, FALSE)
+```
+
+## Idea: What about using one vector per row?
+
+```{r}
+ind1 = c("Leia", 150, TRUE)
+ind2 = c("Luke", 175, TRUE)
+ind3 = c("Han", 185, FALSE)
+
+ind1
+ind2
+ind3
+```
+
+The issue in this case is that R applies its coercion rules, and we end up with three vectors that may not be the most adequate to work with.
+
+------------------------------------------------------------------------
+
+# Another Toy Table
+
+Let's consider a slightly different data set: a table with 3 rows and 2 
+columns. Unlike the preceding table, the following table involves only 
+numeric values.
+
+|          | Height (cm) | Weight (kg) |
+|----------|-------------|-------------|
+| **Leia** | 150         | 55          |
+| **Luke** | 175         | 77          |
+| **Han**  | 185         | 82          |
+
+Focusing on columns Height and Weight, we can implement this data in R by 
+creating:
+
+- vectors for each column
+- or vector for each row
+
+__and then putting everything together into a matrix__
+
+
+## Matrix by binding rows
+
+```{r}
+# let's store this data in a matrix
+leia = c(150, 55)
+luke = c(175, 77)
+han = c(185, 82)
+
+# rbind(): row bind
+mat1 = rbind(leia, luke, han)
+class(mat1)
+
+# give names to columns
+colnames(mat1) = c("height", "weight")
+mat1
+```
+
+## Matrix by binding columns
+
+```{r}
+# columns perspective
+height = c(150, 175, 185)
+weight = c(55, 77, 82)
+
+# cbind(): column bind
+mat2 = cbind(height, weight)
+class(mat2)
+
+# give names to rows
+rownames(mat2) = c("leia", "luke", "han")
+mat2
+```
+
+
+## Matrix from scratch
+
+Let's bring back the 3x2 data table.
+
+|          | Height (cm) | Weight (kg) |
+|----------|-------------|-------------|
+| **Leia** | 150         | 55          |
+| **Luke** | 175         | 77          |
+| **Han**  | 185         | 82          |
+
+We can store this data in a matrix by utilizing the function `matrix()`.
+Here's how to that:
+
+```{r}
+# an R matrix is stored column-major
+mat3 = matrix(
+  data = c(150, 175, 185, 55, 77, 82),
+  nrow = 3, 
+  ncol = 2)
+
+mat3
+```
+
+Here's another way to create the same matrix, but this time by passing the
+input vector (from the row's perspective) and the argument `byrow = TRUE`
+
+```{r}
+# an R matrix is stored column-major
+mat4 = matrix(
+  data = c(150, 55, 175, 77, 185, 82),
+  nrow = 3, 
+  ncol = 2,
+  byrow = TRUE)
+
+mat4
+```
+
+Is `mat4` still stored in column-major format? Let's ask R to temporarily
+reveal its structure:
+
+```{r}
+# reveal column major format
+as.vector(mat4)
+```
+
+## Auxiliary Matrix Functions
+
+```{r}
+# total number of cells in matrix
+length(mat4)
+
+# number of rows and columns
+dim(mat4)
+
+# number of rows
+nrow(mat4)
+
+# number of columns
+ncol(mat4)
+```
+
+# Some Properties of Matrices
+
+-   Matrices (like vectors) are **atomic** objects: i.e. all elements must be of the same type
+
+-   An R matrix is an array (2-dimensional array)
+
+-   R matrices are stored column major
+
+-   `length()`: number of cells
+
+-   **dimensions**: number of rows and columns; `dim()`
+
+-   **number of rows** (1st dimension): `nrow()`
+
+-   **number of columns** (2nd dimension): `ncol()`
+
+-   optionally: rows & columns can have names
+
+    -   `rownames()`
+    -   `colnames()`
+    -   `dimnames()`
+
+
+# Subsetting (Indexing, subscripting) Matrices
+
+```{r}
+mat1
+```
+
+## Numeric Subsetting
+
+```{r}
+# 1st cell: row-1, col-1
+mat1[1,1]
+
+# row-2, col-2
+mat1[2,2]
+
+# reshufle
+mat1[3:1, 2:1]
+
+# row-1, exclude 2nd column
+mat1[1, -2]
+
+# 1st column
+mat1[ ,1]
+
+# 2nd column
+mat1[ ,2]
+
+# 2nd row
+mat1[2, ]
+
+# 
+mat1[c(2, 3, 2, 3, 2, 3), ]
+```
+
+## Logical Subsetting
+
+```{r}
+# subset individuals with height > 170
+mat1[mat1[, 1] > 170, ]
+
+
+# subsetting only the 2nd column (R returns a vector)
+mat1[ ,c(FALSE, TRUE), drop = FALSE]
+
+
+# subsetting only the 2nd column (R returns a column)
+# (we tell R to NOT drop the 2nd dimension)
+mat1[ ,c(FALSE, TRUE), drop = FALSE]
+```
+
+
+## Character\* Subsetting
+
+If the rows and/or columns of a matrix have names, then we can use them for
+subsetting purposes:
+
+```{r}
+mat1
+```
+
+```{r}
+mat1[c("luke", "leia"), ]
+```
+
+```{r}
+mat1[ ,c("height", "height", "height")]
+```
+
+```{r}
+mat1[c("luke", "leia"), c("height", "height", "weight")]
+```
