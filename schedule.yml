@@ -99,6 +99,9 @@
           auxil:
             id: "Slides"
             href: "slides/stat133-01-objs2-matrices-factors.pdf"
+          auxil2:
+            id: "Demo"
+            href: "demos/demo-lec5-matrices.html"
         - type: "Lectur2"
           id: ""
           name: Matrices, part 2 (notes)
