@@ -1,0 +1,212 @@
+---
+title: "Lec-6: Lists"
+date: "Wed Sep-11, 2024"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, error = TRUE)
+```
+
+# Example
+
+Data set example used in past lectures:
+
+| name | height (cm) | force |
+|------|-------------|-------|
+| Leia | 150         | True  |
+| Luke | 175         | True  |
+| Han  | 185         | False |
+
+
+Reminder (from last lecture): creating a vector for every row will result
+in coercion.
+
+```{r}
+# coercion
+ind1 = c("Leia", 150, TRUE)
+ind1
+```
+
+__What kind of object can we use to store the values without having coercion?__
+
+
+# Lists
+
+```{r}
+lis1 = list("Leia", 150, TRUE)
+lis1
+```
+
+__An R list is a non-atomic object.__
+
+Technically speaking: "an R list is a non-atomic vector"
+
+```{r}
+# vector() to create an atomic vector
+vec = vector(mode = "logical", length = 3)
+vec
+```
+
+```{r}
+# vector to create a non-atomic vector better known as a list
+lis2 = vector(mode = "list", length = 3)
+lis2
+```
+
+## Examples of "simple" lists
+
+```{r}
+# naming elements in a list
+lis3 = list('a' = "Leia", 'b' = 150, 'c' = TRUE)
+lis3
+```
+
+```{r}
+# naming elements in a list
+lis4 = list(x = "Leia", y = 150, z = TRUE)
+lis4
+```
+
+```{r}
+# naming elements in a list
+lis5 = list("Luke", 175, TRUE)
+
+names(lis5) = c('A', 'B', 'C')
+lis5
+```
+
+## No vectorization in lists
+
+```{r}
+# example of vectorization
+sqrt(c(2, 4, 6, 8))
+```
+
+```{r}
+# what about sqrt() applied to a list?
+sqrt(list(2, 4, 6, 8))
+```
+
+## Lists can contain any type of object(s)
+
+Lists as the most generic type of data object in R: they can contain any
+kind of object such as vectors, factors, matrices, arrays, and even other
+lists.
+
+```{r}
+lis6 = list(
+  c(2, 4, 6), # vector
+  matrix(9:1, nrow = 3, ncol = 3), # matrix
+  list(TRUE, FALSE) # list
+)
+
+lis6
+```
+
+```{r}
+lis7 = list(
+  'first' = c(2, 4, 6), # vector
+  'second' = matrix(9:1, nrow = 3, ncol = 3), # matrix
+  'third' = list('true' = TRUE, 'false' = FALSE) # list
+)
+lis7
+```
+
+# Subsetting (indexing, subscripting) Lists
+
+Subsetting operators:
+
+-   `lst[ ]`: single brackets
+
+-   `lst[[ ]]`: double brackets
+
+-   (assuming named elements) `lst$name`: dollar
+
+```{r}
+# for vectors
+# double brackets
+x = seq(from = 10, to = 2, by = -2)
+
+# equivalent
+x[3]
+x[[3]]
+
+#
+x[c(3, 1)]
+x[[c(3, 1)]]
+```
+
+```{r}
+lis6
+```
+
+```{r}
+# single brackets
+lis6[1]
+```
+
+```{r}
+# double brackets: an "unboxing" operator
+lis6[[1]]
+```
+
+```{r}
+lis6[[2]]
+```
+
+```{r}
+lis6[[3]]
+```
+
+```{r}
+lis6[[1:2]]
+```
+
+```{r}
+lis6[[c(1,2,3)]]
+```
+
+### List with named elements
+
+```{r}
+lis7["first"]
+```
+
+```{r}
+lis7[["first"]]
+```
+
+```{r}
+lis7[[c("first", "second")]]
+```
+
+```{r}
+lis7[["third"]]
+```
+
+### Dollar `$` operator
+
+```{r}
+lis3$'c'
+```
+
+```{r}
+lis7$'third'
+```
+
+```{r}
+# be careful
+lis7$c('third', 'first')
+```
+
+## Adding & Removing elements from a list
+
+```{r}
+# adding an element
+lis3$d = "new"
+lis3
+
+# removing an element
+lis3$d = NULL
+lis3
+```

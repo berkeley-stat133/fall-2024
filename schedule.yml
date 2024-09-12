@@ -115,6 +115,9 @@
           auxil:
             id: "Slides"
             href: "slides/stat133-01-objs3-lists.pdf"
+          auxil2:
+            id: "Demo"
+            href: "demos/demo-lec6-lists.html"
     - date: "Sep 12"
       items:
         - type: "Labwork"
