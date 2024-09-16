@@ -130,6 +130,9 @@
           id: ""
           name: "Shiny Friday: Future Value"
           href: "https://github.com/data133/shiny/blob/main/future-value2-sliders/app.R"
+          auxil:
+            id: "Slides"
+            href: "slides/stat133-01-shiny-future-value.pdf"
         - type: "Homework"
           id: ""
           name: "HW 2: Lists & Matrices (avail 9/14, due 9/20)"
