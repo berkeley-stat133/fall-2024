@@ -1,0 +1,259 @@
+---
+title: "Lec-8: Intro to Functions"
+date: "Mon Sep-16, 2024"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, error = TRUE)
+```
+
+# Functions
+
+-   Motivation example
+-   Creating simple functions
+-   Anatomy of a function
+-   Names of functions
+-   Return statement
+-   Arguments with default values
+-   Documentation
+
+## Example: Future Value
+
+$$
+FV = P (1 + r)^n
+$$
+
+-   $FV$ = future value
+
+-   $P$ = principal (amount \$)
+
+-   $r$ = rate of return (annual)
+
+-   $n$ = number of years
+
+```{r eval = FALSE}
+# wish
+future_value(1000, r = 0.05, n = 5)
+```
+
+## Creating Simple Functions
+
+My general rule of thumb when approaching the creation of a function is to identify the following:
+
+-   input(s)
+
+-   processing: what to do with inputs
+
+-   output
+
+```{r}
+# inputs
+P = 1000
+r = 0.05
+n = 5
+
+# processing
+FV = P * (1 + r)^n
+
+# output
+FV
+```
+
+### Encapsulate code as a function
+
+```{r}
+fv <- function(P, r, n) {
+  FV = P * (1 + r)^n
+  # output
+  FV
+}
+
+# test your function
+fv(1000, 0.05, 5)
+```
+
+Keep testing your function
+
+```{r}
+fv(1000, 0.05, 0:5)
+```
+
+```{r}
+fv(c(1000, 2000, 3000), 0.05, 5)
+```
+
+```{r}
+# some extreme cases
+fv(NA, 0.05, 5)
+
+fv(c(1000, 2000, NA), 0.05, 5)
+```
+
+### Anatomy of a function
+
+```{r}
+fv <- function(P, r, n) {
+  FV = P * (1 + r)^n
+  # output
+  FV
+}
+```
+
+-   name of a function
+
+-   arguments
+
+-   body: code within the braces
+
+-   **environment\*:** environment where the function was defined
+
+## Names of functions
+
+-   Must contain at least one letter (upper/lower)
+
+    -   valid: `fv()` , `FV()` , `Fv()` , `fV()` , `v()`
+
+-   Can contain digits, but in the first character
+
+    -   valid: `fv1()` , `f1v()`
+
+    -   invalid: `1fv()`
+
+-   Can contain underscore(s), not in the first character
+
+    -   valid: `future_value()` , `fut_val()`
+
+    -   invalid: `_future()`
+
+-   Can contain dot(s)
+
+    -   valid: `future.value()` , `.future()` , `.fv()`
+
+## Return Statement
+
+```{r}
+# many users like to do somthing like this
+# avoid this!
+fv <- function(P, r, n) {
+  FV = P * (1 + r)^n
+  # output
+  print(FV)
+}
+```
+
+```{r}
+# preferred statement to indicate output is return()
+fv <- function(P, r, n) {
+  FV = P * (1 + r)^n
+  # output
+  return(FV)
+}
+```
+
+## Compound Expressions
+
+```{r}
+# simple expressions
+a = 133
+b = c(TRUE, FALSE)
+mat = matrix(1:9, nrow = 3, ncol = 3)
+print("Oski!!!")
+median(1:100)
+```
+
+```{r}
+# compound expression: multiple lines of code treated as a 
+# single unit (or block) or code
+{
+  A = 133
+  B = c(TRUE, FALSE)
+  MAT = matrix(1:9, nrow = 3, ncol = 3)
+}
+```
+
+```{r}
+exp1 <- {
+  A = 133
+  B = c(TRUE, FALSE)
+  MAT = matrix(1:9, nrow = 3, ncol = 3)
+}
+```
+
+```{r}
+exp1
+```
+
+```{r}
+# another compound expression
+exp2 <- {
+  print("Go bears!")
+  A = 133
+  B = c(TRUE, FALSE)
+  MAT = matrix(1:9, nrow = 3, ncol = 3)
+}
+
+exp2
+```
+
+```{r}
+# another compound expression
+exp3 <- {
+  A = 133
+  B = c(TRUE, FALSE)
+  MAT = matrix(1:9, nrow = 3, ncol = 3)
+  print("Go bears!")
+}
+
+exp3
+```
+
+Every (compound) expression in R has a value. The last statement that is executed.
+
+## Compound Expressions and Output of Functions
+
+```{r}
+fv1 <- function(P, r, n) {
+  FV = P * (1 + r)^n # assignment command
+  # output
+  FV # implicit printing statement
+}
+
+fv2 <- function(P, r, n) {
+  FV = P * (1 + r)^n
+}
+
+fv1(1000, 0.05, 5)
+FV2 = fv2(1000, 0.05, 5)
+FV2
+```
+
+## Default values of arguments
+
+```{r}
+fv3 <- function(P = 1, r = 0.01, n = 1) {
+  FV = P * (1 + r)^n # assignment command
+  # output
+  FV # implicit printing statement
+}
+
+fv3()
+
+fv3(n = 5, P = 1000, r = 0.05)
+```
+
+## Documentation of function(s)
+
+```{r}
+# title: future value
+# description: computes future value using compound interest
+# input(s): 
+# P = principal
+# r = rate of return (annual)
+# n = number of years
+# output: computed future value
+fv <- function(P = 1, r = 0.01, n = 1) {
+  FV = P * (1 + r)^n # assignment command
+  # output
+  FV # implicit printing statement
+}
+```
