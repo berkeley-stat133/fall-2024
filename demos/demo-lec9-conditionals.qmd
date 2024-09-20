@@ -1,0 +1,360 @@
+---
+title: "Lec-9: Conditional Statements"
+date: "Wed Sep-18, 2024"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, error = TRUE)
+```
+
+## Example: Variance
+
+Let $X$ be a variable---in the statistics sense---, i.e. $X = (x_1, x_2, x_3, \dots, x_n)$
+
+The (sample) variance of $X$, denoted $Var(X)$, is given by:
+
+$$
+\text{sample:} \quad Var(X) = \frac{(x_1 - \bar{x})^2 + (x_2 - \bar{x})^2 + \dots (x_n - \bar{x})^2}{n-1}
+$$
+
+The (population) variance of $X$ is given by:
+
+$$
+\text{population:} \quad Var(X) = \frac{(x_1 - \bar{x})^2 + (x_2 - \bar{x})^2 + \dots (x_n - \bar{x})^2}{n}
+$$
+
+In R we have the `var()` function, which computes the sample variance:
+
+```{r}
+x = 1:10
+
+# sample
+var(x)
+```
+
+Let's pretend that R does not have the `var()` function. The goal is to implement a `variance()` function that computes either the sample or the population variance.
+
+```{r}
+# inputs
+x = 1:10
+type = "sample" # type = "population"
+
+# processing
+xbar = mean(x)
+n = length(x)
+
+deviations = x - xbar
+sqr_deviations = deviations^2
+sum_sqr_devs = sum(sqr_deviations)
+
+# decision: which variance?
+# if type == "sample"
+var_output = sum_sqr_devs / (n-1)
+
+# if type == "population"
+var_output = sum_sqr_devs / n
+```
+
+We are going to cheat, and compare our `variance()` function against R's `var()` , just to have a quick sanity check.
+
+```{r}
+# sanity check
+var_output
+var(x)
+```
+
+## If-else statement
+
+`if-else` is a programming structure to decide what to compute given a logical (boolean) decision.
+
+Generic blueprint of `if-else` in R:
+
+```{r eval = FALSE}
+if (condition) {
+  # what to do if the condition is TRUE
+} else {
+  # what to do if the condition is FALSE
+}
+```
+
+-   `condition` is some piece of code that R evaluates into a logical value
+
+-   `lenght()` of `condition` must be 1
+
+-   In other words: `if-else` are NOT vectorized
+
+Here's a super simple example. We generate a random number `a` between -1 and 1, and we'll write an `if()` statement to determine if `a` is positive or not.
+
+```{r}
+a = runif(1, min = -1, max = 1)
+
+if (a > 0) {
+  print("a is positive")
+} else {
+  print("a is non-positive")
+}
+```
+
+```{r}
+# let's take a look at the value of a
+a > 0
+```
+
+As we mentioned, `if()` statements are NOT vectorized: if the logical condition has length more than 1, you'll get an error:
+
+```{r}
+# if-else is not vectorized
+b = runif(5, min = -1, max = 1)
+
+if (b > 0) {
+  print("b is positive")
+} else {
+  print("b is non-positive")
+}
+```
+
+## Function `ifelse()`
+
+To overcome the lack of vectorization in `if()` statements, R provides the `ifelse()` function to handle binary conditions:
+
+```{r}
+# vectorized if
+ifelse(b > 0, yes = "positive", no = "non-positive")
+```
+
+## Function `variance()`
+
+Let's go back to our code for implementing a `variance()` function.
+
+First, let's include the `if()` statement to decide which `type` of variance to calculate:
+
+```{r}
+x = 1:10
+type = "sample" # type = "population"
+
+# processing
+xbar = mean(x)
+n = length(x)
+
+deviations = x - xbar
+sqr_deviations = deviations^2
+sum_sqr_devs = sum(sqr_deviations)
+
+# decision: which variance?
+if (type == "sample") {
+  var_output = sum_sqr_devs / (n-1)
+} else {
+  # population
+  var_output = sum_sqr_devs / n  
+}
+
+var_output
+```
+
+Now that we have code that gets the job done, let's assemble our function:
+
+```{r}
+# variance function, version 1
+variance = function(x, type) {
+  xbar = mean(x)
+  n = length(x)
+  
+  deviations = x - xbar
+  sqr_deviations = deviations^2
+  sum_sqr_devs = sum(sqr_deviations)
+  
+  # decision: which variance?
+  if (type == "sample") {
+    var_output = sum_sqr_devs / (n-1)
+  } else {
+    # population
+    var_output = sum_sqr_devs / n  
+  }
+  
+  var_output
+}
+
+variance(1:10, "sample")
+variance(1:10, "population")
+```
+
+We can give a default value to `type` , for example set it to `"sample"`
+
+```{r}
+# variance function, version 2
+variance = function(x, type = "sample") {
+  xbar = mean(x)
+  n = length(x)
+  
+  deviations = x - xbar
+  sqr_deviations = deviations^2
+  sum_sqr_devs = sum(sqr_deviations)
+  
+  # decision: which variance?
+  if (type == "sample") {
+    var_output = sum_sqr_devs / (n-1)
+  } else {
+    # population
+    var_output = sum_sqr_devs / n  
+  }
+  
+  var_output
+}
+
+variance(1:10, "sample")
+variance(1:10, "population")
+```
+
+What if we try the following calls to `variance()`?
+
+```{r}
+variance(1:10, type = "stat133")
+
+variance(1:10, "sam")
+
+variance(1:10, "akjsdhfkjashf")
+```
+
+Mmm. The issue right now is that `variance()` not only works for `type = "sample"` and `type = "population"` , it also works for nonsensical values of `type` .
+
+One way to take care of the `type` argument is by adding an `if()` statement to check that its value makes sense. If `type` is different from `sample` and `population` , then we set `type` to `"sample"` , and we also trigger a `warning()` message:
+
+```{r}
+# variance function, version 3
+variance = function(x, type = "sample") {
+  if (!(type %in% c("sample", "population"))) {
+    type = "sample"
+    warning("incorrect type value; 'sample' is used by default")
+  }
+  # processing
+  xbar = mean(x)
+  n = length(x)
+  
+  deviations = x - xbar
+  sqr_deviations = deviations^2
+  sum_sqr_devs = sum(sqr_deviations)
+  
+  # decision: which variance?
+  if (type == "sample") {
+    var_output = sum_sqr_devs / (n-1)
+  } else {
+    # population
+    var_output = sum_sqr_devs / n  
+  }
+  
+  var_output
+}
+
+variance(1:10, "pop")
+```
+
+Here's an alternative way---not necessarily the best way---is to use a different condition to check the validity of `type`:
+
+```{r}
+# variance function, version 4
+variance = function(x, type = "sample") {
+  if (type != "sample" & type != "population") {
+    type = "sample"
+    warning("incorrect type value; 'sample' is used by default")
+  }
+  # processing
+  xbar = mean(x)
+  n = length(x)
+  
+  deviations = x - xbar
+  sqr_deviations = deviations^2
+  sum_sqr_devs = sum(sqr_deviations)
+  
+  # decision: which variance?
+  if (type == "sample") {
+    var_output = sum_sqr_devs / (n-1)
+  } else {
+    # population
+    var_output = sum_sqr_devs / n  
+  }
+  
+  var_output
+}
+
+variance(1:10, "pop")
+```
+
+## Nested if-else statements
+
+You can have nested if-else statements. Here's the example of the random number.
+
+Given a random number `a` between -1 and 1, let's now consider three possibilities:
+
+-   `a` can be positive
+
+-   `a` can be negative
+
+-   `a` can be zero
+
+```{r}
+a = runif(1, min = -1, max = 1)
+
+# nesting if-elses
+if (a > 0) {
+  print("a is positive")
+} else {
+  if (a < 0) {
+    print("a is negative")
+  } else {
+    print("a is zero")
+  }
+}
+```
+
+For sake of illustration, let's add a 4th condition:
+
+```{r}
+a = runif(1, min = -1, max = 1)
+
+# nesting if-elses
+if (a > 0) {
+  print("a is positive")
+} else {
+  if (a < 0) {
+    print("a is negative")
+  } else {
+    if (a == 0) {
+      print("a is zero")
+    } else {
+      print("who knows")
+    }
+  }
+}
+```
+
+As you can tell, the hierarchical structure of the nested if-else can become harder to inspect. This is why I personally prefer a slightly different style of chaining if-else statements, as follows:
+
+```{r}
+a = runif(1, min = -1, max = 1)
+
+# nesting if-elses
+if (a > 0) {
+  print("a is positive")
+} else if (a < 0) {       # inject a new if-else after the "else" clause
+  print("a is negative")
+} else {
+  print("a is zero")
+}
+```
+
+If we have a fourth case, no problem. All we have to do is inject another if-else after the 2nd `else`
+
+```{r}
+a = runif(1, min = -1, max = 1)
+
+# nesting if-elses
+if (a > 0) {
+  print("a is positive")
+} else if (a < 0) {       # inject a new if-else after the "else" clause
+  print("a is negative")
+} else if (a == 0) {      # inject a new if-else after the "else" clause 
+  print("a is zero")
+} else {
+  print("who knows")
+}
+```
