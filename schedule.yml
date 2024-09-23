@@ -154,6 +154,9 @@
           auxil:
             id: "Slides"
             href: "slides/stat133-02-prog1-intro-functions.pdf"
+          auxil2:
+            id: "Demo"
+            href: "demos/demo-lec8-functions.html"
         - type: "Lectur2"
           id: ""
           name: R Compound Expressions (notes)
@@ -167,6 +170,9 @@
           auxil:
             id: "Slides"
             href: "slides/stat133-02-prog2-if-else.pdf"
+          auxil2:
+            id: "Demo"
+            href: "demos/demo-lec9-conditionals.html"
     - date: "Sep 19"
       items:
         - type: "Labwork"
