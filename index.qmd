@@ -15,8 +15,8 @@ listing:
 
 
 
-::: {.callout-note title="Announcement"}
-## Announcement
+::: {.callout-note title="Announcements"}
+## Reminder
 
 HW3 is due on Sep-27th
 :::
