@@ -183,7 +183,7 @@
       items:
         - type: "Shiny"
           id: ""
-          name: "Shiny Friday: Old Faithful (enriched app)"
+          name: "Shiny Friday: Old Faithful revisited"
           href: "https://github.com/data133/shiny/blob/main/old-faithful3-average-radio/app.R"
         - type: "Homework"
           id: ""
@@ -206,6 +206,9 @@
           auxil:
             id: "Slides"
             href: "slides/stat133-01-objs4-data-frames.pdf"
+          auxil2:
+            id: "Demo"
+            href: "demos/demo-lec11-tables-ggplot1.html"
     - date: "Sep 25"
       items:
         - type: "Lecture"
@@ -215,6 +218,9 @@
           auxil:
             id: "Slides"
             href: "slides/stat133-03-tables1-grammar-graphics.pdf"
+          auxil2:
+            id: "Demo"
+            href: "demos/demo-lec12-tables-ggplot2.html"
     - date: "Sep 26"
       items:
         - type: "Labwork"
@@ -233,7 +239,7 @@
           href: "https://github.com/data133/shiny/blob/main/nba-histograms1-basic/app.R"
         - type: "Homework"
           id: ""
-          name: "HW4: Graphics with ggplot2 (avail 9/28, due 10/04)"
+          name: "HW4: Graphics (avail 9/28, due 10/04)"
           href: "https://bcourses.berkeley.edu/courses/1536526/assignments/8766410"
 - week: 6
   days:
