@@ -132,11 +132,7 @@ gtag('config', 'G-CES9J82GLL', { 'anonymize_ip': true});
   <ul class="collapse">
   <li><a href="#data" id="toc-data" class="nav-link" data-scroll-target="#data">Data</a></li>
   </ul></li>
-  <li><a href="#graphs-timelines" id="toc-graphs-timelines" class="nav-link" data-scroll-target="#graphs-timelines">Graphs: Timelines</a>
-  <ul class="collapse">
-  <li><a href="#first-attempt" id="toc-first-attempt" class="nav-link" data-scroll-target="#first-attempt">First Attempt</a></li>
-  <li><a href="#second-attempt" id="toc-second-attempt" class="nav-link" data-scroll-target="#second-attempt">Second Attempt</a></li>
-  </ul></li>
+  <li><a href="#graphs-timelines" id="toc-graphs-timelines" class="nav-link" data-scroll-target="#graphs-timelines">Graphs: Timelines</a></li>
   </ul>
 </nav>
     </div>
@@ -170,7 +166,8 @@ gtag('config', 'G-CES9J82GLL', { 'anonymize_ip': true});
 
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ecosystem of data science pakacges</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(extrafont)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <section id="why-eggs-cost-so-much" class="level1">
 <h1>Why Eggs Cost So Much</h1>
@@ -191,23 +188,31 @@ gtag('config', 'G-CES9J82GLL', { 'anonymize_ip': true});
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>url <span class="ot">=</span> <span class="st">"https://stat133.berkeley.edu/fall-2024/data/price-of-eggs.csv"</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># import CSV file</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">=</span> <span class="fu">read_csv</span>(<span class="at">file =</span> url, <span class="at">col_types =</span> <span class="st">"dcdD"</span>)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">=</span> <span class="fu">read_csv</span>(<span class="at">file =</span> url, <span class="at">col_types =</span> <span class="st">"dDdc"</span>)</span>
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co"># letters in col_types correspond to:</span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co"># d: double</span></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co"># c: character</span></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="co"># D: date</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="cell">
-<div class="cell-output cell-output-error">
-<pre><code>Error: '../data/price-of-eggs.csv' does not exist in current working directory ('/Users/gaston/Documents/stat133-fall-2024/demos').</code></pre>
-</div>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co"># D: date</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co"># d: double</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="co"># c: character</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Once you’ve imported the data, you can simply type the name of the table to see a few rows:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>dat</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-error">
-<pre><code>Error in eval(expr, envir, enclos): object 'dat' not found</code></pre>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>dat</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 276 × 4
+   Price Date        Year Month
+   &lt;dbl&gt; &lt;date&gt;     &lt;dbl&gt; &lt;chr&gt;
+ 1 0.975 2000-01-01  2000 Jan  
+ 2 0.962 2000-02-01  2000 Feb  
+ 3 0.931 2000-03-01  2000 Mar  
+ 4 0.939 2000-04-01  2000 Apr  
+ 5 0.852 2000-05-01  2000 May  
+ 6 0.838 2000-06-01  2000 Jun  
+ 7 0.868 2000-07-01  2000 Jul  
+ 8 0.893 2000-08-01  2000 Aug  
+ 9 0.92  2000-09-01  2000 Sep  
+10 0.923 2000-10-01  2000 Oct  
+# ℹ 266 more rows</code></pre>
 </div>
 </div>
 <hr>
@@ -216,49 +221,8 @@ gtag('config', 'G-CES9J82GLL', { 'anonymize_ip': true});
 <section id="graphs-timelines" class="level1">
 <h1>Graphs: Timelines</h1>
 <p>Let’s go over a series of plotting rounds, starting with a default timeline, and then gradually adding more elements, and customizing its appearance to get as close as possible to our target visualization.</p>
-<p>Keep in mind that the timeline of the NYT article goes from Jan-2000 to Dec-2022. In our case, we have a few more data points (12 months of 2023).</p>
-<section id="first-attempt" class="level2">
-<h2 class="anchored" data-anchor-id="first-attempt">First Attempt</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1st attempt</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> dat, <span class="fu">aes</span>(<span class="at">x =</span> Date, <span class="at">y =</span> Price)) <span class="sc">+</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-error">
-<pre><code>Error in ggplot(data = dat, aes(x = Date, y = Price)): object 'dat' not found</code></pre>
-</div>
-</div>
-</section>
-<section id="second-attempt" class="level2">
-<h2 class="anchored" data-anchor-id="second-attempt">Second Attempt</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 2nd attempt</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>gg <span class="ot">=</span> <span class="fu">ggplot</span>(<span class="at">data =</span> dat, <span class="fu">aes</span>(<span class="at">x =</span> Date, <span class="at">y =</span> Price)) <span class="sc">+</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">color =</span> <span class="st">"orange"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-error">
-<pre><code>Error in ggplot(data = dat, aes(x = Date, y = Price)): object 'dat' not found</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>gg</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-error">
-<pre><code>Error in eval(expr, envir, enclos): object 'gg' not found</code></pre>
-</div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># changing background theme</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>gg <span class="sc">+</span> <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-error">
-<pre><code>Error in eval(expr, envir, enclos): object 'gg' not found</code></pre>
-</div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># changing background theme</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>gg <span class="sc">+</span> <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-error">
-<pre><code>Error in eval(expr, envir, enclos): object 'gg' not found</code></pre>
-</div>
-</div>
 
 
-</section>
 </section>
 
 </main> <!-- /main -->

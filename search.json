@@ -199,7 +199,7 @@
     "href": "demos/demo-lec11-tables-ggplot1.html#data-frames",
     "title": "Lec-11: Data Frames",
     "section": "Data Frames",
-    "text": "Data Frames\n\nWhat is a data frame (data.frame)?\nHow data frames are stored?\nHow to manipulate data frames? (how do they behave?)\n\nAn R data.frame is the dedicated object to work with “tables”, tabular structure data (rows, and columns).\nData frames are non-atomic\n\n# create a data frame\ndat = data.frame(\n  name = c(\"Leia\", \"Luke\", \"Han\"),\n  height = c(150, 175, 185),\n  force = c(TRUE, TRUE, FALSE)\n)\n\ndat\n\n  name height force\n1 Leia    150  TRUE\n2 Luke    175  TRUE\n3  Han    185 FALSE\n\n\n\nHow data frames are stored?\nData frames are stored as lists.\nThink of data frames as 2-dimensional objects: rows (dim1), columns (dim2)\n\n\nBasic manipulation of data frames as a list\n\ndat[ ]\ndat[[ ]]\ndat$col_name\n\n\n# as a list\ndat[1]\n\n  name\n1 Leia\n2 Luke\n3  Han\n\n\n\n# double brackets as \"unboxking\"\ndat[[1]]\n\n[1] \"Leia\" \"Luke\" \"Han\" \n\n\n\n# double brackets as \"unboxking\"\ndat[[\"force\"]]\n\n[1]  TRUE  TRUE FALSE\n\n\n\ndat$name\n\n[1] \"Leia\" \"Luke\" \"Han\" \n\n\n\n\nManipulating a data frame as a matrix (2-dim)\n\n# cell 1, 1\ndat[1, 1]\n\n[1] \"Leia\"\n\ndat[2, 3]\n\n[1] TRUE\n\n\n\n# 2nd column\ndat[ ,2]\n\n[1] 150 175 185\n\n\n\n# columns 2, 3, and 1\ndat[ ,c(2, 3, 1)]\n\n  height force name\n1    150  TRUE Leia\n2    175  TRUE Luke\n3    185 FALSE  Han\n\n\n\n# rows 2, 3, and 1\ndat[c(2, 3, 1), ]\n\n  name height force\n2 Luke    175  TRUE\n3  Han    185 FALSE\n1 Leia    150  TRUE\n\n\n\n\nlibrary(tidyverse)\n\n── Attaching packages ─────────────────────────────────────── tidyverse 1.3.2 ──\n✔ ggplot2 3.5.1     ✔ purrr   1.0.2\n✔ tibble  3.2.1     ✔ dplyr   1.1.4\n✔ tidyr   1.3.0     ✔ stringr 1.5.1\n✔ readr   2.1.2     ✔ forcats 0.5.2\n── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──\n✖ dplyr::filter() masks stats::filter()\n✖ dplyr::lag()    masks stats::lag()"
+    "text": "Data Frames\n\nWhat is a data frame (data.frame)?\nHow data frames are stored?\nHow to manipulate data frames? (how do they behave?)\n\nAn R data.frame is the dedicated object to work with “tables”, tabular structure data (rows, and columns).\nData frames are non-atomic\n\n# create a data frame\ndat = data.frame(\n  name = c(\"Leia\", \"Luke\", \"Han\"),\n  height = c(150, 175, 185),\n  force = c(TRUE, TRUE, FALSE)\n)\n\ndat\n\n  name height force\n1 Leia    150  TRUE\n2 Luke    175  TRUE\n3  Han    185 FALSE\n\n\n\nHow data frames are stored?\nData frames are stored as lists.\nThink of data frames as 2-dimensional objects: rows (dim1), columns (dim2)\n\n\nBasic manipulation of data frames as a list\n\ndat[ ]\ndat[[ ]]\ndat$col_name\n\n\n# as a list\ndat[1]\n\n  name\n1 Leia\n2 Luke\n3  Han\n\n\n\n# double brackets as \"unboxing\"\ndat[[1]]\n\n[1] \"Leia\" \"Luke\" \"Han\" \n\n\n\n# double brackets as \"unboxing\"\ndat[[\"force\"]]\n\n[1]  TRUE  TRUE FALSE\n\n\n\ndat$name\n\n[1] \"Leia\" \"Luke\" \"Han\" \n\n\n\n\nManipulating a data frame as a matrix (2-dim)\n\n# cell 1, 1\ndat[1, 1]\n\n[1] \"Leia\"\n\ndat[2, 3]\n\n[1] TRUE\n\n\n\n# 2nd column\ndat[ ,2]\n\n[1] 150 175 185\n\n\n\n# columns 2, 3, and 1\ndat[ ,c(2, 3, 1)]\n\n  height force name\n1    150  TRUE Leia\n2    175  TRUE Luke\n3    185 FALSE  Han\n\n\n\n# rows 2, 3, and 1\ndat[c(2, 3, 1), ]\n\n  name height force\n2 Luke    175  TRUE\n3  Han    185 FALSE\n1 Leia    150  TRUE\n\n\n\n\nlibrary(tidyverse)\n\n── Attaching packages ─────────────────────────────────────── tidyverse 1.3.2 ──\n✔ ggplot2 3.5.1     ✔ purrr   1.0.2\n✔ tibble  3.2.1     ✔ dplyr   1.1.4\n✔ tidyr   1.3.0     ✔ stringr 1.5.1\n✔ readr   2.1.2     ✔ forcats 0.5.2\n── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──\n✖ dplyr::filter() masks stats::filter()\n✖ dplyr::lag()    masks stats::lag()"
   },
   {
     "objectID": "demos/demo-lec11-tables-ggplot1.html#graphics-with-ggplot2",
@@ -3258,28 +3258,14 @@
     "href": "demos/demo-lec12-tables-ggplot2.html",
     "title": "Lec-12: Graphics with ggplot",
     "section": "",
-    "text": "# ecosystem of data science pakacges\nlibrary(tidyverse)"
+    "text": "# ecosystem of data science pakacges\nlibrary(tidyverse)\nlibrary(extrafont)"
   },
   {
     "objectID": "demos/demo-lec12-tables-ggplot2.html#data",
     "href": "demos/demo-lec12-tables-ggplot2.html#data",
     "title": "Lec-12: Graphics with ggplot",
     "section": "Data",
-    "text": "Data\nThe data behind the NYT article comes from one of the databases of the US Bureau of Labor Statistics (BLS). Specifically, the associated time series data is: https://data.bls.gov/timeseries/APU0000708111.\nI’ve curated a data file based on the above time series, which is available in the following file CSV:\nhttps://stat133.berkeley.edu/fall-2024/data/price-of-eggs.csv\nYou can import price-of-eggs.csv with the following command:\n\n# file name (and location)\nurl = \"https://stat133.berkeley.edu/fall-2024/data/price-of-eggs.csv\"\n\n# import CSV file\ndat = read_csv(file = url, col_types = \"dcdD\")\n\n# letters in col_types correspond to:\n# d: double\n# c: character\n# D: date\n\n\n\nError: '../data/price-of-eggs.csv' does not exist in current working directory ('/Users/gaston/Documents/stat133-fall-2024/demos').\n\n\nOnce you’ve imported the data, you can simply type the name of the table to see a few rows:\n\ndat\n\nError in eval(expr, envir, enclos): object 'dat' not found"
-  },
-  {
-    "objectID": "demos/demo-lec12-tables-ggplot2.html#first-attempt",
-    "href": "demos/demo-lec12-tables-ggplot2.html#first-attempt",
-    "title": "Lec-12: Graphics with ggplot",
-    "section": "First Attempt",
-    "text": "First Attempt\n\n# 1st attempt\nggplot(data = dat, aes(x = Date, y = Price)) +\n  geom_line()\n\nError in ggplot(data = dat, aes(x = Date, y = Price)): object 'dat' not found"
-  },
-  {
-    "objectID": "demos/demo-lec12-tables-ggplot2.html#second-attempt",
-    "href": "demos/demo-lec12-tables-ggplot2.html#second-attempt",
-    "title": "Lec-12: Graphics with ggplot",
-    "section": "Second Attempt",
-    "text": "Second Attempt\n\n# 2nd attempt\ngg = ggplot(data = dat, aes(x = Date, y = Price)) +\n  geom_line(color = \"orange\")\n\nError in ggplot(data = dat, aes(x = Date, y = Price)): object 'dat' not found\n\ngg\n\nError in eval(expr, envir, enclos): object 'gg' not found\n\n\n\n# changing background theme\ngg + theme_bw()\n\nError in eval(expr, envir, enclos): object 'gg' not found\n\n\n\n# changing background theme\ngg + theme_minimal()\n\nError in eval(expr, envir, enclos): object 'gg' not found"
+    "text": "Data\nThe data behind the NYT article comes from one of the databases of the US Bureau of Labor Statistics (BLS). Specifically, the associated time series data is: https://data.bls.gov/timeseries/APU0000708111.\nI’ve curated a data file based on the above time series, which is available in the following file CSV:\nhttps://stat133.berkeley.edu/fall-2024/data/price-of-eggs.csv\nYou can import price-of-eggs.csv with the following command:\n\n# file name (and location)\nurl = \"https://stat133.berkeley.edu/fall-2024/data/price-of-eggs.csv\"\n\n# import CSV file\ndat = read_csv(file = url, col_types = \"dDdc\")\n\n# letters in col_types correspond to:\n# D: date\n# d: double\n# c: character\n\nOnce you’ve imported the data, you can simply type the name of the table to see a few rows:\n\ndat\n\n# A tibble: 276 × 4\n   Price Date        Year Month\n   &lt;dbl&gt; &lt;date&gt;     &lt;dbl&gt; &lt;chr&gt;\n 1 0.975 2000-01-01  2000 Jan  \n 2 0.962 2000-02-01  2000 Feb  \n 3 0.931 2000-03-01  2000 Mar  \n 4 0.939 2000-04-01  2000 Apr  \n 5 0.852 2000-05-01  2000 May  \n 6 0.838 2000-06-01  2000 Jun  \n 7 0.868 2000-07-01  2000 Jul  \n 8 0.893 2000-08-01  2000 Aug  \n 9 0.92  2000-09-01  2000 Sep  \n10 0.923 2000-10-01  2000 Oct  \n# ℹ 266 more rows"
   },
   {
     "objectID": "demos/demo-lec3-vectors2.html",
@@ -3398,7 +3384,7 @@
     "href": "demos/demo-lec9-conditionals.html#function-ifelse",
     "title": "Lec-9: Conditional Statements",
     "section": "Function ifelse()",
-    "text": "Function ifelse()\nTo overcome the lack of vectorization in if() statements, R provides the ifelse() function to handle binary conditions:\n\n# vectorized if\nifelse(b &gt; 0, yes = \"positive\", no = \"non-positive\")\n\n[1] \"non-positive\" \"positive\"     \"non-positive\" \"positive\"     \"non-positive\""
+    "text": "Function ifelse()\nTo overcome the lack of vectorization in if() statements, R provides the ifelse() function to handle binary conditions:\n\n# vectorized if\nifelse(b &gt; 0, yes = \"positive\", no = \"non-positive\")\n\n[1] \"non-positive\" \"positive\"     \"positive\"     \"non-positive\" \"non-positive\""
   },
   {
     "objectID": "demos/demo-lec9-conditionals.html#function-variance",
@@ -3419,20 +3405,29 @@
     "href": "data.html",
     "title": "Data",
     "section": "",
-    "text": "We’ll use data from several real world situations in class."
+    "text": "We’ll use data from several real world situations in class.",
+    "crumbs": [
+      "Data"
+    ]
   },
   {
-    "objectID": "data.html#data-1",
-    "href": "data.html#data-1",
+    "objectID": "data.html#price-of-eggs",
+    "href": "data.html#price-of-eggs",
     "title": "Data",
-    "section": "Data 1",
-    "text": "Data 1\nTBD"
+    "section": "Price of Eggs",
+    "text": "Price of Eggs\nprice-of-eggs.csv",
+    "crumbs": [
+      "Data"
+    ]
   },
   {
     "objectID": "data.html#data-2",
     "href": "data.html#data-2",
     "title": "Data",
     "section": "Data 2",
-    "text": "Data 2\nTBD"
+    "text": "Data 2\nTBD",
+    "crumbs": [
+      "Data"
+    ]
   }
 ]
