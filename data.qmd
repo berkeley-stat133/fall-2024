@@ -5,9 +5,9 @@ subtitle: "UC Berkeley, STAT 133, Fall 2024"
 
 We'll use data from several real world situations in class.
 
-## Data 1
+## Price of Eggs
 
-TBD
+<a href="data/price-of-eggs.csv" target="_blank">price-of-eggs.csv</a>
 
 
 ## Data 2
