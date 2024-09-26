@@ -1,0 +1,208 @@
+---
+title: "Lec-11: Data Frames"
+date: "Mon Sep-23, 2024"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, error = TRUE)
+```
+
+## Example
+
+Data set example:
+
+| name | height (cm) | force |
+|------|-------------|-------|
+| Leia | 150         | True  |
+| Luke | 175         | True  |
+| Han  | 185         | False |
+
+**How to store/implement this data in R?**
+
+a)  One vector per column
+
+```{r}
+name = c("Leia", "Luke", "Han")
+height = c(150, 175, 185)
+force = c(TRUE, TRUE, FALSE)
+```
+
+b)  One vector per row (coercion!, 🥴)
+
+```{r}
+ind1 = c("Leia", 150, TRUE)
+ind2 = c("Luke", 175, TRUE)
+ind3 = c("Han", 185, FALSE)
+```
+
+c)  In a matrix (coercion!, 😠)
+
+```{r}
+mat = cbind(name, height, force)
+mat
+```
+
+d)  In a list (non-atomic 🙂)
+
+```{r}
+lst = list(
+  name = c("Leia", "Luke", "Han"),
+  height = c(150, 175, 185),
+  force = c(TRUE, TRUE, FALSE)
+)
+
+lst
+```
+
+## Data Frames
+
+-   What is a data frame (`data.frame`)?
+-   How data frames are stored?
+-   How to manipulate data frames? (how do they behave?)
+
+An R data.frame is the dedicated object to work with "tables", tabular structure data (rows, and columns).
+
+Data frames are **non-atomic**
+
+```{r}
+# create a data frame
+dat = data.frame(
+  name = c("Leia", "Luke", "Han"),
+  height = c(150, 175, 185),
+  force = c(TRUE, TRUE, FALSE)
+)
+
+dat
+```
+
+### How data frames are stored?
+
+Data frames are stored as lists.
+
+Think of data frames as 2-dimensional objects: rows (dim1), columns (dim2)
+
+### Basic manipulation of data frames as a list
+
+-   `dat[ ]`
+
+-   `dat[[ ]]`
+
+-   `dat$col_name`
+
+```{r}
+# as a list
+dat[1]
+```
+
+```{r}
+# double brackets as "unboxing"
+dat[[1]]
+```
+
+```{r}
+# double brackets as "unboxing"
+dat[["force"]]
+```
+
+```{r}
+dat$name
+```
+
+### Manipulating a data frame as a matrix (2-dim)
+
+```{r}
+# cell 1, 1
+dat[1, 1]
+
+dat[2, 3]
+```
+
+```{r}
+# 2nd column
+dat[ ,2]
+```
+
+```{r}
+# columns 2, 3, and 1
+dat[ ,c(2, 3, 1)]
+```
+
+```{r}
+# rows 2, 3, and 1
+dat[c(2, 3, 1), ]
+```
+
+------------------------------------------------------------------------
+
+```{r}
+library(tidyverse)
+```
+
+## Graphics with `"ggplot2"`
+
+Iris data set
+
+```{r}
+head(iris)
+```
+
+![](https://cbdm-01.zdv.uni-mainz.de/~galanisl/danalysis/images/iris_flower.png)
+
+## Scatter plot of Sepal.Length and Sepal.Width
+
+```{r}
+# build/assemble graphics by adding "layers"
+ggplot(data = iris, 
+       mapping = aes(x = Sepal.Length, y = Sepal.Width)) +
+  geom_point()
+```
+
+An equivalent call
+
+```{r}
+# build/assemble graphics by adding "layers"
+ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width)) +
+  geom_point()
+```
+
+```{r}
+# build/assemble graphics by adding "layers"
+ggplot(data = iris, 
+       mapping = aes(x = Sepal.Length, y = Sepal.Width, color = Species)) +
+  geom_point()
+```
+
+```{r}
+ggplot(data = iris, 
+       mapping = aes(x = Sepal.Length, y = Sepal.Width)) +
+  geom_point(mapping = aes(color = Species))
+```
+
+### Mappings versus Settings
+
+A setting is when you **set** (i.e. fix) a visual attribute to a constant value.
+
+E.G. scatter plot with blue points (dots)
+
+```{r}
+ggplot(data = iris, 
+       mapping = aes(x = Sepal.Length, y = Sepal.Width)) +
+  geom_point(color = "blue")
+```
+
+```{r}
+ggplot(data = iris, 
+       mapping = aes(x = Sepal.Length, y = Sepal.Width)) +
+  geom_point(aes(color = "blue"))
+```
+
+```{r}
+ggplot(data = iris, 
+       mapping = aes(x = Sepal.Length, y = Sepal.Width)) +
+  geom_point(color = "blue") +
+  geom_smooth() +
+  labs(title = "Big Title", 
+       subtitle = "Subtitle", 
+       x = "x-axis label", 
+       y = "y-axis label")
+```

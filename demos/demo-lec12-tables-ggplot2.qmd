@@ -1,0 +1,177 @@
+---
+title: "Lec-12: Graphics with ggplot"
+date: "Wed Sep-25, 2024"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, error = TRUE)
+```
+
+```{r message = FALSE}
+# You may need to install these packages first.
+library(tidyverse)  # ecosystem of data science pakacges
+library(plotly)     # web interactive graphics
+```
+
+# Why Eggs Cost So Much
+
+Consider the following data visualization from an article in The New York Times (by Ashley Wu, Feb-03-2023):
+
+<https://www.nytimes.com/2023/02/03/briefing/why-eggs-cost-so-much.html>
+
+![](monthly-average-price-of-eggs.png)
+
+\
+
+**Let's replicate this graphic in R with `ggplot()` and friends.**
+
+## Data
+
+The data behind the NYT article comes from one of the databases of the *US Bureau of Labor Statistics* (BLS). Specifically, the associated time series data is: <https://data.bls.gov/timeseries/APU0000708111>.
+
+I've curated a data file based on the above time series, which is available in the following file CSV:
+
+```         
+https://stat133.berkeley.edu/fall-2024/data/price-of-eggs.csv
+```
+
+You can import `price-of-eggs.csv` with the following command:
+
+```{r eval = FALSE}
+# file name (and location)
+url = "https://stat133.berkeley.edu/fall-2024/data/price-of-eggs.csv"
+
+# import CSV file
+dat = read_csv(file = url, col_types = "dDdc")
+
+# letters in col_types correspond to:
+# D: date
+# d: double
+# c: character
+```
+
+```{r echo = FALSE}
+dat = read_csv(file = "../data/price-of-eggs.csv", col_types = "dDdc")
+```
+
+Once you've imported the data, you can simply type the name of the table to see a few rows:
+
+```{r}
+dat
+```
+
+------------------------------------------------------------------------
+
+# Graphs: Timelines
+
+Let's go over a series of plotting rounds, starting with a default timeline, and then gradually adding more elements, and customizing its appearance to get as close as possible to our target visualization.
+
+```{r}
+# let's start with a scatter plot
+ggplot(data = dat,
+       mapping = aes(x = Date, y = Price)) +
+  geom_point()
+```
+
+\
+
+```{r}
+# to get a timeline, use geom_line
+ggplot(data = dat,
+       mapping = aes(x = Date, y = Price)) +
+  geom_line()
+```
+
+\
+
+```{r}
+# assigning graphic to an object of class "ggplot"
+gg1 = ggplot(data = dat,
+       mapping = aes(x = Date, y = Price)) +
+  geom_line(color = "orange")
+
+gg1
+```
+
+\
+
+```{r}
+gg2 = gg1 + 
+  labs(title = "Monthly average price of a dozen eggs",
+       x = "", # no x-axis label
+       y = "", # no y-axis label
+       caption = "Source: Bureau of Labor Statistics")
+
+gg2
+```
+
+\
+
+```{r}
+# changing the background theme
+# - theme_bw()
+# - theme_classic()
+# - theme_dark()
+
+gg3 = gg2 + theme_minimal()
+gg3
+```
+
+\
+
+```{r}
+# customize y-axis scale, and tickmark labels
+gg4 = gg3 + scale_y_continuous(
+  limits = c(0, 4.5),
+  labels = c("", "$1", "$2", "$3", "$4"), 
+  breaks = c(0, 1, 2, 3, 4))
+
+gg4
+```
+
+\
+
+```{r}
+# adding annotation
+gg5 = gg4 + annotate(geom = "text", 
+               x = as.Date("2022-12-01"), 
+               y = 4.5, 
+               label = "Dec. 2022\n4.25", 
+               size = 2.5) #+ 
+  # annotate(geom = "text", 
+  #              x = as.Date("2022-12-01"), 
+  #              y = 4.3, 
+  #              label = "$4.25", 
+  #              size = 2.5)
+gg5
+```
+
+\
+
+```{r}
+# change font of title (Serif, and bold)
+gg6 = gg5 + theme(plot.title = element_text(family = "serif", face = "bold"))
+gg6
+```
+
+\
+
+```{r}
+# simplifying the grid lines
+gg6 = gg5 + 
+  theme(plot.title = element_text(family = "serif", face = "bold"),
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.minor.y = element_blank())
+
+gg6
+```
+
+\
+
+```{r}
+# plotly: web interactive graphics
+# convert a ggplot to a plotly graphic
+ggplotly(gg6)
+```
+
