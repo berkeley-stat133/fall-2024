@@ -51,6 +51,8 @@ website:
         text: Practice Problems
       - href: cheatsheets.qmd
         text: Cheatsheets
+      - href: data.qmd
+        text: Data
       - href: faqs.qmd
         text: FAQs
           
