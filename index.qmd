@@ -18,7 +18,7 @@ listing:
 ::: {.callout-note title="Announcements"}
 ## Reminder
 
-HW3 is due on Sep-27th
+HW4 is due on Oct-4th
 :::
 
 
