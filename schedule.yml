@@ -236,7 +236,13 @@
         - type: "Shiny"
           id: ""
           name: "Shiny Friday: graphics with ggplot"
-          href: "https://github.com/data133/shiny/blob/main/nba-histograms1-basic/app.R"
+          href: "https://github.com/data133/shiny/blob/main/mtcars-scatterplots1-ggplot/app.R"
+          auxil:
+            id: "Demo2"
+            href: "https://github.com/data133/shiny/blob/main/old-faithful-quarto-doc/old-faithful-doc.qmd"
+          auxil2:
+            id: "Demo3"
+            href: "https://github.com/data133/shiny/blob/main/old-faithful-quarto-dashboard/old-faithful-quarto-dashboard.qmd"
         - type: "Homework"
           id: ""
           name: "HW4: Graphics (avail 9/28, due 10/04)"
@@ -266,7 +272,7 @@
           href: "https://www.gastonsanchez.com/R-tidy-hurricanes/2-03-intro-pipes.html"
           auxil:
             id: "Slides"
-            href: "slides/stat133-03-tables2-intro-dplyr.pdf"
+            href: "slides/stat133-03-tables3-more-dplyr.pdf"
     - date: "Oct 3"
       items:
         - type: "Labwork"
@@ -434,7 +440,7 @@
         - type: "Lecture"
           id: ""
           name: "Sentiment Analysis 1 (notes)"
-          href: "https://www.tidytextmining.com/sentiment."
+          href: "https://www.tidytextmining.com/sentiment"
           auxil:
             id: "Doc"
             href: ""
