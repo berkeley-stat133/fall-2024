@@ -27,7 +27,7 @@ Read chapters 5 to 10 of "R Tidy Hurricanes":
 
 You will get to practice common manipulation operations of data-tables using a modern and syntactic way following the data plying framework provided by the R package dplyr.
 
-Also, we are going to review various aspects that have to do with reading in (i.e. importing) tables in R.
+Time permitting, we'll also review various aspects that have to do with reading in (i.e. importing) tables in R.
 
 
 
