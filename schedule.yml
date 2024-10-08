@@ -264,6 +264,9 @@
           auxil:
             id: "Slides"
             href: "slides/stat133-03-tables2-intro-dplyr.pdf"
+          auxil2:
+            id: "Demo"
+            href: "demos/demo-lec14-tables-dplyr1.html"
     - date: "Oct 2"
       items:
         - type: "Lecture"
