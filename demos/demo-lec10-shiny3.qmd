@@ -1,0 +1,40 @@
+---
+title: "Lec-10: Shiny App #3"
+date: "Fri Sep-20, 2024"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, error = TRUE)
+```
+
+```{r}
+faithful
+```
+
+```{r}
+x = faithful[ ,1]
+
+hist(x)
+```
+
+```{r}
+# mean waiting time
+xmean = mean(x)
+xmean
+```
+
+```{r}
+hist(x)
+abline(v = xmean, col = "red", lwd = 3)
+text(x = xmean, y = 40, labels = "mean", col = "red", pos = 2)
+```
+
+## Function `paste()` and `paste0()` 
+
+```{r}
+paste("Stat", "133", sep = " ")
+
+paste0("Stat", "133")
+
+paste("Concepts", "in", "computing", "with", "data", sep = "-")
+```
