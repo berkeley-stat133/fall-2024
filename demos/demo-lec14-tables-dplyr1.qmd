@@ -1,0 +1,219 @@
+---
+title: "Lec-14: Data Wrangling with dplyr"
+date: "Mon Sep-30, 2024"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, error = TRUE)
+```
+
+```{r message = FALSE}
+library(tidyverse)
+```
+
+
+# Main verbs in `"dplyr"`
+
+-   `slice()`: pick rows by position
+-   `filter()`: keep rows matching criteria
+-   `select()`: pick columns by name or position
+-   `mutate()`: add new variables
+-   `arrange()`: reorder rows
+-   `summarise()`: reduce variables to values
+-   `group_by()`: grouped (aggregated) operations
+
+
+## Data set: `mtcars` 
+
+```{r}
+mtcars
+```
+
+## `slice()` 
+
+Subset rows by position/index
+
+```{r}
+# 1st row
+slice(mtcars, 1)
+```
+
+```{r}
+# rows 1 to 5
+slice(mtcars, 1:5)
+```
+
+```{r}
+slice(mtcars, c(2, 4, 10))
+```
+
+```{r}
+slice(mtcars, -(6:32))
+```
+
+
+## `select()`
+
+Select/subset columns either by name or by position.
+
+```{r}
+select(mtcars, mpg)    # mtcars$mpg
+select(mtcars, "mpg")  # mtcars[ ,"mpg"]
+select(mtcars, 1)
+```
+
+
+
+```{r}
+mpg_hp_cyl = select(mtcars, mpg, hp, cyl)
+mpg_hp_cyl
+```
+
+```{r}
+select(mtcars, 3:6)
+```
+
+
+```{r}
+select(mtcars, -(4:11))
+```
+
+```{r}
+select(mtcars, mpg:hp)
+```
+
+```{r}
+select(mtcars, drat:disp)
+```
+
+```{r}
+select(mtcars, -(drat:disp))
+```
+
+
+## `filter()`
+
+Subset rows based on a condition (could be simple or composite)
+
+```{r}
+# simple condition
+filter(mtcars, cyl == 4)
+```
+
+```{r}
+# composite condition: 4-cyl cars, and mpg > 30
+filter(mtcars, cyl == 4 & mpg > 30)
+```
+
+```{r}
+# composite condition: 4-cyl cars, and mpg > 30
+filter(mtcars, cyl == 4, mpg > 30)
+```
+
+```{r}
+# composite condition: 4-cyl cars, OR mpg > 30
+filter(mtcars, cyl == 4 | mpg > 30)
+```
+
+
+## `mutate()`
+
+- Modify existing columns
+
+- Create new columns
+
+```{r}
+compact = filter(mtcars, cyl == 4)
+compact = select(compact, 1:5)
+compact
+```
+
+
+```{r}
+# modify existing column
+mutate(compact, mpg = mpg * 1.6)
+```
+
+```{r}
+# create a new column
+compact = mutate(compact, km_pg = mpg * 1.6)
+compact
+```
+
+
+## `arrange()`
+
+Arrange (sort) contents based on the values of one or more columns
+
+```{r}
+# arrange (ascending)
+arrange(compact, hp)
+```
+
+```{r}
+# arrange (descending)
+arrange(compact, desc(hp))
+```
+
+```{r}
+# arrange (descending)
+arrange(compact, hp, mpg)
+```
+
+
+## `summarize()` & `summarise()`
+
+Compute numeric summaries through some function: e.g. 
+`mean()`, `median()`, `sd()`, `IQR()`, `quantile()`, `var()`, etc
+
+```{r}
+summarize(mtcars, avg_mpg = mean(mpg))
+
+# mean(mtcars$mpg)
+```
+
+```{r}
+summarize(mtcars, 
+          avg_mpg = mean(mpg),
+          med_mpg = median(mpg),
+          min_mpg = min(mpg))
+```
+
+## `group_by()`
+
+Form groups of data (rows) based on the values of one or more
+categorical variables.
+
+```{r}
+mtcars
+```
+
+```{r}
+group_by(mtcars, cyl)
+```
+
+```{r}
+arrange(mtcars, cyl)
+```
+
+
+```{r}
+# mean mpg, by cylinder
+grouped_cyl = group_by(mtcars, cyl)
+summarize(grouped_cyl, avg = mean(mpg), med = median(mpg))
+```
+
+
+## Example
+
+Mean mpg, of different cyl-value cars, arranging the output
+in ascending order.
+
+```{r}
+# step-by-step
+cars1 = group_by(mtcars, cyl)
+cars2 = summarize(cars1, avg = mean(mpg))
+cars3 = arrange(cars2, avg)
+cars3
+```
+

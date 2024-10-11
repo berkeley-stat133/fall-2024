@@ -1,0 +1,144 @@
+---
+title: "Lec-15: More dplyr"
+date: "Wed Oct-2, 2024"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, error = TRUE)
+```
+
+```{r}
+library(tidyverse) # "dplyr"
+```
+
+## Manipulation of Tables (cont'd)
+
+Example with `mtcars`
+
+```{r}
+mtcars
+```
+
+Obtain the mean and median "fuel efficiency" (~ `mpg`), expressed in "kpg"
+for those cars that have automatic transmission (`am`)
+for each category of cylinders (`cyl`)
+arranging the output in descending order by `cyl`
+
+```{r}
+# approach 1) step-by-step
+d1 = mutate(mtcars, kpg = mpg * 1.6)
+d2 = filter(d1, am == 0)
+d3 = group_by(d2, cyl)
+d4 = summarize(d3, avg_kpg = mean(kpg), med_kpg = median(kpg))
+d5 = arrange(d4, desc(cyl))
+d5
+```
+
+
+```{r}
+# approach 1) step-by-step
+d1 = mutate(mtcars, kpg = mpg * 1.6)
+d2 = group_by(d1, cyl) 
+d3 = filter(d2, am == 0)
+d4 = summarize(d3, avg_kpg = mean(kpg), med_kpg = median(kpg))
+d5 = arrange(d4, desc(cyl))
+d5
+```
+
+
+```{r}
+# option 2) function calls (from inside out)
+arrange(
+  summarize(
+  group_by(
+    filter(
+      mutate(mtcars, kpg = mpg * 1.6), 
+      am == 0), 
+    cyl),
+  avg_kpg = mean(kpg),
+  med_kpg = median(kpg)),
+  desc(cyl))
+```
+
+Obtain the mean and median "fuel efficiency" (~ `mpg`), expressed in "kpg"
+for those cars that have automatic transmission (`am`)
+for each category of cylinders (`cyl`)
+arranging the output in descending order by `cyl`
+
+
+```{r}
+# approach 3) pipeline (pipe of commands)
+mtcars |> 
+  mutate(kpg = mpg * 1.6) |>
+  filter(am == 0) |>
+  group_by(cyl) |>
+  summarize(avg_kpg = mean(kpg),
+            med_kpg = median(kpg)) |>
+  arrange(desc(cyl))
+```
+
+
+```{r}
+# scatter plot of mpg and hp
+ggplot(mtcars, aes(x = mpg, y = hp)) +
+  geom_point()
+```
+
+
+```{r}
+# scatter plot of mpg and hp
+mtcars |>
+  ggplot(aes(x = mpg, y = hp)) +
+  geom_point()
+```
+
+
+
+------------------------------------------------------------------------
+
+# Joins
+
+```{r}
+tbl1 = data.frame(
+  key1 = c('Luke', 'Leia', 'Han'),
+  year = c(1, 3, 4),
+  coffee = c('no', 'yes', 'yes')
+)
+
+tbl2 = data.frame(
+  key2 = c('Padme', 'Leia', 'Luke', 'Obi-Wan'),
+  gpa = c(3.9, 4.0, 3.7, 3.8),
+  lunch = c('pizza', 'tacos', 'burrito', 'pad thai')
+)
+
+
+# full_join(x, y) 
+# keeps all observations in x and y
+full_join(tbl1, tbl2, join_by("key1" == "key2"))
+full_join(tbl1, tbl2, by = c("key1" = "key2"))
+
+
+# inner_join(x, y) 
+# keeps observations from x that have a matching key in y.
+inner_join(tbl1, tbl2, by = c("key1" = "key2"))
+
+
+# left_join(x, y)
+# keeps all observations in x
+left_join(tbl1, tbl2, by = "id")
+
+
+# right_join(x, y)
+# keeps all observations in y
+right_join(tbl1, tbl2, by = "id")
+
+
+# semi_join(x, y)
+# return all rows from x with a match in y
+semi_join(tbl1, tbl2, by = "id")
+
+# anti_join(x, y)
+# return all rows from x without a match in y
+anti_join(tbl1, tbl2, by = "id")
+
+```
