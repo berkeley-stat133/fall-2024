@@ -18,7 +18,7 @@ listing:
 ::: {.callout-note title="Announcements"}
 ## Reminder
 
-HW5 is due on Oct-11th
+HW6 is due on Oct-18th
 :::
 
 
