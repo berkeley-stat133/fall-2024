@@ -328,8 +328,11 @@
       items:
         - type: "Shiny"
           id: ""
-          name: "Shiny Friday: Top-n mtcars (continued)"
+          name: "Shiny Friday: Future Value simulations"
           href: "https://github.com/data133/shiny/blob/main/future-value3-simulations/app.R"
+          auxil:
+            id: "Demo"
+            href: "demos/demo-lec19-shiny6.html"
         - type: "Homework"
           id: ""
           name: "HW6: Iterations (avail 10/12, due 10/18)"
@@ -372,7 +375,11 @@
       items:
         - type: "Labwork"
           id: ""
-          name: "Lab 8: Intro to Regex (due 10/18)"
+          name: "Lab 8a: Publishing a shiny app (due 10/18)"
+          href: "https://bcourses.berkeley.edu/courses/1536526/assignments/8767003"
+        - type: "Labwork2"
+          id: ""
+          name: "Lab 8b: Intro to Regex (due 10/18)"
           href: "https://bcourses.berkeley.edu/courses/1536526/assignments/8766391"
     - date: "Oct 18"
       items:
@@ -414,12 +421,8 @@
       items:
         - type: "Labwork"
           id: ""
-          name: "Lab 9a: More Regex (due 10/25)"
+          name: "Lab 9: More Regex (due 10/25)"
           href: "https://bcourses.berkeley.edu/courses/1536526/assignments/8766392"
-        - type: "Labwork2"
-          id: ""
-          name: "Lab 9b: Publishing a shiny app"
-          href: "https://bcourses.berkeley.edu/courses/1536526/assignments/8767003"
     - date: "Oct 25"
       items:
         - type: "Lecture"
