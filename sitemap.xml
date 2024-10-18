@@ -6,7 +6,7 @@
   </url>
   <url>
     <loc>https://berkeley-stat133.github.io/fall-2024/contributions.html</loc>
-    <lastmod>2024-10-13T01:28:40.651Z</lastmod>
+    <lastmod>2024-10-18T17:40:38.823Z</lastmod>
   </url>
   <url>
     <loc>https://berkeley-stat133.github.io/fall-2024/demos/demo-lec18-iterations2.html</loc>
@@ -21,16 +21,20 @@
     <lastmod>2024-09-25T03:18:49.997Z</lastmod>
   </url>
   <url>
-    <loc>https://berkeley-stat133.github.io/fall-2024/demos/demo-lec6-lists.html</loc>
-    <lastmod>2024-09-25T03:18:49.998Z</lastmod>
+    <loc>https://berkeley-stat133.github.io/fall-2024/demos/demo-lec21-regex2.html</loc>
+    <lastmod>2024-10-16T21:08:33.534Z</lastmod>
   </url>
   <url>
-    <loc>https://berkeley-stat133.github.io/fall-2024/demos/demo-lec5-matrices.html</loc>
-    <lastmod>2024-09-25T03:18:49.998Z</lastmod>
+    <loc>https://berkeley-stat133.github.io/fall-2024/demos/demo-lec3-vectors2.html</loc>
+    <lastmod>2024-09-25T03:18:49.997Z</lastmod>
   </url>
   <url>
-    <loc>https://berkeley-stat133.github.io/fall-2024/demos/demo-lec14-tables-dplyr1.html</loc>
-    <lastmod>2024-10-01T00:34:18.305Z</lastmod>
+    <loc>https://berkeley-stat133.github.io/fall-2024/demos/demo-lec12-tables-ggplot2.html</loc>
+    <lastmod>2024-09-26T00:42:35.651Z</lastmod>
+  </url>
+  <url>
+    <loc>https://berkeley-stat133.github.io/fall-2024/demos/demo-lec20-regex1.html</loc>
+    <lastmod>2024-10-15T20:46:08.762Z</lastmod>
   </url>
   <url>
     <loc>https://berkeley-stat133.github.io/fall-2024/demos/demo-lec10-shiny3.html</loc>
@@ -229,12 +233,16 @@
     <lastmod>2024-09-25T03:39:36.847Z</lastmod>
   </url>
   <url>
-    <loc>https://berkeley-stat133.github.io/fall-2024/demos/demo-lec12-tables-ggplot2.html</loc>
-    <lastmod>2024-09-26T00:42:35.651Z</lastmod>
+    <loc>https://berkeley-stat133.github.io/fall-2024/demos/demo-lec14-tables-dplyr1.html</loc>
+    <lastmod>2024-10-01T00:34:18.305Z</lastmod>
   </url>
   <url>
-    <loc>https://berkeley-stat133.github.io/fall-2024/demos/demo-lec3-vectors2.html</loc>
-    <lastmod>2024-09-25T03:18:49.997Z</lastmod>
+    <loc>https://berkeley-stat133.github.io/fall-2024/demos/demo-lec5-matrices.html</loc>
+    <lastmod>2024-09-25T03:18:49.998Z</lastmod>
+  </url>
+  <url>
+    <loc>https://berkeley-stat133.github.io/fall-2024/demos/demo-lec6-lists.html</loc>
+    <lastmod>2024-09-25T03:18:49.998Z</lastmod>
   </url>
   <url>
     <loc>https://berkeley-stat133.github.io/fall-2024/demos/demo-lec19-shiny6.html</loc>
