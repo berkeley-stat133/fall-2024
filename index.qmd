@@ -18,7 +18,7 @@ listing:
 ::: {.callout-note title="Announcements"}
 ## Reminder
 
-HW6 is due on Oct-18th
+Midterm scheduled this Fri Oct-25th. For more information about the midterm please see announcements on bCourses.
 :::
 
 
