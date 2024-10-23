@@ -113,7 +113,7 @@ where the data is hosted.
 wiki = "https://en.wikipedia.org/wiki/"
 women_discus = "Women%27s_discus_throw_world_record_progression"
 url = paste0(wiki, women_discus)
-download.file(wiki_women_discus, "women-discus-throw.html")
+download.file(url, "women-discus-throw.html")
 ```
 
 Assuming that you've downloaded the html content in the file 
