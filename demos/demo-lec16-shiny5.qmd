@@ -1,0 +1,31 @@
+---
+title: "Shiny Friday"
+format: html
+---
+
+# Tidyverse and Reactivity in Shiny
+
+```{r message = FALSE}
+library(tidyverse)
+```
+
+```{r}
+# top-5 cars with largest mpg values
+mtcars |>
+  mutate(name = rownames(mtcars)) |>
+  select(name, mpg) |>
+  arrange(desc(mpg)) |>
+  slice(1:5)
+```
+
+```{r}
+# bar chart
+mtcars |>
+  mutate(name = rownames(mtcars)) |>
+  select(name, mpg) |>
+  arrange(desc(mpg)) |>
+  slice(1:5) |>
+  ggplot(aes(y = reorder(name, mpg), x = mpg)) +
+  geom_col()
+```
+
