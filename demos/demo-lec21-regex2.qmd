@@ -1,0 +1,231 @@
+---
+title: "Lec-21: Regex part 2"
+date: "Wed Oct-16, 2024"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, error = TRUE)
+```
+
+
+```{r message = FALSE}
+# tidyverse includes "stringr"
+library(tidyverse)
+library(rvest) # import data from the web
+```
+
+
+# Men's long jump world record progression
+
+Consider the table of Men's long jump world records
+
+<https://en.wikipedia.org/wiki/Men%27s_long_jump_world_record_progression>
+
+```{r}
+# importing wikipedia table
+wiki = "https://en.wikipedia.org/wiki/Men%27s_long_jump_world_record_progression"
+
+# html document
+doc = read_html(wiki)
+class(doc)
+```
+
+```{r}
+doc
+```
+
+```{r}
+# extract html tables from html doc
+tables_list = html_table(doc)
+class(tables_list)
+```
+
+```{r}
+# desidered table 
+tbl = tables_list[[1]]
+tbl
+```
+
+We were able to get the data in R but it's not ready to be analyzed. If we try
+to graph the records, via columns `Date` and `Mark` this is what happens:
+
+```{r}
+ggplot(tbl, aes(x = Date, y = Mark)) +
+  geom_line()
+```
+
+
+BTW: Here's an alternative way to import the HTML doc and extract the desired 
+HTML table, suing a pipeline:
+
+```{r}
+wiki = "https://en.wikipedia.org/wiki/Men%27s_long_jump_world_record_progression"
+
+tbls = wiki |>
+  read_html() |>
+  html_table()
+
+tbl = tbls[[1]]
+```
+
+
+## Recap from previous lecture
+
+Last time we learned about:
+
+-   character sets (aka character classes)
+
+-   e.g. set of lower case vowels: `[aeiou]`
+
+-   e.g. set of all digits: `[0123456789]`
+
+-   character ranges: `[0-9]` , `[a-z]` , `[A-Z]` , `[3-7d-mQ-Y]`
+
+-   POSIX classes: e.g. `[:digit:]`, `[:alpha:]`, `[:alnum:]`
+
+
+## Example: Mark column
+
+```{r}
+# Mark column
+mark1 = as.numeric(str_extract(tbl$Mark, pattern = "[0-9]\\.[0-9][0-9]"))
+mark1
+```
+
+Example using POSIX classes
+
+```{r}
+str_extract(tbl$Mark, pattern = "[:digit:]\\.[:digit:][:digit:]")
+```
+
+Example using Abbreviated classes
+
+-   `\\s` : space; `\\S` not spaces
+
+-   `\\w` : "word" character (e.g. upper/lower letters, digits, \_); `\\W` not a word
+
+    i.e. `[a-zA-Z0-9_]`
+
+-   `\\d` : digits (ie. `[0-9]` , `[:digit:]` ); `\\D` not a digits
+
+-   `\\b` : word boundaries; `\\B` not a word boundary
+
+```{r}
+str_extract(tbl$Mark, pattern = "\\d\\.\\d\\d")
+```
+
+-----
+
+
+# Quantifiers (Modifiers)
+
+| example    | Description       | Quantity       |
+|------------|-------------------|----------------|
+| `"a*"`     | any number of "a" | \[0, $\infty$) |
+| `"a+"`     | at least one "a"  | \[1, $\infty$) |
+| `"a?"`     | optional "a"      | \[0,1\]        |
+| `"a{3}"`   | 3 "a"s.           | 3              |
+| `"a{3,5}"` | 3 to 5 "a"s.      | \[3,5\]        |
+| `"a{3,}"`  | at least 3        | $\geq 3$       |
+
+
+```{r}
+str_extract(tbl$Athlete, pattern = "\\w\\w\\w")
+```
+
+```{r}
+str_extract(tbl$Athlete, pattern = "\\w*")
+```
+
+```{r}
+str_extract(tbl$Athlete, pattern = "\\w+")
+```
+
+```{r}
+str_view(tbl$Athlete[1:3], pattern = "\\w*")
+```
+
+```{r}
+str_view(tbl$Athlete[1:3], pattern = "\\w+")
+```
+
+```{r}
+str_view(tbl$Athlete[1:3], pattern = "\\w?")
+```
+
+```{r}
+str_extract(tbl$Athlete, "[A-Z]{3}")
+
+# extract year from Date
+str_extract(tbl$Date, "[0-9][0-9][0-9][0-9]")
+
+str_extract(tbl$Date, "[0-9]{4}")
+```
+
+
+
+# Anchors
+
+```{r}
+# caret or 'hat' ^: beginning of the string metacharacter
+# dollar $: end of the string metacharacter
+tbl$Date
+
+# get the day number from Date
+str_extract(tbl$Date, "^\\d\\d?")
+
+str_view(tbl$Date, "\\d\\d?")
+str_view(tbl$Date, "^\\d\\d?")
+```
+
+```{r}
+# end of string $
+# to extract the name of the country
+str_extract(tbl$Place, "\\w+$")
+
+str_extract(tbl$Place, "\\w+\\s\\w+$")
+
+str_extract(tbl$Place, "(\\w+\\s)?\\w+$")
+
+```
+
+
+# Look Arounds
+
+- followed by (look ahead)
+- preceded by (look behind)
+
+```{r}
+# example: preceded by
+feet = as.numeric(str_extract(tbl$Mark, "(?<=\\()\\d{2}"))
+feet
+```
+
+
+```{r}
+# example: followed by
+str_extract(tbl$Mark, "[a-z][a-z](?=\\))")
+```
+
+
+Let's manipulate `Mark`
+
+```{r}
+#
+aux = str_extract(tbl$Mark, "(?<=ft\\s).*(?=\\sin)")
+aux 
+```
+
+```{r}
+# fractional inches
+inch_fractional = str_extract(aux, "\\d.\\d$")
+inch_fractional
+
+# whole inches
+#inch_whole = str_extract(aux, "^\\d\\d?")
+#inch_whole
+
+inch_whole = str_replace(aux, "\\+?\\d.\\d$", replacement = "")
+inch_whole
+```
+

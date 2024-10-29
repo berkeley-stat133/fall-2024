@@ -1,0 +1,186 @@
+---
+title: "Lec-20: Regex part 1"
+date: "Mon Oct-14, 2024"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, error = TRUE)
+```
+
+```{r message = FALSE}
+# tidyverse includes "stringr"
+library(tidyverse)
+```
+
+
+# Regular Expressions (regex)
+
+Regular Expressions, or _regex_ for short, is all about defining a certain 
+"amount of text" formally known as a __pattern__, through characters 
+(e.g. letters, digits, symbols) in your keyboard
+
+To define regex patterns we use letters, digits, and symbols. They can be 
+classified into two big buckets:
+
+- literal characters: upper and lower case letters, digits, and a few symbols. They match themselves.
+
+- metacharacters: set of characters (typically symbols) that a special meaning.
+
+
+## Functions from `"stringr"`
+
+We'll be using functions from the tidyverse package `"stringr"`, for instance
+
+- `str_view()`
+
+- `str_detect()`
+
+- `str_replace()`
+
+- `str_extract()`
+
+- `str_split()`
+
+- `str_match()`
+
+
+## Motivation
+
+Consider the following vectors:
+
+```{r}
+txt1 = c("car", "bus", "bike", "train", "airplane")
+txt1
+```
+
+and
+
+```{r}
+# another vector
+txt2 = c("5", "5.00", "5-0", "500", "555", "$50")
+txt2
+```
+
+
+### Literal characters
+
+A literal character is a character that matches itself. Let's play a little
+bit with the `str_view()` function to get a better feeling of the notion of
+_pattern matching__, which is fundamental in regex.
+
+```{r}
+str_view(txt1, pattern = "a")
+```
+
+
+```{r}
+str_view(txt1, pattern = "ai")
+```
+
+
+```{r}
+str_replace(txt1, pattern = "a", replacement = "A")
+```
+
+```{r}
+str_replace_all(txt1, pattern = "a", replacement = "A")
+```
+
+
+```{r}
+str_view(txt2, pattern = "5")
+```
+
+```{r}
+str_view(txt2, pattern = "0")
+```
+
+```{r}
+str_view(txt2, pattern = "50")
+```
+
+
+## Metacharacter "." (dot)
+
+Wildcard metacharacter: matches any other character
+
+```{r}
+str_view(txt2, pattern = ".")
+```
+
+## Backslah*: escape metacharacter "\"
+
+- single backslash (outside R)
+
+- double backslash (in R)
+
+```{r}
+str_view(txt2, pattern = "\\.")
+```
+
+
+```{r}
+str_view(txt2, pattern = "\\$5")
+```
+
+```{r}
+str_view(txt2, pattern = "5-0")
+```
+
+
+## Character Sets
+
+We define a set with square brackets: `[ ]`
+
+`"[aeiou]"` : set of lower case vowels
+
+`"[AEIOU]"` : set of upper case vowels
+
+`"[012]"` : set of first 3 digits
+
+`"[0123456789]"` : set of digits
+
+`"[abcdefghijklmnopqrstuvwxyz]"` : set of all lower letters
+
+`"[aeiou0123456789]"` : set of lower case vowels & digits
+
+
+Example: the set of lower case vowels
+
+```{r}
+str_view(txt1, pattern = "[aeiou]")
+```
+
+```{r}
+str_view(txt2, pattern = "[0123456789]")
+```
+
+```{r}
+str_view(txt2, pattern = "[01234]")
+```
+
+### Character ranges
+
+- `[0-9]` = `[0123456789]`
+
+- `[0-4]` = `[01234]`
+
+- `[5-8]` = `[5678]`
+
+- `[a-z]` = `[abcdefghijklmnopqrstuvwxyz]`
+
+- `[A-Z]` = `[ABC....XYZ]`
+
+- alphabumeric ranges: `[0-9a-fA-F]`
+
+- `[3-7m-xG-M]`
+
+
+```{r}
+str_remove(txt1, pattern = "[p-z]")
+```
+
+```{r}
+str_remove_all(txt1, pattern = "[p-z]")
+```
+
