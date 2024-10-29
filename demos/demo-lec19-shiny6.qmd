@@ -1,0 +1,113 @@
+---
+title: "Lec-19: Shiny App 6"
+date: "Fri Oct-11, 2024"
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, error = TRUE)
+```
+
+```{r message = FALSE}
+library(tidyverse) # pkgs for data science
+library(plotly)    # web interactive graphics
+```
+
+
+# Investment Simulator
+
+Suppose you are going to invest in some financial product that gives you
+a certain rate of return $r_t$ every year $t = 1, 2, \dots, n$.
+
+Specifically, assume you are going to:
+
+- start the investment with $1000 (at the beginning of time)
+
+- make annual contributions of $500 (at the end of every year)
+
+- stay invested for $n = 5$ years
+
+- annual rates of return $r_t$ will vary every year, following a Normal distribution
+with mean $\mu = 0.08$, and standard deviation $\sigma = 0.16$
+
+__What will the balance be at the beginning of time, and at the end of every year?__
+
+
+$bal_0 = P$
+
+$bal_1 = bal_0 (1 + r_1) + C$
+
+$bal_2 = bal_1 (1 + r_2) + C$
+
+etc
+
+$bal_{n-1} = bal_{n-2} (1 + r_{n-1}) + C$
+
+$bal_n = bal_{n-1} (1 + r_n) + C$
+
+\
+
+Let's write some R code:
+
+```{r}
+# inputs
+P = 1000 # principal
+C = 500  # annual contribution
+n = 5    # number of years
+
+# rates of return: normally distributed
+set.seed(133)
+rate_mean = 0.08
+rate_sd = 0.16
+
+r = rnorm(n, mean = rate_mean, sd = rate_sd)
+r
+```
+
+
+We'll use a `for` loop to carry out the iterative process:
+
+```{r}
+# initialize output vector (length n+1)
+balance = c(P, rep(0, n))
+
+# iterations
+for (y in 1:n) {
+  balance[y+1] = balance[y] * (1+r[y]) + C
+}
+balance
+```
+
+
+```{r}
+# output table
+tbl = data.frame(
+  "year" = 0:n,
+  "rate" = c(NA, r),
+  "balance" = balance
+)
+
+tbl
+```
+
+
+We can visualize the investment with a timeline:
+
+```{r}
+# timeline
+ggplot(tbl, aes(x = year, y = balance)) +
+  geom_point() +
+  geom_line()
+```
+
+Optionally, you can pass your ggplor object to `ggplotly()` to get an 
+interactive graphic:
+
+```{r}
+gg = ggplot(tbl, aes(x = year, y = balance)) +
+  geom_point() +
+  geom_line()
+
+ggplotly(gg)
+```
+

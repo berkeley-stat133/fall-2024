@@ -1,0 +1,132 @@
+---
+title: "Lec-18: Iterations (part 2)"
+date: "Wed Oct-9, 2024"
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, error = TRUE)
+library(tidyverse)
+library(plotly)
+```
+
+```r
+library(tidyverse)
+library(plotly)
+```
+
+
+## Example: Future Value with variable rates of return
+
+We've talked the Future Value:
+
+$$
+FV  = P \times (1 + r)^n
+$$
+
+where:
+
+- $P$: principal (initial amount)
+- $r$ (annual) rate of return or interest rate
+- $n$ number of years
+
+In its simplest version, the formula of the Future Value assumes a constant
+rate of return $r$.
+
+What if we want to consider variable rates of return?
+
+
+## Future Value with variable rates of return
+
+Let's assume that we have annual rates of return that could vary between
+0% and positive 20%. For computational purposes, let's suppose that 
+rates of return follow a Uniform distribution with parameters min = 0 and 
+max = 0.20
+
+```{r}
+set.seed(133)
+r = runif(n, min = 0, max = 0.2)
+r
+```
+
+What would be the Future Value if we invest $1,000 in some financial product
+---that has variable rates of return---for 5 years?
+
+```{r}
+set.seed(133)
+n = 5
+p = 1000
+
+r = runif(n, min = 0, max = 0.2)
+r
+```
+
+Let's write a few commands to understand what kind of computations are 
+necessary:
+
+```{r}
+# future values
+fv1 = p * (1 + r[1])
+fv2 = fv1 * (1 + r[2])
+fv3 = fv2 * (1 + r[3])
+fv4 = fv3 * (1 + r[4])
+fv5 = fv4 * (1 + r[5])
+
+c(fv1, fv2, fv3, fv4, fv5)
+```
+
+
+## Using a for-loop
+
+```{r}
+# use a for-loop
+
+# initialize output vector
+fv = rep(0, n)
+
+# for-loop
+for (i in 1:n) {
+  if (i == 1) {
+    fv[i] = p * (1 + r[i])
+  } else {
+    fv[i] = fv[i-1] * (1 + r[i])
+  }
+}
+
+fv
+```
+
+
+### Timeline
+
+```{r}
+# visualize it with a timeline
+dat = data.frame(
+  year = 1:n,
+  amount = fv
+)
+dat
+```
+
+
+```{r}
+ggplot(dat, aes(x = year, y = amount)) +
+  geom_point() +
+  geom_line()
+```
+
+
+
+### Timeline with `plotly`
+
+We can convert our ggplot graphic into a plotly object to make it interactive:
+
+```{r}
+gg = ggplot(dat, aes(x = year, y = amount)) +
+  geom_point() +
+  geom_line()
+
+# converting to plotly
+ggplotly(gg)
+```
+

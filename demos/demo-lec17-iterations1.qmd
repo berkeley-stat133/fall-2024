@@ -1,0 +1,202 @@
+---
+title: "Lec-17: Iterations (part 1)"
+date: "Mon Oct-7, 2024"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, error = TRUE)
+```
+
+
+## Motivation
+
+Let's consider a toy matrix of random numbers arrange in 10 rows and 3 columns:
+
+```{r}
+set.seed(1234) # for reproducibility
+x = matrix(runif(30), 10, 3)
+x
+```
+
+Goal: say we want to obtain summary statistics for each of the columns, for
+example the means (or medians, minimima, range, etc).
+
+
+### Naive Approach
+
+To get the column means, conceptually speaking, we need to traverse every 
+column and get the mean:
+
+```{r}
+xmeans = c(mean(x[ ,1]), mean(x[ ,2]), mean(x[ ,3]))
+xmeans
+```
+
+This is too repetitive, and not very efficient.
+
+But the important step can be generalized in an abstract sense as:
+
+```
+mean(x[ ,pos])
+```
+
+where `pos` indicates _position_ ranging from the first column to the third
+column.
+
+
+## For-loop
+
+Here's how to compute the column means with a `for` loop:
+
+```{r}
+# initialize output vector
+xmeans = rep(0, 3)
+
+# iterative steps
+for (pos in 1:3) {
+  xmeans[pos] = mean(x[ ,pos])
+}
+
+xmeans
+```
+
+And we can make it even more general to any number of columns in `x`:
+
+```{r}
+# initialize output vector
+xmeans = rep(0, ncol(x))
+
+# iterative steps
+for (pos in 1:ncol(x)) {
+  xmeans[pos] = mean(x[ ,pos])
+}
+
+xmeans
+```
+
+
+### Generic blue print of a `for` loop
+
+```{r eval = FALSE}
+for (iterator in vector) {
+  # repetitive steps
+}
+```
+
+A `for` loop takes three ingredients:
+
+- `iterator`: auxiliary object
+
+- `in` keyword
+
+- `vector`: a vector whose length will determine the number of iterations
+
+
+-----
+
+
+## Apply
+
+Alternative to `for` loops, we also have the `apply()` function which can
+be used for __arrays__, to apply a function to all the rows or columns.
+
+Here's how to use `apply()` to get the column means, medians, and range:
+
+```{r}
+xmeans = apply(x, 2, mean)
+xmeans
+
+xmedians = apply(x, 2, median)
+xmedians
+
+
+# range: max - min
+# anonymous
+apply(x, 2, function(u) {max(u)-min(u)})
+
+
+# function defined outside apply
+myrange = function(u) {
+  max(u)-min(u)
+}
+apply(x, 2, myrange)
+```
+
+What if the input matrix has missing values?
+
+```{r}
+# copy of x
+y = x
+y[1,1] = NA
+
+mean(y[,1], na.rm = TRUE)
+
+apply(y, 2, mean, na.rm = TRUE)
+```
+
+Sibling functions:
+
+`rowSums()`
+
+`colSums()`
+
+```{r}
+rowSums(x)
+
+colSums(x)
+```
+
+`rowMeans()` & `colMeans()`
+
+```{r}
+rowMeans(x)
+
+colMeans(x)
+```
+
+
+-----
+
+
+## `"dplyr"` : function `across()`
+
+```{r}
+tbl = as_tibble(x)
+
+summarise(tbl, mean(V1), mean(V2), mean(V3))
+
+tbl |> summarise(mean(V1), mean(V2), mean(V3))
+
+# across
+tbl |> summarise(across(1:3, mean))
+
+tbl |> summarise(across(V1:V3, mean))
+
+tbl |> summarise(across(V1:V3, mean, .names = "mean_{.col}"))
+
+
+tbl2 = as_tibble(y)
+tbl2 |> summarise(across(V1:V3, mean))
+
+tbl2 |> summarise(across(V1:V3, \(x) mean(x, na.rm = TRUE)))
+```
+
+
+-----
+
+
+## While Loop
+
+```{r}
+xmeans = rep(0, ncol(X))
+i = 1
+
+while (i <= ncol(X)) {
+  xmeans[i] = mean(X[,i])
+  i = i + 1
+}
+
+xmeans
+```
+
+
