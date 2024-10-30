@@ -128,8 +128,10 @@ gtag('config', 'G-CES9J82GLL', { 'anonymize_ip': true});
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#regular-expressions-regex" id="toc-regular-expressions-regex" class="nav-link active" data-scroll-target="#regular-expressions-regex">Regular Expressions (regex)</a></li>
-  <li><a href="#functions-from-stringr" id="toc-functions-from-stringr" class="nav-link" data-scroll-target="#functions-from-stringr">Functions from <code>"stringr"</code></a>
+  <li><a href="#regular-expressions-regex" id="toc-regular-expressions-regex" class="nav-link active" data-scroll-target="#regular-expressions-regex">Regular Expressions (regex)</a>
+  <ul class="collapse">
+  <li><a href="#functions-from-stringr" id="toc-functions-from-stringr" class="nav-link" data-scroll-target="#functions-from-stringr">Functions from <code>"stringr"</code></a></li>
+  <li><a href="#motivation" id="toc-motivation" class="nav-link" data-scroll-target="#motivation">Motivation</a>
   <ul class="collapse">
   <li><a href="#literal-characters" id="toc-literal-characters" class="nav-link" data-scroll-target="#literal-characters">Literal characters</a></li>
   </ul></li>
@@ -138,6 +140,7 @@ gtag('config', 'G-CES9J82GLL', { 'anonymize_ip': true});
   <li><a href="#character-sets" id="toc-character-sets" class="nav-link" data-scroll-target="#character-sets">Character Sets</a>
   <ul class="collapse">
   <li><a href="#character-ranges" id="toc-character-ranges" class="nav-link" data-scroll-target="#character-ranges">Character ranges</a></li>
+  </ul></li>
   </ul></li>
   </ul>
 </nav>
@@ -171,19 +174,20 @@ gtag('config', 'G-CES9J82GLL', { 'anonymize_ip': true});
 
 
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse) <span class="co"># pkgs for data science</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># tidyverse includes "stringr"</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<section id="regular-expressions-regex" class="level2">
-<h2 class="anchored" data-anchor-id="regular-expressions-regex">Regular Expressions (regex)</h2>
-<p>Define a certain “amount of text”: pattern Pattern matching</p>
-<p>We use letters, digits, and symbols</p>
+<section id="regular-expressions-regex" class="level1">
+<h1>Regular Expressions (regex)</h1>
+<p>Regular Expressions, or <em>regex</em> for short, is all about defining a certain “amount of text” formally known as a <strong>pattern</strong>, through characters (e.g.&nbsp;letters, digits, symbols) in your keyboard</p>
+<p>To define regex patterns we use letters, digits, and symbols. They can be classified into two big buckets:</p>
 <ul>
 <li><p>literal characters: upper and lower case letters, digits, and a few symbols. They match themselves.</p></li>
 <li><p>metacharacters: set of characters (typically symbols) that a special meaning.</p></li>
 </ul>
-</section>
 <section id="functions-from-stringr" class="level2">
 <h2 class="anchored" data-anchor-id="functions-from-stringr">Functions from <code>"stringr"</code></h2>
+<p>We’ll be using functions from the tidyverse package <code>"stringr"</code>, for instance</p>
 <ul>
 <li><p><code>str_view()</code></p></li>
 <li><p><code>str_detect()</code></p></li>
@@ -192,18 +196,31 @@ gtag('config', 'G-CES9J82GLL', { 'anonymize_ip': true});
 <li><p><code>str_split()</code></p></li>
 <li><p><code>str_match()</code></p></li>
 </ul>
+</section>
+<section id="motivation" class="level2">
+<h2 class="anchored" data-anchor-id="motivation">Motivation</h2>
+<p>Consider the following vectors:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>txt1 <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"car"</span>, <span class="st">"bus"</span>, <span class="st">"bike"</span>, <span class="st">"train"</span>, <span class="st">"airplane"</span>)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>txt1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>txt1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "car"      "bus"      "bike"     "train"    "airplane"</code></pre>
 </div>
 </div>
+<p>and</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># another vector</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>txt2 <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"5"</span>, <span class="st">"5.00"</span>, <span class="st">"5-0"</span>, <span class="st">"500"</span>, <span class="st">"555"</span>, <span class="st">"$50"</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>txt2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "5"    "5.00" "5-0"  "500"  "555"  "$50" </code></pre>
+</div>
+</div>
 <section id="literal-characters" class="level3">
 <h3 class="anchored" data-anchor-id="literal-characters">Literal characters</h3>
+<p>A literal character is a character that matches itself. Let’s play a little bit with the <code>str_view()</code> function to get a better feeling of the notion of _pattern matching__, which is fundamental in regex.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_view</span>(txt1, <span class="at">pattern =</span> <span class="st">"a"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_view</span>(txt1, <span class="at">pattern =</span> <span class="st">"a"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] │ c&lt;a&gt;r
 [4] │ tr&lt;a&gt;in
@@ -211,30 +228,22 @@ gtag('config', 'G-CES9J82GLL', { 'anonymize_ip': true});
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_view</span>(txt1, <span class="at">pattern =</span> <span class="st">"ai"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_view</span>(txt1, <span class="at">pattern =</span> <span class="st">"ai"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[4] │ tr&lt;ai&gt;n
 [5] │ &lt;ai&gt;rplane</code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_replace</span>(txt1, <span class="at">pattern =</span> <span class="st">"a"</span>, <span class="at">replacement =</span> <span class="st">"A"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_replace</span>(txt1, <span class="at">pattern =</span> <span class="st">"a"</span>, <span class="at">replacement =</span> <span class="st">"A"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "cAr"      "bus"      "bike"     "trAin"    "Airplane"</code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_replace_all</span>(txt1, <span class="at">pattern =</span> <span class="st">"a"</span>, <span class="at">replacement =</span> <span class="st">"A"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_replace_all</span>(txt1, <span class="at">pattern =</span> <span class="st">"a"</span>, <span class="at">replacement =</span> <span class="st">"A"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "cAr"      "bus"      "bike"     "trAin"    "AirplAne"</code></pre>
-</div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># another vector</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>txt2 <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"5"</span>, <span class="st">"5.00"</span>, <span class="st">"5-0"</span>, <span class="st">"500"</span>, <span class="st">"555"</span>, <span class="st">"$50"</span>)</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>txt2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "5"    "5.00" "5-0"  "500"  "555"  "$50" </code></pre>
 </div>
 </div>
 <div class="cell">
@@ -308,7 +317,13 @@ gtag('config', 'G-CES9J82GLL', { 'anonymize_ip': true});
 </section>
 <section id="character-sets" class="level2">
 <h2 class="anchored" data-anchor-id="character-sets">Character Sets</h2>
-<p>We define a set with square brackets: [ ]</p>
+<p>We define a set with square brackets: <code>[ ]</code></p>
+<p><code>"[aeiou]"</code> : set of lower case vowels</p>
+<p><code>"[AEIOU]"</code> : set of upper case vowels</p>
+<p><code>"[012]"</code> : set of first 3 digits</p>
+<p><code>"[0123456789]"</code> : set of digits</p>
+<p><code>"[abcdefghijklmnopqrstuvwxyz]"</code> : set of all lower letters</p>
+<p><code>"[aeiou0123456789]"</code> : set of lower case vowels &amp; digits</p>
 <p>Example: the set of lower case vowels</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_view</span>(txt1, <span class="at">pattern =</span> <span class="st">"[aeiou]"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -320,10 +335,6 @@ gtag('config', 'G-CES9J82GLL', { 'anonymize_ip': true});
 [5] │ &lt;a&gt;&lt;i&gt;rpl&lt;a&gt;n&lt;e&gt;</code></pre>
 </div>
 </div>
-<p>another set: <code>[AEIOU]</code></p>
-<p>another one: <code>[0123456789]</code></p>
-<p><code>[01234]</code></p>
-<p><code>[abcdefghijklmnopqrstuvwxyz]</code></p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_view</span>(txt2, <span class="at">pattern =</span> <span class="st">"[0123456789]"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -369,6 +380,7 @@ gtag('config', 'G-CES9J82GLL', { 'anonymize_ip': true});
 </div>
 
 
+</section>
 </section>
 </section>
 

@@ -128,8 +128,17 @@ gtag('config', 'G-CES9J82GLL', { 'anonymize_ip': true});
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#apply-family-functions" id="toc-apply-family-functions" class="nav-link active" data-scroll-target="#apply-family-functions"><code>apply()</code> family functions</a></li>
-  <li><a href="#question" id="toc-question" class="nav-link" data-scroll-target="#question">Question:</a></li>
+  <li><a href="#motivation" id="toc-motivation" class="nav-link active" data-scroll-target="#motivation">Motivation</a>
+  <ul class="collapse">
+  <li><a href="#naive-approach" id="toc-naive-approach" class="nav-link" data-scroll-target="#naive-approach">Naive Approach</a></li>
+  </ul></li>
+  <li><a href="#for-loop" id="toc-for-loop" class="nav-link" data-scroll-target="#for-loop">For-loop</a>
+  <ul class="collapse">
+  <li><a href="#generic-blue-print-of-a-for-loop" id="toc-generic-blue-print-of-a-for-loop" class="nav-link" data-scroll-target="#generic-blue-print-of-a-for-loop">Generic blue print of a <code>for</code> loop</a></li>
+  </ul></li>
+  <li><a href="#apply" id="toc-apply" class="nav-link" data-scroll-target="#apply">Apply</a></li>
+  <li><a href="#dplyr-function-across" id="toc-dplyr-function-across" class="nav-link" data-scroll-target="#dplyr-function-across"><code>"dplyr"</code> : function <code>across()</code></a></li>
+  <li><a href="#while-loop" id="toc-while-loop" class="nav-link" data-scroll-target="#while-loop">While Loop</a></li>
   </ul>
 </nav>
     </div>
@@ -161,168 +170,228 @@ gtag('config', 'G-CES9J82GLL', { 'anonymize_ip': true});
 </header>
 
 
+<section id="motivation" class="level2">
+<h2 class="anchored" data-anchor-id="motivation">Motivation</h2>
+<p>Let’s consider a toy matrix of random numbers arrange in 10 rows and 3 columns:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">12345</span>) <span class="co"># for reproducibility purposes</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>X <span class="ot">=</span> <span class="fu">matrix</span>(<span class="fu">runif</span>(<span class="dv">30</span>), <span class="at">nrow =</span> <span class="dv">10</span>, <span class="at">ncol =</span> <span class="dv">3</span>)</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>X</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>) <span class="co"># for reproducibility</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>x <span class="ot">=</span> <span class="fu">matrix</span>(<span class="fu">runif</span>(<span class="dv">30</span>), <span class="dv">10</span>, <span class="dv">3</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>x</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>           [,1]        [,2]      [,3]
- [1,] 0.7209039 0.034535435 0.4537281
- [2,] 0.8757732 0.152373490 0.3267524
- [3,] 0.7609823 0.735684952 0.9654153
- [4,] 0.8861246 0.001136587 0.7074819
- [5,] 0.4564810 0.391203335 0.6445426
- [6,] 0.1663718 0.462494654 0.3898285
- [7,] 0.3250954 0.388143982 0.6985436
- [8,] 0.5092243 0.402485142 0.5440579
- [9,] 0.7277053 0.178963585 0.2264672
-[10,] 0.9897369 0.951658754 0.4845578</code></pre>
+<pre><code>             [,1]      [,2]       [,3]
+ [1,] 0.113703411 0.6935913 0.31661245
+ [2,] 0.622299405 0.5449748 0.30269337
+ [3,] 0.609274733 0.2827336 0.15904600
+ [4,] 0.623379442 0.9234335 0.03999592
+ [5,] 0.860915384 0.2923158 0.21879954
+ [6,] 0.640310605 0.8372956 0.81059855
+ [7,] 0.009495756 0.2862233 0.52569755
+ [8,] 0.232550506 0.2668208 0.91465817
+ [9,] 0.666083758 0.1867228 0.83134505
+[10,] 0.514251141 0.2322259 0.04577026</code></pre>
 </div>
 </div>
+<p>Goal: say we want to obtain summary statistics for each of the columns, for example the means (or medians, minimima, range, etc).</p>
+<section id="naive-approach" class="level3">
+<h3 class="anchored" data-anchor-id="naive-approach">Naive Approach</h3>
+<p>To get the column means, conceptually speaking, we need to traverse every column and get the mean:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># output vector</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>xmeans <span class="ot">=</span> <span class="fu">rep</span>(<span class="dv">0</span>, <span class="fu">ncol</span>(X))</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># for loop</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (pos <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">ncol</span>(X)) {</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">"iteration:"</span>, pos))</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  xmeans[pos] <span class="ot">=</span> <span class="fu">mean</span>(X[ ,pos])</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>xmeans <span class="ot">=</span> <span class="fu">c</span>(<span class="fu">mean</span>(x[ ,<span class="dv">1</span>]), <span class="fu">mean</span>(x[ ,<span class="dv">2</span>]), <span class="fu">mean</span>(x[ ,<span class="dv">3</span>]))</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>xmeans</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] "iteration: 1"
-[1] "iteration: 2"
-[1] "iteration: 3"</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>xmeans</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.6418399 0.3698680 0.5441375</code></pre>
+<pre><code>[1] 0.4892264 0.4546337 0.4165217</code></pre>
 </div>
 </div>
-<section id="apply-family-functions" class="level2">
-<h2 class="anchored" data-anchor-id="apply-family-functions"><code>apply()</code> family functions</h2>
-<ul>
-<li><p><code>apply()</code> : apply a function on an R array (e.g.&nbsp;2-dim, N-dim)</p></li>
-<li><p><code>lapply()</code> : apply a function on an R list</p></li>
-<li><p><code>sweep()</code> : sweep elements of a matrix</p></li>
-</ul>
-<p>Some useRs refer to these functions as <strong>vectorized loop</strong> functions</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">apply</span>(X, <span class="at">MARGIN =</span> <span class="dv">2</span>, <span class="at">FUN =</span> mean)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.6418399 0.3698680 0.5441375</code></pre>
-</div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">apply</span>(X, <span class="at">MARGIN =</span> <span class="dv">2</span>, <span class="at">FUN =</span> median)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.7243046 0.3896737 0.5143078</code></pre>
-</div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">apply</span>(X, <span class="at">MARGIN =</span> <span class="dv">2</span>, <span class="at">FUN =</span> min)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.166371785 0.001136587 0.226467179</code></pre>
-</div>
-</div>
-<p>What about the range: max - min?</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">range</span>(X[, <span class="dv">1</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.1663718 0.9897369</code></pre>
-</div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>myrange <span class="ot">=</span> <span class="cf">function</span>(x) {</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">max</span>(x) <span class="sc">-</span> <span class="fu">min</span>(x)</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="fu">myrange</span>(X[,<span class="dv">1</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.8233652</code></pre>
-</div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># we can use our own functions</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">apply</span>(X, <span class="dv">2</span>, myrange)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.8233652 0.9505222 0.7389481</code></pre>
-</div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># we can also use "anonymous" functions (i.e. lambda)</span></span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">apply</span>(X, <span class="dv">2</span>, <span class="cf">function</span>(y) <span class="fu">max</span>(y) <span class="sc">-</span> <span class="fu">min</span>(y))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.8233652 0.9505222 0.7389481</code></pre>
-</div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># we can also use "anonymous" functions (i.e. lambda)</span></span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">apply</span>(X, <span class="dv">2</span>, \(y) <span class="fu">max</span>(y) <span class="sc">-</span> <span class="fu">min</span>(y))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.8233652 0.9505222 0.7389481</code></pre>
-</div>
-</div>
+<p>This is too repetitive, and not very efficient.</p>
+<p>But the important step can be generalized in an abstract sense as:</p>
+<pre><code>mean(x[ ,pos])</code></pre>
+<p>where <code>pos</code> indicates <em>position</em> ranging from the first column to the third column.</p>
 </section>
-<section id="question" class="level2">
-<h2 class="anchored" data-anchor-id="question">Question:</h2>
-<p>What if we want to apply a computation to every element of a matrix?</p>
+</section>
+<section id="for-loop" class="level2">
+<h2 class="anchored" data-anchor-id="for-loop">For-loop</h2>
+<p>Here’s how to compute the column means with a <code>for</code> loop:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># double every element in X</span></span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>X <span class="sc">*</span> <span class="dv">2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># initialize output vector</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>xmeans <span class="ot">=</span> <span class="fu">rep</span>(<span class="dv">0</span>, <span class="dv">3</span>)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co"># iterative steps</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (pos <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>) {</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  xmeans[pos] <span class="ot">=</span> <span class="fu">mean</span>(x[ ,pos])</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>xmeans</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>           [,1]        [,2]      [,3]
- [1,] 1.4418078 0.069070870 0.9074561
- [2,] 1.7515464 0.304746980 0.6535048
- [3,] 1.5219647 1.471369905 1.9308306
- [4,] 1.7722491 0.002273173 1.4149638
- [5,] 0.9129619 0.782406671 1.2890853
- [6,] 0.3327436 0.924989308 0.7796570
- [7,] 0.6501908 0.776287963 1.3970873
- [8,] 1.0184487 0.804970284 1.0881157
- [9,] 1.4554105 0.357927170 0.4529344
-[10,] 1.9794739 1.903317507 0.9691155</code></pre>
+<pre><code>[1] 0.4892264 0.4546337 0.4165217</code></pre>
 </div>
 </div>
+<p>And we can make it even more general to any number of columns in <code>x</code>:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># assuming that we have the vector of means</span></span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>xmeans</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># initialize output vector</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>xmeans <span class="ot">=</span> <span class="fu">rep</span>(<span class="dv">0</span>, <span class="fu">ncol</span>(x))</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co"># iterative steps</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (pos <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">ncol</span>(x)) {</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  xmeans[pos] <span class="ot">=</span> <span class="fu">mean</span>(x[ ,pos])</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>xmeans</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.6418399 0.3698680 0.5441375</code></pre>
+<pre><code>[1] 0.4892264 0.4546337 0.4165217</code></pre>
 </div>
 </div>
+<section id="generic-blue-print-of-a-for-loop" class="level3">
+<h3 class="anchored" data-anchor-id="generic-blue-print-of-a-for-loop">Generic blue print of a <code>for</code> loop</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sweep</span>(X, <span class="at">MARGIN =</span> <span class="dv">2</span>, <span class="at">STATS =</span> xmeans, <span class="at">FUN =</span> <span class="st">"-"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>             [,1]        [,2]          [,3]
- [1,]  0.07906403 -0.33533256 -0.0904094509
- [2,]  0.23393333 -0.21749450 -0.2173851155
- [3,]  0.11914246  0.36581696  0.4212777992
- [4,]  0.24428470 -0.36873141  0.1633443530
- [5,] -0.18535890  0.02133534  0.1004051124
- [6,] -0.47546808  0.09262666 -0.1543090392
- [7,] -0.31674448  0.01827599  0.1544061152
- [8,] -0.13261553  0.03261715 -0.0000796597
- [9,]  0.08586539 -0.19090441 -0.3176703455
-[10,]  0.34789707  0.58179076 -0.0595797691</code></pre>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (iterator <span class="cf">in</span> vector) {</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># repetitive steps</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</div>
+<p>A <code>for</code> loop takes three ingredients:</p>
+<ul>
+<li><p><code>iterator</code>: auxiliary object</p></li>
+<li><p><code>in</code> keyword</p></li>
+<li><p><code>vector</code>: a vector whose length will determine the number of iterations</p></li>
+</ul>
+<hr>
+</section>
+</section>
+<section id="apply" class="level2">
+<h2 class="anchored" data-anchor-id="apply">Apply</h2>
+<p>Alternative to <code>for</code> loops, we also have the <code>apply()</code> function which can be used for <strong>arrays</strong>, to apply a function to all the rows or columns.</p>
+<p>Here’s how to use <code>apply()</code> to get the column means, medians, and range:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sweep</span>(X, <span class="at">MARGIN =</span> <span class="dv">2</span>, <span class="at">STATS =</span> <span class="dv">5</span>, <span class="at">FUN =</span> <span class="st">"+"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>xmeans <span class="ot">=</span> <span class="fu">apply</span>(x, <span class="dv">2</span>, mean)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>xmeans</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>          [,1]     [,2]     [,3]
- [1,] 5.720904 5.034535 5.453728
- [2,] 5.875773 5.152373 5.326752
- [3,] 5.760982 5.735685 5.965415
- [4,] 5.886125 5.001137 5.707482
- [5,] 5.456481 5.391203 5.644543
- [6,] 5.166372 5.462495 5.389828
- [7,] 5.325095 5.388144 5.698544
- [8,] 5.509224 5.402485 5.544058
- [9,] 5.727705 5.178964 5.226467
-[10,] 5.989737 5.951659 5.484558</code></pre>
+<pre><code>[1] 0.4892264 0.4546337 0.4165217</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># X + 5</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>xmedians <span class="ot">=</span> <span class="fu">apply</span>(x, <span class="dv">2</span>, median)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>xmedians</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.6157871 0.2892696 0.3096529</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># range: max - min</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="co"># anonymous</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="fu">apply</span>(x, <span class="dv">2</span>, <span class="cf">function</span>(u) {<span class="fu">max</span>(u)<span class="sc">-</span><span class="fu">min</span>(u)})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.8514196 0.7367107 0.8746622</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># function defined outside apply</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>myrange <span class="ot">=</span> <span class="cf">function</span>(u) {</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">max</span>(u)<span class="sc">-</span><span class="fu">min</span>(u)</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="fu">apply</span>(x, <span class="dv">2</span>, myrange)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.8514196 0.7367107 0.8746622</code></pre>
+</div>
+</div>
+<p>What if the input matrix has missing values?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># copy of x</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>y <span class="ot">=</span> x</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>y[<span class="dv">1</span>,<span class="dv">1</span>] <span class="ot">=</span> <span class="cn">NA</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(y[,<span class="dv">1</span>], <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.5309512</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">apply</span>(y, <span class="dv">2</span>, mean, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.5309512 0.4546337 0.4165217</code></pre>
+</div>
+</div>
+<p>Sibling functions:</p>
+<p><code>rowSums()</code></p>
+<p><code>colSums()</code></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rowSums</span>(x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] 1.1239072 1.4699676 1.0510543 1.5868088 1.3720308 2.2882048 0.8214166
+ [8] 1.4140295 1.6841516 0.7922473</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">colSums</span>(x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 4.892264 4.546337 4.165217</code></pre>
+</div>
+</div>
+<p><code>rowMeans()</code> &amp; <code>colMeans()</code></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rowMeans</span>(x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] 0.3746357 0.4899892 0.3503514 0.5289363 0.4573436 0.7627349 0.2738055
+ [8] 0.4713432 0.5613839 0.2640824</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">colMeans</span>(x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.4892264 0.4546337 0.4165217</code></pre>
+</div>
+</div>
+<hr>
+</section>
+<section id="dplyr-function-across" class="level2">
+<h2 class="anchored" data-anchor-id="dplyr-function-across"><code>"dplyr"</code> : function <code>across()</code></h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>tbl <span class="ot">=</span> <span class="fu">as_tibble</span>(x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error in as_tibble(x): could not find function "as_tibble"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summarise</span>(tbl, <span class="fu">mean</span>(V1), <span class="fu">mean</span>(V2), <span class="fu">mean</span>(V3))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error in summarise(tbl, mean(V1), mean(V2), mean(V3)): could not find function "summarise"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>tbl <span class="sc">|&gt;</span> <span class="fu">summarise</span>(<span class="fu">mean</span>(V1), <span class="fu">mean</span>(V2), <span class="fu">mean</span>(V3))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error in summarise(tbl, mean(V1), mean(V2), mean(V3)): could not find function "summarise"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co"># across</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>tbl <span class="sc">|&gt;</span> <span class="fu">summarise</span>(<span class="fu">across</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, mean))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error in summarise(tbl, across(1:3, mean)): could not find function "summarise"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>tbl <span class="sc">|&gt;</span> <span class="fu">summarise</span>(<span class="fu">across</span>(V1<span class="sc">:</span>V3, mean))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error in summarise(tbl, across(V1:V3, mean)): could not find function "summarise"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>tbl <span class="sc">|&gt;</span> <span class="fu">summarise</span>(<span class="fu">across</span>(V1<span class="sc">:</span>V3, mean, <span class="at">.names =</span> <span class="st">"mean_{.col}"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error in summarise(tbl, across(V1:V3, mean, .names = "mean_{.col}")): could not find function "summarise"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>tbl2 <span class="ot">=</span> <span class="fu">as_tibble</span>(y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error in as_tibble(y): could not find function "as_tibble"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>tbl2 <span class="sc">|&gt;</span> <span class="fu">summarise</span>(<span class="fu">across</span>(V1<span class="sc">:</span>V3, mean))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error in summarise(tbl2, across(V1:V3, mean)): could not find function "summarise"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>tbl2 <span class="sc">|&gt;</span> <span class="fu">summarise</span>(<span class="fu">across</span>(V1<span class="sc">:</span>V3, \(x) <span class="fu">mean</span>(x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error in summarise(tbl2, across(V1:V3, function(x) mean(x, na.rm = TRUE))): could not find function "summarise"</code></pre>
+</div>
+</div>
+<hr>
+</section>
+<section id="while-loop" class="level2">
+<h2 class="anchored" data-anchor-id="while-loop">While Loop</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>xmeans <span class="ot">=</span> <span class="fu">rep</span>(<span class="dv">0</span>, <span class="fu">ncol</span>(X))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error in ncol(X): object 'X' not found</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>i <span class="ot">=</span> <span class="dv">1</span></span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> (i <span class="sc">&lt;=</span> <span class="fu">ncol</span>(X)) {</span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a>  xmeans[i] <span class="ot">=</span> <span class="fu">mean</span>(X[,i])</span>
+<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a>  i <span class="ot">=</span> i <span class="sc">+</span> <span class="dv">1</span></span>
+<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error in ncol(X): object 'X' not found</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>xmeans</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.4892264 0.4546337 0.4165217</code></pre>
+</div>
 </div>
 
 
