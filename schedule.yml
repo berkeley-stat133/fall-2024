@@ -309,6 +309,9 @@
           auxil:
             id: "Slides"
             href: "slides/stat133-02-prog3-for-loop.pdf"
+          auxil2:
+            id: "Demo"
+            href: "demos/demo-lec17-iterations1.html"
     - date: "Oct 9"
       items:
         - type: "Lecture"
@@ -318,6 +321,9 @@
           auxil:
             id: "Slides"
             href: "slides/stat133-02-prog4-apply-loops.pdf"
+          auxil2:
+            id: "Demo"
+            href: "demos/demo-lec18-iterations2.html"
     - date: "Oct 10"
       items:
         - type: "Labwork"
@@ -354,6 +360,9 @@
           auxil:
             id: "Slides"
             href: "slides/stat133-04-regex1-part1.pdf"
+          auxil2:
+            id: "Demo"
+            href: "demos/demo-lec20-regex1.html"
         - type: "Lectur2"
           id: ""
           name: Character sets (notes)
@@ -367,6 +376,9 @@
           auxil:
             id: "Slides"
             href: "slides/stat133-04-regex2-part2.pdf"
+          auxil2:
+            id: "Demo"
+            href: "demos/demo-lec21-regex2.html"
         - type: "Lectur2"
           id: ""
           name: Quantifiers (notes)
@@ -448,8 +460,8 @@
           name: "Sentiment Analysis 1 (notes)"
           href: "https://www.tidytextmining.com/sentiment"
           auxil:
-            id: "Doc"
-            href: ""
+            id: "Demo"
+            href: "demos/demo-lec26-sentiment-analysis1.html"
     - date: "Oct 30"
       items:
         - type: "Lecture"
@@ -457,8 +469,8 @@
           name: "Sentiment Analysis 2 (notes)"
           href: "https://www.tidytextmining.com/sentiment"
           auxil:
-            id: "Doc"
-            href: "."
+            id: "Demo"
+            href: "demos/demo-lec27-sentiment-analysis2.html"
         - type: "Lectur2"
           id: ""
           name: "Correspondence Analysis (notes)"
