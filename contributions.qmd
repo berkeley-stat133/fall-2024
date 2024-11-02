@@ -20,3 +20,5 @@ Lecture notes taken, and kindly shared, by students:
 - <a href="lecnotes/lec20-regex1-by-yuxuan-wei.pdf" target="_blank">Lec 20, Mon Oct-14, Regex I</a> (by Yuxuan Wei).
 
 - <a href="lecnotes/lec20-21-regex1-by-warren-birkman.pdf" target="_blank">Lec 20-21, Mon/Wed Oct 14/16, Regex I and II</a> (by Warren Birkman).
+
+- <a href="lecnotes/lec26-27-sentiment-analysis-by-harish-raghunath.pdf" target="_blank">Lec 26-27, Mon/Wed Oct 28/30, Sentiment Analysis</a> (by Harish Raghunath).
