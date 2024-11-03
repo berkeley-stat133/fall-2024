@@ -1,0 +1,140 @@
+---
+title: "Text Mining 1"
+format: html
+---
+
+```{r}
+library(tidyverse)
+library(tidytext)
+```
+
+## Text Analysis
+
+-   **Bag of Words analysis**: split text into "words" or "tokens" (single units of text or set of characters)
+
+-    Syntactic parsing (not covered)
+
+## Sources of text
+
+-   questionnaires, surveys, polls
+
+-   books, journals, papers
+
+-   tweets and similar
+
+-   reviews
+
+-   posts, blogs, web text
+
+-   political speeches
+
+-   scripts
+
+-   lyrics
+
+-   poems
+
+-   ETC
+
+### Common Operations in Bag-of-words analyses
+
+Example:
+
+```{r}
+txt1 = "The quick brown fox jumps over the lazy dog."
+txt1
+```
+
+Main step: split text into tokens (or words)
+
+```{r}
+tokens1 = unlist(str_split(txt1, pattern = "\\s"))
+tokens1
+```
+
+Other typical operations:
+
+```{r}
+# convert to lower case characters
+tokens1 = str_to_lower(tokens1)
+tokens1
+```
+
+```{r}
+# remove punctuation symbols
+str_remove(tokens1, pattern = "\\.")
+
+tokens1 = str_remove(tokens1, pattern = "[[:punct:]]")
+tokens1
+```
+
+## Another example
+
+```{r}
+txt2 = "Hey, guess what? Every Monday @ 9am the quick brown FOX jumps 10 times over the lazy basset-hound dog. This IS Amazing!!!"
+```
+
+```{r}
+# tokenization
+tokens2 = unlist(str_split(txt2, pattern = "\\s"))
+tokens2
+```
+
+```{r}
+# convert to lower case
+tokens2 = str_to_lower(tokens2)
+tokens2
+```
+
+```{r}
+# remove punctuation symbols
+tokens2 = str_remove(tokens2, "[[:punct:]]")
+tokens2
+```
+
+
+```{r}
+# one idea
+txt2 |>
+  str_remove_all("[[:punct:]]") |>
+  str_remove_all("\\d") |>
+  str_squish() |>
+  str_to_lower() |>
+  str_split("\\s") |>
+  unlist() |>
+  table()
+```
+
+
+## Example: I Have a Dream
+
+```{r}
+txt3 = "I have a dream that one day on the red hills of Georgia, the sons of former slaves and the sons of former slave owners will be able to sit down together at the table of brotherhood. I have a dream that one day even the state of Mississippi, a state sweltering with the heat of injustice, sweltering with the heat of oppression will be transformed into an oasis of freedom and justice. I have a dream that my four little children will one day live in a nation where they will not be judged by the color of their skin but by the content of their character. I have a dream today. I have a dream that one day down in Alabama with its vicious racists, with its governor having his lips dripping with the words of interposition and nullification, one day right down in Alabama little Black boys and Black girls will be able to join hands with little white boys and white girls as sisters and brothers. I have a dream today. I have a dream that one day every valley shall be exalted, every hill and mountain shall be made low, the rough places will be made plain, and the crooked places will be made straight, and the glory of the Lord shall be revealed, and all flesh shall see it together."
+```
+
+```{r}
+tokens3 = txt3 |>
+  str_remove_all("[[:punct:]]") |>
+  str_remove_all("\\d") |>
+  str_squish() |>
+  str_to_lower() |>
+  str_split("\\s") |>
+  unlist()
+
+tokens3_count = data.frame("token" = tokens3) |>
+  count(token, name = "count", sort = TRUE)
+
+tokens3_count
+```
+
+```{r}
+# getting rid of common (uninteresting) words
+common = c("the", "of", "a", "in", "and")
+
+data.frame("token" = tokens3[!(tokens3 %in% common)]) |>
+  count(token, name = "count", sort = TRUE) |>
+  slice(1:10) |>
+  ggplot(aes(y = reorder(token, count), x = count)) +
+  geom_col()
+```
+
