@@ -1,0 +1,113 @@
+---
+title: "Lec-24: Text Mining (part 2)"
+date: "Wed Oct-23, 2024"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, error = TRUE)
+```
+
+
+```{r}
+library(tidyverse) # stringr
+library(tidytext)
+library(janeaustenr)
+library(wordcloud)
+library(RColorBrewer)
+```
+
+```{r}
+class(prideprejudice)
+length(prideprejudice)
+head(prideprejudice, n = 15)
+```
+
+```{r}
+# text into a data frame
+pride = data.frame("text" = prideprejudice)
+head(pride)
+
+# tokenization
+pride_tokens = unnest_tokens(tbl = pride, input = text, output = word)
+pride_tokens
+```
+
+
+## Frequency Analysis (get counts)
+
+```{r}
+pride_tokens |>
+  count(word, name = "count", sort = TRUE) |>
+  slice(1:20) |>
+  ggplot(aes(y = reorder(word, count), x = count)) +
+  geom_col()
+```
+
+
+## Remove "Stop Words"
+
+```{r}
+# lexicon of "stop words"
+stop_words
+```
+
+```{r}
+# remove stop words from table of tokens
+pride_tokens2 = anti_join(pride_tokens, stop_words, by = "word")
+pride_tokens2 |> 
+  count(word, name = "count", sort = TRUE) |>
+  slice(1:20) |> 
+  ggplot(aes(y = reorder(word, count), x = count)) +
+  geom_col()
+```
+
+
+## Word Clouds
+
+```{r}
+pride_tokens2_counts = pride_tokens2 |> 
+  count(word, name = "count", sort = TRUE) 
+
+pride_tokens2_counts
+```
+
+
+```{r}
+wordcloud(
+  words = pride_tokens2_counts$word, 
+  freq = pride_tokens2_counts$count, 
+  max.words = 100)
+```
+
+```{r}
+wordcloud(
+  words = pride_tokens2_counts$word, 
+  freq = pride_tokens2_counts$count, 
+  max.words = 100, 
+  random.order = FALSE, 
+  colors = brewer.pal(n = 8, name = "Dark2"))
+```
+
+
+## N-grams
+
+N = 2: "bigrams"
+
+```{r}
+pride_bigrams = unnest_tokens(pride, input = text, output = bigram, 
+              token = "ngrams", n = 2)
+```
+
+## Search for bigrams that contain "elizabeth"
+
+```{r}
+pride_bigrams |> 
+  mutate(elizabeth = str_detect(bigram, "elizabeth")) |>
+  filter(elizabeth == TRUE) |>
+  count(bigram, name = "count", sort = TRUE) |> 
+  slice(1:20) |>
+  ggplot(aes(y = reorder(bigram, count), x = count)) +
+  geom_col()
+```
+
+
