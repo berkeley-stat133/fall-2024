@@ -1,0 +1,67 @@
+---
+title: "Text Mining (part 3)"
+format: html
+---
+
+```{r}
+# packages
+library(tidyverse)
+library(tidytext)
+library(janeaustenr)
+library(igraph)
+library(ggraph)
+```
+
+
+## Example: Pride and Prejudice
+
+```{r}
+pride = tibble("text" = prideprejudice)
+
+# tokenizing: bigrams
+pride_bigrams = unnest_tokens(
+  pride, 
+  input = text,
+  output = bigram, 
+  token = "ngrams", 
+  n = 2
+) |> 
+  filter(!is.na(bigram))
+
+pride_bigrams
+```
+
+```{r}
+# bigrams containing "elizabeth"
+pride_bigrams |> 
+  filter(str_detect(bigram, pattern = "elizabeth")) |>
+  count(bigram, name = "count", sort = TRUE)
+```
+
+
+```{r}
+# remove stop words from bigrams
+bigram_counts = pride_bigrams |> 
+  mutate(word1 = str_extract(bigram, "^\\w+"),
+         word2 = str_extract(bigram, "\\w+$")) |> 
+  filter(!(word1 %in% stop_words$word),
+         !(word2 %in% stop_words$word)) |>
+  count(bigram, word1, word2, name = "count", sort = TRUE)
+```
+
+## Visualizing bigrams with a "graph" (network)
+
+```{r}
+bigrams_graph = bigram_counts |>
+  select(2:4) |>
+  slice_head(n = 30) |>
+  graph_from_data_frame()
+```
+
+```{r}
+ggraph(bigrams_graph, layout = "fr") +
+  geom_edge_link() +
+  geom_node_point() +
+  geom_node_text(aes(label = name), vjust = 1, hjust = 1)
+```
+
