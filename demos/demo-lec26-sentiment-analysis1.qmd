@@ -1,0 +1,208 @@
+---
+title: "Lec-26: Sentiment Analysis (part 1)"
+date: "Mon Oct-28, 2024"
+format: html
+embed-resources: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, error = TRUE)
+```
+
+```{r message=FALSE}
+# packages
+library(tidyverse)    # base tidy data tools
+library(tidytext)     # text mining; gets along with tidyverse
+library(janeaustenr)  # Jane Austen's novels
+```
+
+## Sentiment Analysis
+
+We continue to use the text of the novel *Pride and Prejudice* by Jane Austen.
+
+```{r}
+# 1) data in a table
+pride = tibble(
+  "text" = prideprejudice
+)
+
+# 2) tokenize and remove stop_words
+pride_tokens = pride |>
+  unnest_tokens(input = text, output = word) |>
+  anti_join(stop_words, by = "word") |>
+  count(word, sort = TRUE, name = "count")
+
+pride_tokens |> slice_head(n = 15)
+```
+
+## Sentiment Lexicons
+
+We can use the tools of text mining to approach the emotional content of text.
+One way to analyze the sentiment of a text is to consider the text as a 
+combination of its individual words, and the sentiment of the whole text as 
+the sum of the sentiment content of the individual words.
+
+This isn't the only way to approach sentiment analysis, but it is the most 
+common one.
+
+The `"tidytext"` package comes with the `sentiments` dataset that contains 
+a dictionary or __lexicon__ (curated by Bing Liu) of words and their associated
+sentiment. 
+
+```{r}
+rbind(head(sentiments, 5), tail(sentiments, 5))
+```
+
+
+### Sentiment Lexicons in Tidytext
+
+Bing Liu's sentiment lexicon is based on unigrams (i.s. single words). It 
+contains many English words and the words are assigned a sentiment label
+`positive` or `negative`.
+
+In addition to the `sentiments` dataset, `"tidytext"` also has the 
+`get_sentiments()` function that allows us to obtain more sentiment lexicons:
+
+- `"bing"`: from Bing Liu; this lexicon categorizes words in a binary fashion
+into positive and negative categories.
+
+- `"afinn"`: from Finn Arup Nielsen; this lexicon assigns words with a score
+that runs between -5 and 5, with negative scores indicating negative sentiment
+and positive scores indicating positive sentiment.
+
+- `"nrc"`: from Saif Mohammad and Peter Turney; this lexicon categorizes words 
+in a binary fashion (`"yes"` / `"no"`) into categories of positive, negative, 
+anger, anticipation, disgust, fear, joy, sadness, surprise, and trust.
+
+- `"loughran"`: another lexicon somewhat similar to `"afinn"`.
+
+You can use `get_sentiments()`
+
+```{r}
+# AFINN
+afinn = get_sentiments(lexicon = "afinn")
+afinn |> slice_head(n = 10)
+```
+
+```{r}
+nrc = get_sentiments("nrc")
+nrc |> slice_head(n = 10)
+```
+
+
+### Sentiment Analysis with Inner Join
+
+With data in a tidy format, the sentiments of words can be added to our data
+table with an inner join via `inner_join()`.
+
+```{r}
+pride_sentim = inner_join(pride_tokens, sentiments, by = "word")
+```
+
+Notice that the word `"miss"` is being handled by the sentiment lexicons 
+as related to the verb _to miss_, instead of a title prefixed to the name of 
+a woman as in _miss Emma_. Because of this, we are going to exclude the 
+token `"miss"` from our analysis:
+
+```{r}
+pride_sentim |>
+  filter(word != "miss") |>
+  slice_head(n = 20) |>
+  ggplot(aes(x = count, y = reorder(word, count), fill = sentiment)) +
+  geom_col() +
+  labs(title = "20 most common words with an associated sentiment",
+       y = "word")
+```
+
+## Sentiment Score by Chapter
+
+Another type of sentiment analysis that can be performed on the `prideprejudice`
+text is to compute a sentiment score for each chapter in the book.
+
+Notice that `prideprejudice` contains elements indicating where a chapter 
+begins, like element 7 in the following output (`"Chapter 1"`)
+
+```{r}
+head(prideprejudice, n = 20)
+```
+
+We need to do a bit of text processing in order to split the text into chapters.
+Here are the proposed steps:
+
+1) collapse `prideprejudice` into a single element vector
+
+2) split text into chapters using a regex pattern `"Chapter \\d+"`
+
+3) assemble table with columns `"chapter"` and "text"`
+
+
+```{r}
+# 1) collapse text into one-element vector
+pride_collapsed = paste(prideprejudice, collapse = " ")
+
+# 2) split text into chapters
+pride_split = str_split(pride_collapsed, pattern = "Chapter \\d+")
+
+class(pride_split)
+
+pride_chapters = pride_split[[1]][-1]
+```
+
+```{r}
+# 3) table of chapters, and their text content
+pride_dat = tibble(
+  "chapter" = 1:length(pride_chapters),
+  "text" = pride_chapters
+)
+```
+
+The we proceed as usual: tokenizing the text, removing stopwords, and getting
+word counts:
+
+```{r}
+# tokenize, remove stop-words, and get frequencies
+pride_tokens = pride_dat |>
+  unnest_tokens(input = text, output = word) |>
+  anti_join(stop_words, by = "word") |>
+  count(chapter, word, sort = TRUE, name = "count")
+
+slice_head(pride_tokens, n = 10)
+```
+
+Then we attach sentiments to those words that appear in Bing's lexicon:
+
+```{r}
+# remove "miss"
+pride_sentims = inner_join(pride_tokens, sentiments, by = "word") |>
+  filter(word != "miss")
+
+slice_head(pride_sentims, n = 10)
+```
+
+Having identified the type of `sentiment` for each word, we then use 
+`pivot_wider()` to "unfold" this column into 2 new columns: `positive` and 
+`negative`. After that, we summarise a `score` column, grouping by `chapter`, 
+based on the number of positive words minus number of negative words.
+
+
+```{r}
+pride_scores_by_chapter = pride_sentims |>
+  pivot_wider(names_from = sentiment, values_from = count, values_fill = 0) |>
+  group_by(chapter) |>
+  summarise(score = sum(positive) - sum(negative))
+
+slice_head(pride_scores_by_chapter, n = 10)
+```
+
+
+```{r}
+pride_scores_by_chapter |>
+  mutate(type = case_when(
+    score >= 0 ~ "pos",
+    score < 0 ~ "neg" 
+  )) |>
+  ggplot(aes(x = chapter, y = score, fill = type)) +
+  geom_col() +
+  labs(title = "Sentiment score for each chapter in 'Pride and Prejudice'")
+```
+
