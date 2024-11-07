@@ -1,0 +1,201 @@
+---
+title: "Lec-27: Sentiment Analysis (part 2)"
+date: "Wed Oct-30, 2024"
+format: 
+  html:
+    toc: true
+    number-sections: true
+    theme: simplex
+embed-resources: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, error = TRUE)
+```
+
+```{r message=FALSE}
+# packages
+library(tidyverse)    # base tidy data tools
+library(tidytext)     # text mining; gets along with tidyverse
+library(janeaustenr)  # Jane Austen's novels
+```
+
+
+# Introduction
+
+This is a companion file to the lecture on "Sentiment Analysis (part 2)".
+
+The code and examples are adapted from the book 
+__Text Mining with R: A Tidy Approach__ by Julia Silge and David Robinson.
+
+<https://www.tidytextmining.com/>
+
+
+## Jane Austen's Novels
+
+The package `"janeaustenr"` contains the text of six novels written by 
+English writer Jane Austen:
+
+- Sense and Sensibility
+- Pride and Prejudice  
+- Mansfield Park     
+- Emma               
+- Northanger Abbey   
+- Persuasion  
+
+All of Jane Austen's novels, are available in the tibble returned by
+`austen_books()`:
+
+```{r}
+austen_books() |>
+  slice_head(n = 10)
+```
+
+```{r}
+# which books:
+austen_books() |>
+  distinct(book)
+```
+
+
+
+# More Sentiment Analysis
+
+We can use the tools of text mining to approach the emotional content of text.
+One way to analyze the sentiment of a text is to consider the text as a 
+combination of its individual words, and the sentiment of the whole text as 
+the sum of the sentiment content of the individual words.
+
+This isn't the only way to approach sentiment analysis, but it is the most 
+common one.
+
+The `"tidytext"` package comes with the `sentiments` dataset that contains 
+a dictionary or __lexicon__ (curated by Bing Liu) of words and their associated
+sentiment. 
+
+```{r}
+rbind(head(sentiments, 5), tail(sentiments, 5))
+```
+
+
+## Change of sentiments throughout each novel
+
+Instead of focusing on a single novel, we can take into account all novels
+and inspect the "flow" of sentiments along their texts.
+
+For convenience purpose, we will add (`mutate`) two auxiliary columns:
+
+- `linenumber`
+- `chapter`
+
+After that, we tokenize with `unnest_tokens()`, and then proceed to remove
+stop-words:
+
+```{r}
+austen_tokens <- austen_books() |>
+  group_by(book) |>
+  mutate(
+    linenumber = row_number(),
+    chapter = cumsum(
+      str_detect(text, regex("^chapter [\\divxlc]", ignore_case = TRUE)))) |>
+  ungroup() |>
+  unnest_tokens(word, text) |>
+  anti_join(stop_words, by = "word")
+
+head(austen_tokens)
+```
+
+```{r}
+tail(austen_tokens)
+```
+
+
+-----
+
+
+## Sentiments through each chapter
+
+First, we find a sentiment score for each word using the Bing lexicon and
+`inner_join()`.
+
+Next, we count up how many positive and negative words there are in each
+chapter. We then use `pivot_wider()` so that we have negative and positive sentiments in
+separate columns, and lastly calculate a net sentiment `(positive - negative)`
+
+
+```{r}
+austen_sentiments <- austen_tokens |>
+  inner_join(sentiments, by = "word", relationship = "many-to-many") |>
+  count(book, chapter, sentiment) |>
+  pivot_wider(names_from = sentiment, values_from = n, values_fill = 0) |>
+  mutate(score = positive - negative)
+```
+
+Now we can plot these sentiment scores across the plot trajectory of each 
+novel.
+
+```{r}
+ggplot(data = austen_sentiments,
+       aes(x = chapter, y = score, fill = book)) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(~ book, ncol = 2, scales = "free_x") +
+  theme_bw() +
+  labs(title = "Sentiment through the chapters of Jane Austen's novels")
+
+```
+
+
+-----
+
+
+## Sentiments through narrative
+
+Another alternative to visualize the sentiment flow through the content of
+each book is to divide the text into "smaller" sections, as compared to 
+chapters.
+
+We count up how many positive and negative words there are in defined 
+sections of each book. We define an `index` to keep track of where we are
+in the narrative; this index (using integer division) counts up sections of 
+80 lines of text.
+
+Small sections of text may not have enough words in them to get a good estimate
+of sentiment, while really large sections can wash out narrative structure.
+For this example, using 80 lines works well, but this can vary depending on 
+individual texts.
+
+We then use `pivot_wider()` so that we have negative and positive sentiments in
+separate columns, and lastly calculate a net sentiment `(positive - negative)`
+
+
+```{r}
+austen_sentiments <- austen_tokens |>
+  inner_join(sentiments, by = "word", relationship = "many-to-many") |>
+  count(book, index = linenumber %/% 80, sentiment) |>
+  pivot_wider(names_from = sentiment, values_from = n, values_fill = 0) |>
+  mutate(score = positive - negative)
+
+head(austen_sentiments, 10)
+```
+
+Now we can plot these sentiment scores across the plot trajectory of each 
+novel.
+
+```{r}
+ggplot(data = austen_sentiments,
+       aes(x = index, y = score, fill = book)) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(~ book, ncol = 2, scales = "free_x") +
+  theme_bw() +
+  labs(title = "Sentiment through the narratives of Jane Austen's novels")
+```
+
+We can see how each novel begins with a fairly positive mood. Also, notice how
+each novel changes toward more positive or negative sentiment over the 
+trajectory of the story.
+
+Likewise, most novels tend to finish with a positive sentiment, perhaps with 
+the exception of _Persuasion_ that seems to end with a slightly negative score.
+
+
+-----
