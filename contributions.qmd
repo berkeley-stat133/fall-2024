@@ -17,6 +17,8 @@ Lecture notes taken, and kindly shared, by students:
 
 - <a href="lecnotes/lec18-more-iterations-by-warren-birkman.pdf" target="_blank">Lec-18, Wed Oct-9, More Iterations</a> (by Warren Birkman).
 
+- <a href="lecnotes/lec17-iterations-by-ajay-sharma.pdf" target="_blank">Lec-17, Mon Oct-7, Iterations</a> (by Ajay Sharma).
+
 - <a href="lecnotes/lec20-regex1-by-yuxuan-wei.pdf" target="_blank">Lec 20, Mon Oct-14, Regex I</a> (by Yuxuan Wei).
 
 - <a href="lecnotes/lec20-21-regex1-by-warren-birkman.pdf" target="_blank">Lec 20-21, Mon/Wed Oct 14/16, Regex I and II</a> (by Warren Birkman).
