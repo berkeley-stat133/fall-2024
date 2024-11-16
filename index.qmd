@@ -18,7 +18,7 @@ listing:
 ::: {.callout-note title="Announcements"}
 ## Reminder
 
-App-2 is due on Nov-15.
+App-3 is due on Dec-6th.
 :::
 
 
