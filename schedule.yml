@@ -28,7 +28,7 @@
             href: "slides/stat133-01-objs1-vectors-part1.pdf"
           auxil2:
             id: "Demo"
-            href: "demos/demo-lec2-vectors1.html"
+            href: "https://bcourses.berkeley.edu/courses/1536526/files/folder/demos?preview=90268962"
         - type: "Lectur2"
           id: ""
           name: "Vectors, part 2 (notes)"
@@ -58,7 +58,7 @@
             href: "slides/stat133-01-objs1-vectors-part2.pdf"
           auxil2:
             id: "Demo"
-            href: "demos/demo-lec3-vectors2.html"
+            href: "https://bcourses.berkeley.edu/courses/1536526/files/folder/demos?preview=90268963"
         - type: "Lectur2"
           id: ""
           name: "Vectors, part 4 (notes)"
@@ -101,7 +101,7 @@
             href: "slides/stat133-01-objs2-matrices-factors.pdf"
           auxil2:
             id: "Demo"
-            href: "demos/demo-lec5-matrices.html"
+            href: "https://bcourses.berkeley.edu/courses/1536526/files/folder/demos?preview=90268964"
         - type: "Lectur2"
           id: ""
           name: Matrices, part 2 (notes)
@@ -117,7 +117,7 @@
             href: "slides/stat133-01-objs3-lists.pdf"
           auxil2:
             id: "Demo"
-            href: "demos/demo-lec6-lists.html"
+            href: "https://bcourses.berkeley.edu/courses/1536526/files/folder/demos?preview=90268965"
     - date: "Sep 12"
       items:
         - type: "Labwork"
@@ -156,7 +156,7 @@
             href: "slides/stat133-02-prog1-intro-functions.pdf"
           auxil2:
             id: "Demo"
-            href: "demos/demo-lec8-functions.html"
+            href: "https://bcourses.berkeley.edu/courses/1536526/files/folder/demos?preview=90268966"
         - type: "Lectur2"
           id: ""
           name: R Compound Expressions (notes)
@@ -172,7 +172,7 @@
             href: "slides/stat133-02-prog2-if-else.pdf"
           auxil2:
             id: "Demo"
-            href: "demos/demo-lec9-conditionals.html"
+            href: "https://bcourses.berkeley.edu/courses/1536526/files/folder/demos?preview=90268967"
     - date: "Sep 19"
       items:
         - type: "Labwork"
@@ -208,7 +208,7 @@
             href: "slides/stat133-01-objs4-data-frames.pdf"
           auxil2:
             id: "Demo"
-            href: "demos/demo-lec11-tables-ggplot1.html"
+            href: "https://bcourses.berkeley.edu/courses/1536526/files/folder/demos?preview=90268969"
     - date: "Sep 25"
       items:
         - type: "Lecture"
@@ -220,7 +220,7 @@
             href: "slides/stat133-03-tables1-grammar-graphics.pdf"
           auxil2:
             id: "Demo"
-            href: "demos/demo-lec12-tables-ggplot2.html"
+            href: "https://bcourses.berkeley.edu/courses/1536526/files/folder/demos?preview=90268970"
     - date: "Sep 26"
       items:
         - type: "Labwork"
@@ -266,7 +266,7 @@
             href: "slides/stat133-03-tables2-intro-dplyr.pdf"
           auxil2:
             id: "Demo"
-            href: "demos/demo-lec14-tables-dplyr1.html"
+            href: "https://bcourses.berkeley.edu/courses/1536526/files/folder/demos?preview=90268971"
     - date: "Oct 2"
       items:
         - type: "Lecture"
@@ -276,6 +276,9 @@
           auxil:
             id: "Slides"
             href: "slides/stat133-03-tables3-more-dplyr.pdf"
+          auxil2:
+            id: "Demo"
+            href: "https://bcourses.berkeley.edu/courses/1536526/files/folder/demos?preview=90268972"
     - date: "Oct 3"
       items:
         - type: "Labwork"
@@ -311,7 +314,7 @@
             href: "slides/stat133-02-prog3-for-loop.pdf"
           auxil2:
             id: "Demo"
-            href: "demos/demo-lec17-iterations1.html"
+            href: "https://bcourses.berkeley.edu/courses/1536526/files/folder/demos?preview=90268974"
     - date: "Oct 9"
       items:
         - type: "Lecture"
@@ -323,7 +326,7 @@
             href: "slides/stat133-02-prog4-apply-loops.pdf"
           auxil2:
             id: "Demo"
-            href: "demos/demo-lec18-iterations2.html"
+            href: "https://bcourses.berkeley.edu/courses/1536526/files/folder/demos?preview=90268975"
     - date: "Oct 10"
       items:
         - type: "Labwork"
@@ -338,7 +341,7 @@
           href: "https://github.com/data133/shiny/blob/main/future-value3-simulations/app.R"
           auxil:
             id: "Demo"
-            href: "demos/demo-lec19-shiny6.html"
+            href: "https://bcourses.berkeley.edu/courses/1536526/files/folder/demos?preview=90268976"
         - type: "Homework"
           id: ""
           name: "HW6: Iterations (avail 10/12, due 10/18)"
@@ -362,7 +365,7 @@
             href: "slides/stat133-04-regex1-part1.pdf"
           auxil2:
             id: "Demo"
-            href: "demos/demo-lec20-regex1.html"
+            href: "https://bcourses.berkeley.edu/courses/1536526/files/folder/demos?preview=90268977"
         - type: "Lectur2"
           id: ""
           name: Character sets (notes)
@@ -378,7 +381,7 @@
             href: "slides/stat133-04-regex2-part2.pdf"
           auxil2:
             id: "Demo"
-            href: "demos/demo-lec21-regex2.html"
+            href: "https://bcourses.berkeley.edu/courses/1536526/files/folder/demos?preview=90268978"
         - type: "Lectur2"
           id: ""
           name: Quantifiers (notes)
@@ -420,6 +423,9 @@
           auxil:
             id: "Slides"
             href: "slides/stat133-05-text1-mining-intro.pdf"
+          auxil2:
+            id: "Demo"
+            href: "https://bcourses.berkeley.edu/courses/1536526/files/folder/demos?preview=90269046"
     - date: "Oct 23"
       items:
         - type: "Lecture"
@@ -429,6 +435,9 @@
           auxil:
             id: "Slides"
             href: "slides/stat133-05-text2-mining-tidytext.pdf"
+          auxil2:
+            id: "Demo"
+            href: "https://bcourses.berkeley.edu/courses/1536526/files/folder/demos?preview=90268981"
     - date: "Oct 24"
       items:
         - type: "Labwork"
@@ -441,9 +450,12 @@
           id: ""
           name: Text Mining, part 3
           href: "https://www.tidytextmining.com/ngrams"
+          auxil:
+            id: "Demo"
+            href: "https://bcourses.berkeley.edu/courses/1536526/files/folder/demos?preview=90268982"
         - type: "Midterm"
           id: ""
-          name: "More information TBA"
+          name: "See announcement in bCourses"
           href: ""
 - week: 10
   days:
@@ -461,7 +473,7 @@
           href: "https://www.tidytextmining.com/sentiment"
           auxil:
             id: "Demo"
-            href: "demos/demo-lec26-sentiment-analysis1.html"
+            href: "https://bcourses.berkeley.edu/courses/1536526/files/folder/demos?preview=90268983"
     - date: "Oct 30"
       items:
         - type: "Lecture"
@@ -470,7 +482,7 @@
           href: "https://www.tidytextmining.com/sentiment"
           auxil:
             id: "Demo"
-            href: "demos/demo-lec27-sentiment-analysis2.html"
+            href: "https://bcourses.berkeley.edu/courses/1536526/files/folder/demos?preview=90268984"
         - type: "Lectur2"
           id: ""
           name: "Correspondence Analysis (notes)"
@@ -532,6 +544,9 @@
           auxil:
             id: "Slides"
             href: "docs/maps-storms/storms-slides3.html"
+          auxil:
+            id: "Demo"
+            href: "https://bcourses.berkeley.edu/courses/1536526/files/folder/demos?preview=90269007"
 - week: 12
   days:
     - date: "About"
@@ -550,11 +565,8 @@
       items:
         - type: "Lecture"
           id: ""
-          name: "Choropleth maps 1"
-          href: "."
-          auxil:
-            id: "Slides"
-            href: "docs/choropleth/us-elections-slides1.html"
+          name: "Guest Lecture: Wildfire in California"
+          href: ""
     - date: "Nov 14"
       items:
         - type: "Labwork"
@@ -565,8 +577,8 @@
       items:
         - type: "Lecture"
           id: ""
-          name: "Choropleth maps 2"
-          href: "."
+          name: "Choropleth maps 1"
+          href: "https://bcourses.berkeley.edu/courses/1536526/files/folder/demos?preview=90269008"
         - type: "Homework"
           id: ""
           name: "Shiny App-3 (avail 11/16, due 12/06)"
