@@ -306,7 +306,7 @@ window.Quarto = {
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># vectorized if</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ifelse</span>(b <span class="sc">&gt;</span> <span class="dv">0</span>, <span class="at">yes =</span> <span class="st">"positive"</span>, <span class="at">no =</span> <span class="st">"non-positive"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] "non-positive" "non-positive" "non-positive" "non-positive" "positive"    </code></pre>
+<pre><code>[1] "positive"     "positive"     "positive"     "non-positive" "positive"    </code></pre>
 </div>
 </div>
 </section>
@@ -535,7 +535,7 @@ default</code></pre>
 <span id="cb41-15"><a href="#cb41-15" aria-hidden="true" tabindex="-1"></a>  }</span>
 <span id="cb41-16"><a href="#cb41-16" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] "a is positive"</code></pre>
+<pre><code>[1] "a is negative"</code></pre>
 </div>
 </div>
 <p>As you can tell, the hierarchical structure of the nested if-else can become harder to inspect. This is why I personally prefer a slightly different style of chaining if-else statements, as follows:</p>
@@ -551,7 +551,7 @@ default</code></pre>
 <span id="cb43-9"><a href="#cb43-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="st">"a is zero"</span>)</span>
 <span id="cb43-10"><a href="#cb43-10" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] "a is negative"</code></pre>
+<pre><code>[1] "a is positive"</code></pre>
 </div>
 </div>
 <p>If we have a fourth case, no problem. All we have to do is inject another if-else after the 2nd <code>else</code></p>
