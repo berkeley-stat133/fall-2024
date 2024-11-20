@@ -579,6 +579,9 @@
           id: ""
           name: "Choropleth maps 1"
           href: "https://bcourses.berkeley.edu/courses/1536526/files/folder/demos?preview=90269008"
+          auxil:
+            id: "Demo"
+            href: "https://bcourses.berkeley.edu/courses/1536526/files/folder/demos?preview=90269008"
         - type: "Homework"
           id: ""
           name: "Shiny App-3 (avail 11/16, due 12/06)"
@@ -595,16 +598,34 @@
       items:
         - type: "Lecture"
           id: ""
+          name: "Choropleth maps 2"
+          href: "docs/choropleth/us-elections-slides1.html"
+          auxil:
+            id: "Demo"
+            href: "https://bcourses.berkeley.edu/courses/1536526/files/folder/demos?preview=90287921"
+    - date: "Nov 20"
+      items:
+        - type: "Lecture"
+          id: ""
           name: "JSON data (notes)"
           href: "https://www.gastonsanchez.com/R-web-technologies/3-01-json.html"
           auxil:
             id: "Slides"
             href: "docs/api-open-notify/open-notify-slides.html"
+          auxil:
+            id: "Demo"
+            href: "https://bcourses.berkeley.edu/courses/1536526/files/folder/demos?preview=90273694"
         - type: "Lectur2"
           id: ""
           name: "APIs (notes)"
           href: "https://www.gastonsanchez.com/R-web-technologies/4-02-api-open-notify.html"
-    - date: "Nov 20"
+    - date: "Nov 21"
+      items:
+        - type: "Labwork"
+          id: ""
+          name: "Lab 13: Bart API (due 11/22)"
+          href: "https://bcourses.berkeley.edu/courses/1536526/assignments/8766396"
+    - date: "Nov 22"
       items:
         - type: "Lecture"
           id: ""
@@ -617,21 +638,6 @@
           id: ""
           name: "XML 2 (notes)"
           href: "https://www.gastonsanchez.com/R-web-technologies/2-02-parsing-xml.html"
-    - date: "Nov 21"
-      items:
-        - type: "Labwork"
-          id: ""
-          name: "Lab 13: Bart API (due 11/22)"
-          href: "https://bcourses.berkeley.edu/courses/1536526/assignments/8766396"
-    - date: "Nov 22"
-      items:
-        - type: "Lecture"
-          id: ""
-          name: "Xpath (notes)"
-          href: "https://www.gastonsanchez.com/R-web-technologies/2-03-xpath.html"
-          auxil:
-            id: "Slides"
-            href: "slides/stat133-07-web3-parsing-xml.pdf"
 - week: 14
   days:
     - date: "About"
@@ -644,8 +650,11 @@
       items:
         - type: "Lecture"
           id: ""
-          name: "Web Scraping: HTML (notes)"
-          href: "https://www.gastonsanchez.com/R-web-technologies/2-04-html.html"
+          name: "Xpath (notes)"
+          href: "https://www.gastonsanchez.com/R-web-technologies/2-03-xpath.html"
+          auxil:
+            id: "Slides"
+            href: "slides/stat133-07-web3-parsing-xml.pdf"
     - date: "Nov 27"
       items:
         - type: "Lecture"
@@ -676,13 +685,13 @@
       items:
         - type: "Lecture"
           id: ""
-          name: "Web Scraping 2"
-          href: "."
+          name: "Web Scraping: HTML (notes)"
+          href: "https://www.gastonsanchez.com/R-web-technologies/2-04-html.html"
     - date: "Dec 4"
       items:
         - type: "Lecture"
           id: ""
-          name: "Web Scraping 3"
+          name: "Web Scraping 2"
           href: "."
     - date: "Dec 5"
       items:
