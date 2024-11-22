@@ -612,7 +612,7 @@
           auxil:
             id: "Slides"
             href: "docs/api-open-notify/open-notify-slides.html"
-          auxil:
+          auxil2:
             id: "Demo"
             href: "https://bcourses.berkeley.edu/courses/1536526/files/folder/demos?preview=90273694"
         - type: "Lectur2"
