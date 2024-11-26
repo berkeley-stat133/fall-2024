@@ -615,10 +615,6 @@
           auxil2:
             id: "Demo"
             href: "https://bcourses.berkeley.edu/courses/1536526/files/folder/demos?preview=90273694"
-        - type: "Lectur2"
-          id: ""
-          name: "APIs (notes)"
-          href: "https://www.gastonsanchez.com/R-web-technologies/4-02-api-open-notify.html"
     - date: "Nov 21"
       items:
         - type: "Labwork"
@@ -629,15 +625,8 @@
       items:
         - type: "Lecture"
           id: ""
-          name: "XML 1 (notes)"
-          href: "https://www.gastonsanchez.com/R-web-technologies/2-01-xml.html"
-          auxil:
-            id: "Slides"
-            href: "slides/stat133-07-web2-xml-intro.pdf"
-        - type: "Lectur2"
-          id: ""
-          name: "XML 2 (notes)"
-          href: "https://www.gastonsanchez.com/R-web-technologies/2-02-parsing-xml.html"
+          name: "APIs (notes)"
+          href: "https://www.gastonsanchez.com/R-web-technologies/4-02-api-open-notify.html"
 - week: 14
   days:
     - date: "About"
@@ -650,11 +639,11 @@
       items:
         - type: "Lecture"
           id: ""
-          name: "Xpath (notes)"
-          href: "https://www.gastonsanchez.com/R-web-technologies/2-03-xpath.html"
+          name: "XML 1 (notes)"
+          href: "https://www.gastonsanchez.com/R-web-technologies/2-01-xml.html"
           auxil:
             id: "Slides"
-            href: "slides/stat133-07-web3-parsing-xml.pdf"
+            href: "slides/stat133-07-web2-xml-intro.pdf"
     - date: "Nov 27"
       items:
         - type: "Lecture"
@@ -685,14 +674,20 @@
       items:
         - type: "Lecture"
           id: ""
-          name: "Web Scraping: HTML (notes)"
-          href: "https://www.gastonsanchez.com/R-web-technologies/2-04-html.html"
+          name: "Xpath (notes)"
+          href: "https://www.gastonsanchez.com/R-web-technologies/2-02-parsing-xml.html"
+          auxil:
+            id: "Slides"
+            href: "slides/stat133-07-web3-parsing-xml.pdf"
     - date: "Dec 4"
       items:
         - type: "Lecture"
           id: ""
-          name: "Web Scraping 2"
-          href: "."
+          name: "Xpath (notes)"
+          href: "https://www.gastonsanchez.com/R-web-technologies/2-03-xpath.html"
+          auxil:
+            id: "Slides"
+            href: "slides/stat133-07-web3-parsing-xml.pdf"
     - date: "Dec 5"
       items:
         - type: "Labwork"
@@ -703,8 +698,8 @@
       items:
         - type: "Lecture"
           id: ""
-          name: "Closing Talk"
-          href: ""
+          name: "Web Scraping: HTML (notes)"
+          href: "https://www.gastonsanchez.com/R-web-technologies/2-04-html.html"
 - week: 16
   days:
     - date: "About"
