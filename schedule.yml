@@ -688,6 +688,10 @@
           auxil:
             id: "Slides"
             href: "slides/stat133-07-web3-parsing-xml.pdf"
+        - type: "Lectur2"
+          id: ""
+          name: "Web Scraping: HTML (notes)"
+          href: "https://www.gastonsanchez.com/R-web-technologies/2-04-html.html"
     - date: "Dec 5"
       items:
         - type: "Labwork"
@@ -698,8 +702,8 @@
       items:
         - type: "Lecture"
           id: ""
-          name: "Web Scraping: HTML (notes)"
-          href: "https://www.gastonsanchez.com/R-web-technologies/2-04-html.html"
+          name: "Closing Talk"
+          href: ""
 - week: 16
   days:
     - date: "About"
@@ -707,16 +711,10 @@
         - type: "Overview"
           id: ""
           name: "RRR Week"
-    - date: "Dec ??"
-      items:
-        - type: "Review"
-          id: ""
-          name: "Final Review TBA"
-          href: ""
 - week: 17
   days:
     - date: "Dec 18"
       items:
         - type: "Final"
           id: ""
-          name: "Final Exam"
+          name: "Final Exam (see announcement in bCourses)"
